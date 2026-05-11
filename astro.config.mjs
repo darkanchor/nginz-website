@@ -4,6 +4,7 @@ import { defineConfig, passthroughImageService } from "astro/config";
 // All dynamic API ownership lives in the separate Worker runtime at worker/.
 // No Astro API routes — "/api/*" is exclusively the Worker's domain.
 export default defineConfig({
+  devToolbar: { enabled: false },
   output: "static",
   site: "https://nginz.dev",
   image: {

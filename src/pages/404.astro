@@ -4,8 +4,12 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
 <BaseLayout title="Not found | nginz">
   <section class="page-header">
-    <p class="muted">404</p>
+    <p class="muted" style="font-size: var(--text-sm); text-transform: uppercase; letter-spacing: 0.05em;">404</p>
     <h1>Page not found</h1>
-    <p>The requested page does not exist in this scaffold yet.</p>
+    <p class="muted">The requested page does not exist.</p>
+    <div style="margin-top: var(--sp-6); display: flex; gap: var(--sp-3); justify-content: center;">
+      <a href="/" class="btn btn-primary">Go Home</a>
+      <a href="/docs" class="btn btn-secondary">Read Docs</a>
+    </div>
   </section>
 </BaseLayout>

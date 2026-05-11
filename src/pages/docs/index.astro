@@ -1,22 +1,135 @@
 ---
-import { getCollection, type CollectionEntry } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
-const docs = await getCollection("docs");
+// Organize docs into navigation structure
+const navSections = [
+  {
+    category: "nginz",
+    label: "nginz",
+    items: [
+      { divider: true, label: "Native Modules" },
+      { title: "ACME / Let's Encrypt", slug: "reference/modules/acme" },
+      { title: "Cache Purge API", slug: "reference/modules/cache-purge" },
+      { title: "Cache Tags", slug: "reference/modules/cache-tags" },
+      { title: "Canary Routing", slug: "reference/modules/canary" },
+      { title: "Circuit Breaker", slug: "reference/modules/circuit-breaker" },
+      { title: "Consul Integration", slug: "reference/modules/consul" },
+      { title: "Dynamic Upstreams", slug: "reference/modules/dynamic-upstreams" },
+      { title: "Echoz Debug Output", slug: "reference/modules/echoz" },
+      { title: "GraphQL Gateway", slug: "reference/modules/graphql" },
+      { title: "Health Checks", slug: "reference/modules/healthcheck" },
+      { title: "JSON Schema Validation", slug: "reference/modules/jsonschema" },
+      { title: "JWT Authentication", slug: "reference/modules/jwt" },
+      { title: "nftables IP Policy", slug: "reference/modules/nftset" },
+      { title: "NJS Orchestration", slug: "reference/modules/njs" },
+      { title: "OpenID Connect", slug: "reference/modules/oidc" },
+      { title: "PostgREST API", slug: "reference/modules/pgrest" },
+      { title: "Prometheus Metrics", slug: "reference/modules/prometheus" },
+      { title: "Rate Limiting", slug: "reference/modules/ratelimit" },
+      { title: "Redis", slug: "reference/modules/redis" },
+      { title: "Request ID", slug: "reference/modules/requestid" },
+      { title: "JSON Transform", slug: "reference/modules/transform" },
+      { title: "Upstream Balancer", slug: "reference/modules/upstream-balancer" },
+      { title: "WAF", slug: "reference/modules/waf" },
+      { title: "WeChat Pay", slug: "reference/modules/wechatpay" },
+      { title: "Worker Events", slug: "reference/modules/worker-events" },
+    ],
+  },
+  {
+    category: "nginz-njs",
+    label: "nginz-njs",
+    items: [
+      { title: "Scripted Modules" },
+      { divider: true, label: "Modules" },
+      { title: "Authz", slug: "reference/scripted-modules/authz" },
+      { title: "Control API", slug: "reference/scripted-modules/control-api" },
+      { title: "Feature Flags", slug: "reference/scripted-modules/feature-flags" },
+      { title: "Health Gateway", slug: "reference/scripted-modules/health-gateway" },
+      { title: "HTTP Client", slug: "reference/scripted-modules/http-client" },
+      { title: "Metrics", slug: "reference/scripted-modules/metrics" },
+      { title: "MLCache", slug: "reference/scripted-modules/mlcache" },
+      { title: "Request Tracing", slug: "reference/scripted-modules/request-tracing" },
+      { title: "Response Templating", slug: "reference/scripted-modules/response-templating" },
+      { title: "Response Transform", slug: "reference/scripted-modules/response-transform" },
+      { title: "Session", slug: "reference/scripted-modules/session" },
+      { title: "Webhook", slug: "reference/scripted-modules/webhook" },
+      { title: "Workflow", slug: "reference/scripted-modules/workflow" },
+    ],
+  },
+  {
+    category: "nginz-token",
+    label: "nginz-token",
+    items: [
+      { title: "Coming soon" },
+    ],
+  },
+];
+
+const currentCategory = "nginz";
 ---
 
 <BaseLayout title="Docs | nginz">
-  <section class="page-header">
-    <p class="muted">Documentation</p>
-    <h1>Docs</h1>
-    <p>Technical documentation for the nginz family.</p>
-  </section>
+  <div class="docs-layout">
+    <aside class="docs-sidebar">
+      <div class="sidebar-sections">
+        {navSections.map((section) => (
+          <div class="sidebar-category">
+            <button class={`sidebar-category-btn${section.category === currentCategory ? ' active' : ''}`} data-category={section.category}>
+              {section.category === "nginz" && <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5Z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>}
+              {section.category === "nginz-njs" && <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>}
+              {section.category === "nginz-token" && <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>}
+              <span>{section.label}</span>
+            </button>
+          </div>
+        ))}
+      </div>
 
-  <section class="card-grid">
-    {docs.map((d: CollectionEntry<"docs">) => (
-      <article class="card">
-        <h2><a href={`/docs/${d.slug}`}>{d.data.title}</a></h2>
-      </article>
-    ))}
-  </section>
+      <div class="sidebar-pages">
+        {navSections.filter(s => s.category === currentCategory).map((section) => (
+          <nav class="sidebar-nav">
+            {section.items.map((item: any) => (
+              item.divider
+                ? <div class="sidebar-divider">{item.label}</div>
+                : item.slug
+                  ? <a href={`/docs/${item.slug}`} class="sidebar-link">{item.title}</a>
+                  : <span class="sidebar-link sidebar-link-muted">{item.title}</span>
+            ))}
+          </nav>
+        ))}
+      </div>
+
+      <div class="sidebar-cta">
+        <a href="/contact" class="btn btn-secondary" style="width: 100%; font-size: var(--text-xs);">Need Help?</a>
+      </div>
+    </aside>
+
+    <div class="docs-content">
+      <div class="docs-content-inner">
+        <h1>Documentation</h1>
+        <p class="muted" style="font-size: var(--text-lg); margin-bottom: var(--sp-8);">
+          Technical documentation for the nginz family. Select a product category in the sidebar to explore modules and guides.
+        </p>
+
+        <div class="card-grid" style="grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));">
+          {navSections.map((section) => (
+            <a href={`/docs/${section.items.find((i: any) => i.slug)?.slug ?? '#'}`} style="text-decoration: none; color: inherit;">
+              <div class="card" style="padding: var(--sp-5);">
+                <div style="display: flex; align-items: center; gap: var(--sp-2); margin-bottom: var(--sp-3);">
+                  <div class="icon-box" style="width: 28px; height: 28px; min-width: 28px;">
+                    {section.category === "nginz" && <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5Z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>}
+                    {section.category === "nginz-njs" && <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>}
+                    {section.category === "nginz-token" && <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>}
+                  </div>
+                  <span class={`tag${section.category !== 'nginz' ? ' tag-mint' : ''}`}>{section.label}</span>
+                </div>
+                <h3 style="font-size: var(--text-base);">{section.label === 'nginz' ? 'Core Platform' : section.label === 'nginz-njs' ? 'Policy Engine' : 'AI Gateway'}</h3>
+                <p style="font-size: var(--text-sm); color: var(--color-text-secondary);">{section.items.length} docs</p>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
 </BaseLayout>
+

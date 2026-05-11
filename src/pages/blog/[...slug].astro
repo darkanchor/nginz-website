@@ -19,19 +19,7 @@ const { Content } = await post.render();
 ---
 
 <BaseLayout title={post.data.title} description={post.data.description ?? `${post.data.title} on the nginz blog.`}>
-  <div class="page-header" style="max-width: 800px; margin: 0 auto var(--spacing-12); text-align: center;">
-    <h1>{post.data.title}</h1>
-    {post.data.description && <p class="muted" style="font-size: var(--text-lg);">{post.data.description}</p>}
-    {(post.data.author || post.data.date) && (
-      <div class="muted" style="font-size: var(--text-sm); margin-top: var(--spacing-4);">
-        {post.data.author && <span>By {post.data.author}</span>}
-        {post.data.author && post.data.date && <span> • </span>}
-        {post.data.date && <span>{post.data.date.toLocaleDateString("en-US")}</span>}
-      </div>
-    )}
-  </div>
-
-  <article class="prose" style="max-width: 800px; margin: 0 auto; padding-bottom: var(--spacing-16);">
+  <article class="prose" style="max-width: 800px; margin: 0 auto; padding-bottom: var(--sp-16);">
     <Content />
   </article>
 </BaseLayout>
