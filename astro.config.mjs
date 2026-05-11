@@ -6,7 +6,7 @@ import { defineConfig, passthroughImageService } from "astro/config";
 export default defineConfig({
   devToolbar: { enabled: false },
   output: "static",
-  site: "https://nginz.dev",
+  site: "https://darkanchor.com",
   image: {
     service: passthroughImageService(),
   },

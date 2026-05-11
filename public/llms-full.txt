@@ -1,10 +1,81 @@
-# nginz full index
+# darkanchor / nginz — full agent index
 
-This file is a placeholder for expanded agent-ingestible content.
+This file provides expanded agent-ingestible content for the nginz product family by darkanchor.
 
-- /products/nginz
-- /products/nginz-njs
-- /products/nginz-token
-- /pricing
-- /docs
-- /contact
+## Organization
+- Name: darkanchor
+- Site: https://darkanchor.com
+- GitHub: https://github.com/darkanchor
+
+## Products
+
+### nginz
+- License: Apache-2.0
+- Category: Open Source
+- Tagline: Core Zig nginx module platform for modern HTTP infrastructure.
+- URL: /products/nginz
+- Native modules: acme, cache-purge, cache-tags, canary, circuit-breaker, consul, dynamic-upstreams, echoz, graphql, healthcheck, jsonschema, jwt, nftset, njs, oidc, pgrest, prometheus, ratelimit, redis, requestid, transform, upstream-balancer, waf, wechatpay, worker-events
+
+### nginz-njs
+- License: Apache-2.0
+- Category: Policy Layer
+- Tagline: Gleam→njs programmable policy layer for dynamic request handling.
+- URL: /products/nginz-njs
+- Scripted modules: authz, control-api, feature-flags, health-gateway, http-client, metrics, mlcache, request-tracing, response-templating, response-transform, session, webhook, workflow
+
+### nginz-token
+- License: BSL-1.1
+- Category: AI Gateway
+- Tagline: Paid control layer for quotas, cost visibility, and organizational AI routing.
+- URL: /products/nginz-token
+- Status: Coming soon
+
+## Documentation
+
+All module documentation is under /docs/reference/modules/ (native) and /docs/reference/scripted-modules/ (njs).
+
+### nginz native modules
+- /docs/reference/modules/acme — ACME / Let's Encrypt: automatic TLS certificate issuance and renewal
+- /docs/reference/modules/cache-purge — Cache Purge API: selective cache invalidation
+- /docs/reference/modules/cache-tags — Cache Tags: tag-based cache grouping and purging
+- /docs/reference/modules/canary — Canary Routing: percentage-based traffic splitting
+- /docs/reference/modules/circuit-breaker — Circuit Breaker: upstream failure detection and automatic circuit opening
+- /docs/reference/modules/consul — Consul Integration: service discovery via HashiCorp Consul
+- /docs/reference/modules/dynamic-upstreams — Dynamic Upstreams: runtime upstream configuration without reload
+- /docs/reference/modules/echoz — Echoz Debug Output: request/response debugging
+- /docs/reference/modules/graphql — GraphQL Gateway: GraphQL query routing and execution
+- /docs/reference/modules/healthcheck — Health Checks: active and passive upstream health monitoring
+- /docs/reference/modules/jsonschema — JSON Schema Validation: request/response validation
+- /docs/reference/modules/jwt — JWT Authentication: bearer token validation and claim extraction
+- /docs/reference/modules/nftset — nftables IP Policy: IP allowlist/blocklist via nftables
+- /docs/reference/modules/njs — NJS Orchestration: JavaScript runtime for advanced request processing
+- /docs/reference/modules/oidc — OpenID Connect: OIDC authentication flow support
+- /docs/reference/modules/pgrest — PostgREST API: direct PostgreSQL REST API gateway
+- /docs/reference/modules/prometheus — Prometheus Metrics: request metrics for Prometheus scraping
+- /docs/reference/modules/ratelimit — Rate Limiting: configurable request rate limiting
+- /docs/reference/modules/redis — Redis: Redis integration for caching and key-value lookups
+- /docs/reference/modules/requestid — Request ID: unique request tracing identifiers
+- /docs/reference/modules/transform — JSON Transform: in-flight JSON response transformation
+- /docs/reference/modules/upstream-balancer — Upstream Balancer: weighted load balancing strategies
+- /docs/reference/modules/waf — WAF: web application firewall rules
+- /docs/reference/modules/wechatpay — WeChat Pay: WeChat Pay integration
+- /docs/reference/modules/worker-events — Worker Events: inter-worker event broadcasting
+
+### nginz-njs scripted modules
+- /docs/reference/scripted-modules/authz — Authorization Policy Engine
+- /docs/reference/scripted-modules/control-api — Control API: runtime inspection and management
+- /docs/reference/scripted-modules/feature-flags — Feature Flags: toggle features at the edge
+- /docs/reference/scripted-modules/health-gateway — Health Gateway: upstream health aggregation
+- /docs/reference/scripted-modules/http-client — HTTP Client: outbound HTTP from njs
+- /docs/reference/scripted-modules/metrics — Metrics: application-level metric reporting
+- /docs/reference/scripted-modules/mlcache — MLCache: machine learning model response caching
+- /docs/reference/scripted-modules/request-tracing — Request Tracing: distributed trace propagation
+- /docs/reference/scripted-modules/response-templating — Response Templating: dynamic response formatting
+- /docs/reference/scripted-modules/response-transform — Response Transform: programmatic response modification
+- /docs/reference/scripted-modules/session — Session: stateful session management
+- /docs/reference/scripted-modules/webhook — Webhook: outbound webhook delivery
+- /docs/reference/scripted-modules/workflow — Workflow: multi-step request orchestration
+
+## Other Pages
+- /products — Product overview
+- /contact — Contact form (POST /api/contact)

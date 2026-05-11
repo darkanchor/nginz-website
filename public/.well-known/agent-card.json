@@ -1,8 +1,8 @@
 {
-  "name": "nginz site agent",
-  "description": "Helps agents understand the nginz product family, pricing, and documentation.",
-  "url": "https://example.com",
-  "version": "0.1.0",
+  "name": "darkanchor nginz agent",
+  "description": "Agent card for the darkanchor nginz product family. Provides product information, documentation, and module reference for nginz (native nginx modules), nginz-njs (Gleam→njs policy layer), and nginz-token (AI gateway control).",
+  "url": "https://darkanchor.com",
+  "version": "0.2.0",
   "capabilities": {
     "streaming": false,
     "pushNotifications": false
@@ -11,14 +11,26 @@
     {
       "id": "product-info",
       "name": "Product Information",
-      "description": "Explains nginz, nginz-njs, nginz-token, pricing, and docs.",
-      "tags": ["products", "pricing", "docs"]
+      "description": "Explains nginz, nginz-njs, and nginz-token: licensing, capabilities, and module listings.",
+      "tags": ["products", "nginz", "nginz-njs", "nginz-token"]
+    },
+    {
+      "id": "docs-reference",
+      "name": "Documentation Reference",
+      "description": "Lists and describes all 27 native modules (nginz) and 13 scripted modules (nginz-njs) with links to their documentation pages.",
+      "tags": ["docs", "modules", "reference"]
+    },
+    {
+      "id": "contact",
+      "name": "Contact",
+      "description": "Submit inquiries via POST /api/contact.",
+      "tags": ["contact"]
     }
   ],
   "defaultInputModes": ["text/plain"],
   "defaultOutputModes": ["text/plain"],
   "provider": {
-    "organization": "nginz",
-    "url": "https://example.com"
+    "organization": "darkanchor",
+    "url": "https://github.com/darkanchor"
   }
 }
