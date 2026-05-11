@@ -22,8 +22,14 @@ Utilities for local dev, build, test, and **module documentation iteration**.
 
 ## Module documentation toolkit
 
-Native module reference docs live in `src/content/docs/reference/modules/`.
-Each module has one `.md` file using a consistent structure:
+There are now two parallel module reference families:
+
+- native modules: `src/content/docs/reference/modules/`
+- scripted modules: `src/content/docs/reference/scripted-modules/`
+
+Each family has an `index.md` landing page plus one `.md` file per module.
+
+Native module pages use this structure:
 
 ```
 ---
@@ -38,6 +44,26 @@ description: One-line explanation of what the module does.
 ## nginx.conf synthesis
 
 ## Directive reference
+
+## Works well with
+```
+
+Scripted module pages use the same rhythm, but replace directive reference with
+the library-facing API section:
+
+```
+---
+title: Module Name
+description: One-line explanation of what the module does.
+---
+
+# Module Name
+
+## When to use this module
+
+## nginx.conf synthesis
+
+## Public Gleam API
 
 ## Works well with
 ```
@@ -64,6 +90,10 @@ template with `title` and `description` frontmatter pre-filled. The
 remaining placeholders (`$USE_CASE_*`, `$DIRECTIVE_*`, etc.) are left for
 you to fill manually since they require domain judgment.
 
+For scripted modules, reuse the same approach but adapt the API section to
+document the important `pub fn` surface and the `exports()` adapter rather
+than nginx directives.
+
 Pass an explicit slug whenever the customer-facing title differs from the
 native module name. That keeps URLs aligned with the actual nginz module
 directory and the reference index.
@@ -85,7 +115,8 @@ After scaffolding:
 npm run validate:modules
 ```
 
-The validation script performs three checks:
+The validation script validates both native and scripted module doc sets. It
+performs three checks for each set:
 
 **1. Page structure** — every module `.md` file (except `index.md`) is
 checked for:
@@ -94,14 +125,13 @@ checked for:
 - `# H1` heading
 - `## When to use this module`
 - `## nginx.conf synthesis`
-- `## Directive reference`
+- `## Directive reference` for native modules, or `## Public Gleam API` for scripted modules
 - `## Works well with`
 
-**2. Index health** — the script parses `index.md` and verifies that every
-module referenced by URL (`/docs/reference/modules/<slug>`) has a
-corresponding `.md` file. By default missing pages are warnings because the
-index intentionally includes future modules. Use strict mode to fail on
-those gaps:
+**2. Index health** — the script parses each family's `index.md` and verifies
+that every module referenced by URL has a corresponding `.md` file. By
+default missing pages are warnings because an index may intentionally include
+future modules. Use strict mode to fail on those gaps:
 
 ```bash
 npm run validate:modules -- --strict-index
@@ -110,9 +140,8 @@ npm run validate:modules -- --strict-index
 The script also warns about `.md` files that exist but are not listed in the
 index.
 
-**3. Module cross-link health** — the script scans explicit
-`/docs/reference/modules/<slug>` links inside module pages and fails if any
-linked page is missing.
+**3. Module cross-link health** — the script scans explicit module links inside
+module pages and fails if any linked page is missing within the same family.
 
 Errors produce a non-zero exit code (useful for CI). Warnings are advisory
 and do not fail the run.
@@ -124,7 +153,7 @@ and do not fail the run.
 ### Iterative documentation rounds
 
 This repo supports repeated documentation rounds for new and existing
-modules. A typical iteration cycle looks like:
+modules across both module families. A typical iteration cycle looks like:
 
 ```
 Round N                          Round N+1
@@ -138,9 +167,11 @@ Round N                          Round N+1
 
 ### Step-by-step workflow for a new module doc
 
-1. **Identify the module** — determine the module name, its directives, and
-   its use cases. The nginz source tree (`src/`) is the authority for
-   directive names, contexts, and defaults.
+1. **Identify the module** — determine the module family, module name, and its
+   user-facing surface. For native docs, the nginz source tree is the authority
+   for directives, contexts, and defaults. For scripted docs, the nginz-njs
+   source tree is the authority for `pub fn` APIs, `exports()` adapter shape,
+   and test-backed nginx wiring.
 
 2. **Scaffold** — run `npm run scaffold:module -- --slug module-slug "Module Name" "Description"`.
    This creates the `.md` file from template.
@@ -156,10 +187,15 @@ Round N                          Round N+1
    - `$RELATED_MODULE_*` and `$RELATED_MODULE_*_SLUG` — cross-links to other
       modules with a brief explanation of why they pair well
 
-4. **Register in the index** — add a bullet under the appropriate category
-   in `src/content/docs/reference/modules/index.md`:
+4. **Register in the index** — add a bullet under the appropriate category in
+   the correct family index:
+    ```markdown
+    - [Module Name](/docs/reference/modules/module-slug)
+    ```
+
+   For scripted modules, use:
    ```markdown
-   - [Module Name](/docs/reference/modules/module-slug)
+   - [Module Name](/docs/reference/scripted-modules/module-slug)
    ```
 
 5. **Validate** — run `npm run validate:modules` and fix any errors. Use
@@ -176,7 +212,9 @@ Round N                          Round N+1
   2. When is it actually useful?
   3. What does the nginx.conf shape look like?
   4. Which other modules work well with it?
-- Directives must list all applicable **contexts** and the **default value**.
+- Native docs should list directives with contexts and defaults.
+- Scripted docs should explain the important `pub fn` APIs and make clear that
+  `exports()` is the nginx adapter, not the whole product surface.
 - Examples in `nginx.conf synthesis` must be realistic (copy-pasteable with
   minimal changes).
 - Cross-links in "Works well with" should use explicit markdown links and
@@ -188,8 +226,9 @@ Round N                          Round N+1
 ### Handling existing docs
 
 When updating an existing module doc:
-- Do not restructure the headings (the validation script enforces them).
-- Add directives or use cases as the module evolves.
+- Do not restructure the required headings (the validation script enforces them).
+- Update directives or use cases for native docs as the module evolves.
+- Update exposed APIs or test-backed wiring for scripted docs as the module evolves.
 - Update the `nginx.conf synthesis` example if the recommended configuration
   pattern changes.
 - Re-run validation after any change.
