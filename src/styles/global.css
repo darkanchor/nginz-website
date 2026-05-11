@@ -45,6 +45,7 @@
   --color-warning: #9A6700;
   --color-danger: #CF222E;
   --color-header-bg: #FFFFFF;
+  --color-footer-bg: #F7F8FA;
 
   /* Shadows */
   --shadow-sm: 0 1px 2px rgba(27, 31, 36, 0.06);
@@ -120,6 +121,7 @@ html.dark {
   --color-warning: #FFDA7A;
   --color-danger: #FF7575;
   --color-header-bg: #1E2129;
+  --color-footer-bg: #1A1D24;
 
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
   --shadow-md: 0 3px 6px rgba(0, 0, 0, 0.25);
@@ -353,8 +355,11 @@ html.dark .theme-toggle .icon-moon { display: none; }
 /* ─── Footer ─── */
 .site-footer {
   margin-top: var(--sp-24);
+  background: var(--color-footer-bg);
   padding: var(--sp-12) 0;
   border-top: 1px solid var(--color-border);
+}
+.site-footer .footer-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: var(--sp-8);

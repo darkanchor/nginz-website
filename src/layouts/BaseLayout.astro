@@ -40,30 +40,34 @@ const { title, description = "The nginz family: nginx + nginz, nginz-njs, and ng
       <main class="site-main">
         <slot />
       </main>
-
-      <footer class="site-footer">
-        <div>
-          <h4>darkanchor</h4>
-          <p class="footer-desc">The modern Zig-based platform for nginx infrastructure. Core modules, programmable policy, and AI gateway control.</p>
-        </div>
-        <div>
-          <h4>Products</h4>
-          <ul>
-            <li><a href="/products/nginz">nginz core</a></li>
-            <li><a href="/products/nginz-njs">nginz-njs</a></li>
-            <li><a href="/products/nginz-token">nginz-token</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4>Developers</h4>
-          <ul>
-            <li><a href="/docs">Documentation</a></li>
-            <li><a href="https://github.com/darkanchor" target="_blank" rel="noopener">GitHub</a></li>
-            <li><a href="/llms.txt">Agent Docs</a></li>
-          </ul>
-        </div>
-      </footer>
     </div>
+
+    <footer class="site-footer">
+      <div class="site-shell">
+        <div class="footer-grid">
+          <div>
+            <h4>darkanchor</h4>
+            <p class="footer-desc">The modern Zig-based platform for nginx infrastructure. Core modules, programmable policy, and AI gateway control.</p>
+          </div>
+          <div>
+            <h4>Products</h4>
+            <ul>
+              <li><a href="/products/nginz">nginz core</a></li>
+              <li><a href="/products/nginz-njs">nginz-njs</a></li>
+              <li><a href="/products/nginz-token">nginz-token</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4>Developers</h4>
+            <ul>
+              <li><a href="/docs">Documentation</a></li>
+              <li><a href="https://github.com/darkanchor" target="_blank" rel="noopener">GitHub</a></li>
+              <li><a href="/llms.txt">Agent Docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </footer>
 
     <script is:inline>
       // Theme toggle
