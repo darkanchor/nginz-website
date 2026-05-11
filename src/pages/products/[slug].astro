@@ -18,13 +18,13 @@ const { product } = Astro.props;
 const { Content } = await product.render();
 ---
 
-<BaseLayout title={product.data.title} description={product.data.tagline ?? `${product.data.title} in the nginz family.`}>
+<BaseLayout title={product.data.title} description={product.data.tagline ?? `${product.data.title} in the nginz family.`} siteName="darkanchor">
   <div class="page-header" style="max-width: 800px; margin: 0 auto var(--sp-8); text-align: center;">
     {product.data.category && <span class={`tag${product.data.category === 'Enterprise' ? ' tag-mint' : ''}`} style="margin-bottom: var(--sp-3);">{product.data.category}</span>}
     {product.data.tagline && <p class="muted" style="font-size: var(--text-lg);">{product.data.tagline}</p>}
     <div style="margin-top: var(--sp-6); display: flex; gap: var(--sp-3); justify-content: center;">
       <a href="/contact" class="btn btn-primary">Contact</a>
-      <a href="/docs" class="btn btn-secondary">Read Docs</a>
+      <a href={product.slug === 'nginz-njs' ? '/docs/reference/scripted-modules/authz' : '/docs'} class="btn btn-secondary">Read Docs</a>
     </div>
   </div>
 

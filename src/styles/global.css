@@ -18,8 +18,8 @@
   --color-bg: #FFFFFF;
   --color-bg-elevated: #FFFFFF;
   --color-bg-sunken: #F7F8FA;
-  --color-bg-code: #F4F6F8;
-  --color-bg-code-block: #F1F3F6;
+  --color-bg-code: #EDEEF0;
+  --color-bg-code-block: #EBECEF;
   --color-text: #1F2328;
   --color-text-secondary: #656D76;
   --color-text-tertiary: #8B949E;
@@ -95,8 +95,8 @@ html.dark {
   --color-bg: #1E2129;
   --color-bg-elevated: #272B34;
   --color-bg-sunken: #1A1D24;
-  --color-bg-code: #3E4451;
-  --color-bg-code-block: #3A3F4B;
+  --color-bg-code: #262930;
+  --color-bg-code-block: #24272E;
   --color-text: #E7EAEF;
   --color-text-secondary: #A9B4C6;
   --color-text-tertiary: #8B99B2;
@@ -445,6 +445,7 @@ html.dark .btn-outline:hover {
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: var(--sp-6);
   margin: var(--sp-8) 0;
+  align-items: stretch;
 }
 
 .card {
@@ -454,6 +455,7 @@ html.dark .btn-outline:hover {
   background: var(--color-bg-elevated);
   display: flex;
   flex-direction: column;
+  height: 100%;
   transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 .card:hover {
@@ -505,6 +507,29 @@ html.dark .btn-outline:hover {
 .page-header h1 { margin-bottom: var(--sp-2); }
 
 /* ─── Table ─── */
+/* ─── Tables ─── */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: var(--sp-4) 0;
+  font-size: var(--text-sm);
+}
+th {
+  text-align: left;
+  font-weight: 600;
+  padding: var(--sp-3) var(--sp-4);
+  border-bottom: 2px solid var(--color-text);
+}
+td {
+  padding: var(--sp-3) var(--sp-4);
+  border-bottom: 1px solid var(--color-border-subtle);
+  vertical-align: top;
+}
+tr:last-child td {
+  border-bottom: none;
+}
+
+/* ─── Matrix table (homepage) ─── */
 .matrix-table {
   width: 100%;
   border-collapse: collapse;
@@ -514,18 +539,22 @@ html.dark .btn-outline:hover {
   border-radius: var(--radius-lg);
   overflow: hidden;
 }
-.matrix-table th, .matrix-table td {
+.matrix-table th {
   padding: var(--sp-3) var(--sp-4);
   border-bottom: 1px solid var(--color-border-subtle);
   text-align: left;
   font-size: var(--text-sm);
-}
-.matrix-table th {
   background: var(--color-bg-sunken);
   font-weight: 600;
   color: var(--color-text);
 }
-.matrix-table td { color: var(--color-text-secondary); }
+.matrix-table td {
+  padding: var(--sp-3) var(--sp-4);
+  border-bottom: 1px solid var(--color-border-subtle);
+  text-align: left;
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
 
 /* ─── Prose ─── */
 .prose { max-width: 65ch; }

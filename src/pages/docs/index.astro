@@ -68,13 +68,15 @@ const navSections = [
 const currentCategory = "nginz";
 ---
 
-<BaseLayout title="Docs | nginz">
+<BaseLayout title="Docs" siteName="darkanchor">
   <div class="docs-layout">
-    <aside class="docs-sidebar">
+    <aside class="docs-sidebar" id="docs-sidebar">
       <div class="sidebar-sections">
         {navSections.map((section) => (
           <div class="sidebar-category">
-            <button class={`sidebar-category-btn${section.category === currentCategory ? ' active' : ''}`} data-category={section.category}>
+            <button class={`sidebar-category-btn${section.category === currentCategory ? ' active' : ''}`} data-category={section.category}
+              onclick={`document.querySelectorAll('.sidebar-pages').forEach(el => el.style.display = 'none'); const target = document.getElementById('pages-' + this.dataset.category); if (target) target.style.display = 'block'; document.querySelectorAll('.sidebar-category-btn').forEach(b => b.classList.remove('active')); this.classList.add('active');`}
+            >
               {section.category === "nginz" && <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5Z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>}
               {section.category === "nginz-njs" && <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>}
               {section.category === "nginz-token" && <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>}
@@ -84,8 +86,8 @@ const currentCategory = "nginz";
         ))}
       </div>
 
-      <div class="sidebar-pages">
-        {navSections.filter(s => s.category === currentCategory).map((section) => (
+      {navSections.map((section) => (
+        <div class="sidebar-pages" id={`pages-${section.category}`} style={section.category === currentCategory ? '' : 'display: none;'}>
           <nav class="sidebar-nav">
             {section.items.map((item: any) => (
               item.divider
@@ -95,8 +97,8 @@ const currentCategory = "nginz";
                   : <span class="sidebar-link sidebar-link-muted">{item.title}</span>
             ))}
           </nav>
-        ))}
-      </div>
+        </div>
+      ))}
 
       <div class="sidebar-cta">
         <a href="/contact" class="btn btn-secondary" style="width: 100%; font-size: var(--text-xs);">Need Help?</a>

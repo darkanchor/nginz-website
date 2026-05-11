@@ -18,7 +18,7 @@ const { post } = Astro.props;
 const { Content } = await post.render();
 ---
 
-<BaseLayout title={post.data.title} description={post.data.description ?? `${post.data.title} on the nginz blog.`}>
+<BaseLayout title={post.data.title} description={post.data.description ?? `${post.data.title} on the nginz blog.`} siteName="darkanchor">
   <article class="prose" style="max-width: 800px; margin: 0 auto; padding-bottom: var(--sp-16);">
     <Content />
   </article>

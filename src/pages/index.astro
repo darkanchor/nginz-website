@@ -28,7 +28,7 @@ const products = [
 ];
 ---
 
-<BaseLayout title="HTTP Infrastructure & AI Gateways">
+<BaseLayout title="HTTP Infrastructure & AI Gateways" siteName="darkanchor">
   <section style="padding: var(--sp-16) 0 var(--sp-12); text-align: center; max-width: 800px; margin: 0 auto;">
     <h1 style="margin-bottom: var(--sp-4);">
       Run nginx + nginz for HTTP infrastructure.
@@ -53,7 +53,7 @@ const products = [
 
     <div class="card-grid">
       {products.map((p) => (
-        <a href={p.href} style="text-decoration: none; color: inherit;">
+        <a href={p.href} style="text-decoration: none; color: inherit; display: block; height: 100%;">
           <div class="card">
             <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: var(--sp-4);">
               <div class="icon-box">

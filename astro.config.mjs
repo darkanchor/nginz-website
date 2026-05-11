@@ -10,6 +10,9 @@ export default defineConfig({
   image: {
     service: passthroughImageService(),
   },
+  markdown: {
+    syntaxHighlight: false,
+  },
   build: {
     assets: "_assets",
   },
