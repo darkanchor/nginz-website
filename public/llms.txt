@@ -1,0 +1,12 @@
+# nginz
+> nginx-native infrastructure products for HTTP, policy, and AI gateway control.
+
+## Products
+- [/products/nginz](/products/nginz): Core Zig nginx module platform.
+- [/products/nginz-njs](/products/nginz-njs): Gleam→njs policy layer for programmable nginx logic.
+- [/products/nginz-token](/products/nginz-token): AI gateway product for rate, cost, security, and team control.
+
+## Key Pages
+- [/pricing](/pricing): Plan and commercial-use overview.
+- [/docs](/docs): Technical documentation entry.
+- [/contact](/contact): Human and agent contact entry.

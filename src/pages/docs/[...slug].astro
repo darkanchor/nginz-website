@@ -1,0 +1,49 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const docs = await getCollection('docs');
+  return docs.map((doc: CollectionEntry<'docs'>) => ({
+    params: { slug: doc.slug },
+    props: { doc },
+  }));
+}
+
+type Props = {
+  doc: CollectionEntry<'docs'>;
+};
+
+const { doc } = Astro.props;
+const { Content } = await doc.render();
+---
+
+<BaseLayout title={doc.data.title} description={doc.data.description ?? `${doc.data.title} documentation for the nginz family.`}>
+  <div style="display: grid; grid-template-columns: 250px 1fr; gap: var(--spacing-12); max-width: 1200px; margin: 0 auto; align-items: start;">
+    
+    <aside style="position: sticky; top: var(--spacing-8); border-right: 1px solid var(--color-line); padding-right: var(--spacing-6); height: calc(100vh - 100px); overflow-y: auto;">
+      <h3 style="font-size: var(--text-sm); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--spacing-4); color: var(--color-text-muted);">Documentation</h3>
+      <nav style="display: grid; gap: var(--spacing-2);">
+        <a href="/docs/getting-started/overview" style="font-size: var(--text-sm); font-weight: 500;">Getting Started</a>
+        <a href="/docs/getting-started/local-development" style="font-size: var(--text-sm); font-weight: 500;">Local Development</a>
+        <a href="/docs/guides/cloudflare-deployment" style="font-size: var(--text-sm); font-weight: 500;">Deployment</a>
+        <a href="/docs/guides/payments" style="font-size: var(--text-sm); font-weight: 500;">Payments</a>
+      </nav>
+      
+      <div style="margin-top: var(--spacing-8); padding-top: var(--spacing-6); border-top: 1px solid var(--color-line);">
+        <a href="/contact" class="btn btn-outline" style="width: 100%; font-size: var(--text-xs);">Need Help?</a>
+      </div>
+    </aside>
+
+    <article style="padding-bottom: var(--spacing-16); max-width: 800px;">
+      <div class="page-header" style="margin-bottom: var(--spacing-8);">
+        <h1 style="margin-bottom: var(--spacing-2);">{doc.data.title}</h1>
+        {doc.data.description && <p class="muted" style="font-size: var(--text-lg);">{doc.data.description}</p>}
+      </div>
+
+      <div class="prose" style="max-width: none;">
+        <Content />
+      </div>
+    </article>
+  </div>
+</BaseLayout>

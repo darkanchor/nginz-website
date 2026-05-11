@@ -1,0 +1,22 @@
+---
+import { getCollection, type CollectionEntry } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const docs = await getCollection("docs");
+---
+
+<BaseLayout title="Docs | nginz">
+  <section class="page-header">
+    <p class="muted">Documentation</p>
+    <h1>Docs</h1>
+    <p>Technical documentation for the nginz family.</p>
+  </section>
+
+  <section class="card-grid">
+    {docs.map((d: CollectionEntry<"docs">) => (
+      <article class="card">
+        <h2><a href={`/docs/${d.slug}`}>{d.data.title}</a></h2>
+      </article>
+    ))}
+  </section>
+</BaseLayout>

@@ -1,0 +1,24 @@
+{
+  "name": "nginz site agent",
+  "description": "Helps agents understand the nginz product family, pricing, and documentation.",
+  "url": "https://example.com",
+  "version": "0.1.0",
+  "capabilities": {
+    "streaming": false,
+    "pushNotifications": false
+  },
+  "skills": [
+    {
+      "id": "product-info",
+      "name": "Product Information",
+      "description": "Explains nginz, nginz-njs, nginz-token, pricing, and docs.",
+      "tags": ["products", "pricing", "docs"]
+    }
+  ],
+  "defaultInputModes": ["text/plain"],
+  "defaultOutputModes": ["text/plain"],
+  "provider": {
+    "organization": "nginz",
+    "url": "https://example.com"
+  }
+}

@@ -1,0 +1,53 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="About" description="The story and vision behind the nginz family of infrastructure tools.">
+  <div class="page-header" style="text-align: center; margin-bottom: var(--spacing-12);">
+    <h1>About nginz</h1>
+    <p class="prose muted" style="margin: 0 auto; font-size: var(--text-lg);">
+      Modernizing nginx for the AI era.
+    </p>
+  </div>
+
+  <section class="section" style="padding-top: 0; max-width: 800px; margin: 0 auto;">
+    <div style="font-size: var(--text-lg); line-height: 1.8; color: var(--color-slate);">
+      <p style="margin-bottom: var(--spacing-6);">
+        The <strong>nginz</strong> project was born from a simple realization: nginx is the most battle-tested HTTP server in the world, but extending it has historically been difficult, memory-unsafe, or limited by older embedded languages.
+      </p>
+      
+      <p style="margin-bottom: var(--spacing-6);">
+        By using <strong>Zig</strong>, we unlock native C-level performance and memory safety without sacrificing the raw speed that makes nginx ubiquitous. We call this the open-source core: <code>nginz</code>.
+      </p>
+      
+      <h3 style="margin-top: var(--spacing-12); margin-bottom: var(--spacing-4);">Moving up the stack</h3>
+      
+      <p style="margin-bottom: var(--spacing-6);">
+        Infrastructure isn't just about moving bytes anymore. It's about programmable policy and intelligent routing.
+      </p>
+      
+      <p style="margin-bottom: var(--spacing-6);">
+        With <code>nginz-njs</code>, we bring type-safe functional programming (via Gleam) to the nginx javascript engine (njs). This allows teams to write complex, provably correct routing logic that compiles down to high-performance event loop code.
+      </p>
+
+      <h3 style="margin-top: var(--spacing-12); margin-bottom: var(--spacing-4);">The AI Gateway</h3>
+      
+      <p style="margin-bottom: var(--spacing-6);">
+        As AI becomes deeply integrated into every product, companies are losing visibility into token spend, and struggling to manage multiple LLM providers.
+      </p>
+      
+      <p style="margin-bottom: var(--spacing-6);">
+        <code>nginz-token</code> is our enterprise solution. It sits right where it belongs: at the edge of your network, controlling quotas, routing requests, and providing deep cost visibility before a single byte reaches your application servers.
+      </p>
+      
+      <div style="margin-top: var(--spacing-12); padding: var(--spacing-8); background: var(--color-paper); border: 1px solid var(--color-line); border-radius: var(--radius-lg); text-align: center;">
+        <h4 style="margin-bottom: var(--spacing-4);">Join the community</h4>
+        <p class="muted" style="margin-bottom: var(--spacing-6);">We're building this in the open. Check out the code, read the docs, and run it locally.</p>
+        <div style="display: flex; gap: var(--spacing-4); justify-content: center;">
+          <a href="https://github.com/nginz-project" target="_blank" rel="noopener" class="btn btn-outline">GitHub</a>
+          <a href="/docs" class="btn btn-primary">Read Documentation</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

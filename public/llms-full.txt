@@ -1,0 +1,10 @@
+# nginz full index
+
+This file is a placeholder for expanded agent-ingestible content.
+
+- /products/nginz
+- /products/nginz-njs
+- /products/nginz-token
+- /pricing
+- /docs
+- /contact

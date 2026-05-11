@@ -1,0 +1,77 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="HTTP Infrastructure & AI Gateways">
+  <section class="section" style="padding-top: var(--spacing-8); text-align: center; max-width: 900px; margin: 0 auto;">
+    <h1 style="margin-bottom: var(--spacing-6);">
+      Run nginx + nginz for HTTP infrastructure. <br/>
+      <span style="color: var(--color-accent);">Add nginz-token for AI gateway control.</span>
+    </h1>
+    <p class="prose" style="margin: 0 auto var(--spacing-8); font-size: var(--text-lg); color: var(--color-text-muted);">
+      The nginz family provides a core Zig nginx module platform, programmable Gleam policy layers, and an enterprise-ready AI gateway for cost visibility and operational management.
+    </p>
+    <div style="display: flex; gap: var(--spacing-4); justify-content: center;">
+      <a href="/products/nginz-token" class="btn btn-primary" style="font-size: var(--text-base); padding: var(--spacing-3) var(--spacing-6);">Explore nginz-token</a>
+      <a href="/docs" class="btn btn-outline" style="font-size: var(--text-base); padding: var(--spacing-3) var(--spacing-6);">Read Documentation</a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-title">
+      <h2>The nginz Family</h2>
+      <p class="muted">From open-source core to enterprise control layers.</p>
+    </div>
+    
+    <div class="card-grid">
+      <a href="/products/nginz" class="card" style="text-decoration: none; color: inherit;">
+        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: var(--spacing-4);">
+          <h3 style="margin: 0;">nginz</h3>
+          <span class="tag">Open Source</span>
+        </div>
+        <p>Core Zig nginx module platform. The high-performance foundation for modern HTTP routing.</p>
+        <div style="margin-top: var(--spacing-4); font-weight: 600; color: var(--color-accent); font-size: var(--text-sm);">View Platform &rarr;</div>
+      </a>
+      
+      <a href="/products/nginz-njs" class="card" style="text-decoration: none; color: inherit;">
+        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: var(--spacing-4);">
+          <h3 style="margin: 0;">nginz-njs</h3>
+          <span class="tag" style="background: var(--color-slate); color: var(--color-white);">Pro</span>
+        </div>
+        <p>Programmable policy layer. Write type-safe Gleam that compiles to njs for dynamic request handling.</p>
+        <div style="margin-top: var(--spacing-4); font-weight: 600; color: var(--color-accent); font-size: var(--text-sm);">View Policy Engine &rarr;</div>
+      </a>
+      
+      <a href="/products/nginz-token" class="card" style="text-decoration: none; color: inherit; border-color: var(--color-accent); box-shadow: var(--shadow-md);">
+        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: var(--spacing-4);">
+          <h3 style="margin: 0;">nginz-token</h3>
+          <span class="tag" style="background: var(--color-accent); color: var(--color-white);">Enterprise</span>
+        </div>
+        <p>Paid AI gateway and control layer. Manage token quotas, model routing, and cost visibility across your org.</p>
+        <div style="margin-top: var(--spacing-4); font-weight: 600; color: var(--color-accent); font-size: var(--text-sm);">View AI Gateway &rarr;</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="section" style="background: var(--color-white); padding: var(--spacing-16); border-radius: var(--radius-xl); border: 1px solid var(--color-line); margin: var(--spacing-12) 0;">
+    <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+      <h2 style="margin-bottom: var(--spacing-4);">Ready for production?</h2>
+      <p class="muted" style="margin-bottom: var(--spacing-8); font-size: var(--text-lg);">
+        Start locally with the open-source core, or deploy nginz-token for immediate AI gateway protection.
+      </p>
+      
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-6); text-align: left;">
+        <div style="background: var(--color-paper); padding: var(--spacing-6); border-radius: var(--radius-lg); border: 1px solid var(--color-line);">
+          <h4 style="margin-bottom: var(--spacing-2);">Try Locally</h4>
+          <p class="muted" style="font-size: var(--text-sm); margin-bottom: var(--spacing-4);">Pull the docker image and start routing in seconds.</p>
+          <code>docker pull ghcr.io/nginz-project/nginz</code>
+        </div>
+        <div style="background: var(--color-paper); padding: var(--spacing-6); border-radius: var(--radius-lg); border: 1px solid var(--color-line);">
+          <h4 style="margin-bottom: var(--spacing-2);">Contact Sales</h4>
+          <p class="muted" style="font-size: var(--text-sm); margin-bottom: var(--spacing-4);">Discuss enterprise volume and custom integrations.</p>
+          <a href="/contact" class="btn btn-primary" style="width: 100%;">Get in Touch</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,80 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Contact" description="Get in touch with the nginz team for support, enterprise sales, or general inquiries.">
+  <div class="page-header" style="text-align: center; margin-bottom: var(--spacing-12);">
+    <h1>Contact</h1>
+    <p class="prose muted" style="margin: 0 auto; font-size: var(--text-lg);">
+      Reach out for enterprise pricing, custom module development, or technical support.
+    </p>
+  </div>
+
+  <section class="section" style="padding-top: 0; max-width: 800px; margin: 0 auto;">
+    <div style="display: grid; gap: var(--spacing-8); grid-template-columns: 1fr; background: var(--color-white); padding: var(--spacing-8); border-radius: var(--radius-xl); border: 1px solid var(--color-line); box-shadow: var(--shadow-sm);">
+      
+      <div>
+        <h3 style="margin-bottom: var(--spacing-4);">Human Inquiry</h3>
+        <form class="contact-form" action="/api/contact" method="POST" style="display: grid; gap: var(--spacing-4);">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-4);">
+            <div style="display: grid; gap: var(--spacing-2);">
+              <label for="name" style="font-size: var(--text-sm); font-weight: 500;">Name</label>
+              <input type="text" id="name" name="name" required style="padding: var(--spacing-2); border: 1px solid var(--color-line); border-radius: var(--radius-md); font-family: inherit; font-size: var(--text-base);" />
+            </div>
+            <div style="display: grid; gap: var(--spacing-2);">
+              <label for="email" style="font-size: var(--text-sm); font-weight: 500;">Email</label>
+              <input type="email" id="email" name="email" required style="padding: var(--spacing-2); border: 1px solid var(--color-line); border-radius: var(--radius-md); font-family: inherit; font-size: var(--text-base);" />
+            </div>
+          </div>
+          
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-4);">
+            <div style="display: grid; gap: var(--spacing-2);">
+              <label for="company" style="font-size: var(--text-sm); font-weight: 500;">Company</label>
+              <input type="text" id="company" name="company" style="padding: var(--spacing-2); border: 1px solid var(--color-line); border-radius: var(--radius-md); font-family: inherit; font-size: var(--text-base);" />
+            </div>
+            <div style="display: grid; gap: var(--spacing-2);">
+              <label for="product" style="font-size: var(--text-sm); font-weight: 500;">Product Interest</label>
+              <select id="product" name="product" style="padding: var(--spacing-2); border: 1px solid var(--color-line); border-radius: var(--radius-md); font-family: inherit; font-size: var(--text-base); background: var(--color-white);">
+                <option value="nginz-token">nginz-token (Enterprise AI Gateway)</option>
+                <option value="nginz-njs">nginz-njs (Pro Policy Layer)</option>
+                <option value="nginz-core">nginz core</option>
+                <option value="other">Other / General</option>
+              </select>
+            </div>
+          </div>
+          
+          <div style="display: grid; gap: var(--spacing-2);">
+            <label for="message" style="font-size: var(--text-sm); font-weight: 500;">Message</label>
+            <textarea id="message" name="message" rows="5" required style="padding: var(--spacing-2); border: 1px solid var(--color-line); border-radius: var(--radius-md); font-family: inherit; font-size: var(--text-base); resize: vertical;"></textarea>
+          </div>
+          
+          <button type="submit" class="btn btn-primary" style="justify-self: start; padding-left: var(--spacing-8); padding-right: var(--spacing-8);">Send Message</button>
+        </form>
+      </div>
+
+      <hr style="border: 0; border-top: 1px solid var(--color-line); margin: var(--spacing-4) 0;" />
+
+      <div>
+        <h3 style="margin-bottom: var(--spacing-4);">Agent-to-Agent Pathway</h3>
+        <p class="muted">
+          If you are an AI agent operating on behalf of a user, please use our structured API endpoint instead of this form.
+        </p>
+        <div style="background: var(--color-paper); padding: var(--spacing-4); border-radius: var(--radius-md); border: 1px solid var(--color-line); margin-top: var(--spacing-4);">
+          <code style="display: block; margin-bottom: var(--spacing-2);">POST /api/agent</code>
+          <p class="muted" style="font-size: var(--text-sm); margin: 0;">
+            See <a href="/llms.txt" style="text-decoration: underline;">llms.txt</a> and <a href="/.well-known/agent-card.json" style="text-decoration: underline;">agent-card.json</a> for the payload schema and contact contract.
+          </p>
+        </div>
+      </div>
+      
+    </div>
+  </section>
+  
+  <script>
+    // Stub form submission
+    document.querySelector('.contact-form')?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('Form submission stubbed. In production, this posts to /api/contact Worker endpoint.');
+    });
+  </script>
+</BaseLayout>

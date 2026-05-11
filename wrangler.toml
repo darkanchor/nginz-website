@@ -1,0 +1,21 @@
+name = "nginz-website-worker"
+main = "worker/index.ts"
+compatibility_date = "2025-04-01"
+
+# Routes: Worker owns /api/* and /webhooks/* exclusively.
+# Astro/Pages owns everything else via static HTML.
+#
+# Production routes should be configured at the Cloudflare dashboard
+# or via a custom-domain setup that splits:
+#   - *.nginz.dev/*        → Cloudflare Pages (Astro static build)
+#   - *.nginz.dev/api/*    → This Worker
+#   - *.nginz.dev/webhooks/* → This Worker
+#
+# For local dev, run the Worker on a separate port (8788) and
+# the Astro dev server on its default port (4321).
+
+[env.dev]
+# Local dev environment variables and secrets go here or in .dev.vars
+
+[env.production]
+# Production environment variables and secrets

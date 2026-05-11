@@ -1,0 +1,76 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Products" description="The nginz product family. Core infrastructure, programmable policy, and AI gateway control.">
+  <div class="page-header" style="text-align: center; margin-bottom: var(--spacing-12);">
+    <h1>Product Family</h1>
+    <p class="prose muted" style="margin: 0 auto; font-size: var(--text-lg);">
+      Open-source foundation. Paid layers that solve organizational problems rather than artificially gated basics.
+    </p>
+  </div>
+
+  <section class="section" style="padding-top: 0;">
+    <div class="card-grid" style="grid-template-columns: 1fr;">
+      
+      <div class="card" style="display: grid; grid-template-columns: 1fr 2fr; gap: var(--spacing-8); align-items: center; padding: var(--spacing-8);">
+        <div>
+          <span class="tag" style="margin-bottom: var(--spacing-4);">Open Source</span>
+          <h2 style="margin-bottom: var(--spacing-2);">nginz core</h2>
+          <p class="muted">The foundational Zig-based nginx module platform.</p>
+          <a href="/products/nginz" class="btn btn-outline" style="margin-top: var(--spacing-4);">View Core Platform</a>
+        </div>
+        <div style="background: var(--color-paper); padding: var(--spacing-6); border-radius: var(--radius-lg); border: 1px solid var(--color-line);">
+          <ul style="list-style: none; padding: 0; display: grid; gap: var(--spacing-3); margin: 0;">
+            <li style="display: flex; gap: var(--spacing-2);"><strong style="color: var(--color-accent);">✓</strong> High-performance Zig core</li>
+            <li style="display: flex; gap: var(--spacing-2);"><strong style="color: var(--color-accent);">✓</strong> Native nginx integration</li>
+            <li style="display: flex; gap: var(--spacing-2);"><strong style="color: var(--color-accent);">✓</strong> Memory-safe memory pools</li>
+            <li style="display: flex; gap: var(--spacing-2);"><strong style="color: var(--color-accent);">✓</strong> Docker-ready deployments</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card" style="display: grid; grid-template-columns: 1fr 2fr; gap: var(--spacing-8); align-items: center; padding: var(--spacing-8);">
+        <div>
+          <span class="tag" style="background: var(--color-slate); color: var(--color-white); margin-bottom: var(--spacing-4);">Pro</span>
+          <h2 style="margin-bottom: var(--spacing-2);">nginz-njs</h2>
+          <p class="muted">Programmable policy layer compiling Gleam to njs.</p>
+          <a href="/products/nginz-njs" class="btn btn-primary" style="margin-top: var(--spacing-4);">Explore Policy Engine</a>
+        </div>
+        <div style="background: var(--color-paper); padding: var(--spacing-6); border-radius: var(--radius-lg); border: 1px solid var(--color-line);">
+          <ul style="list-style: none; padding: 0; display: grid; gap: var(--spacing-3); margin: 0;">
+            <li style="display: flex; gap: var(--spacing-2);"><strong style="color: var(--color-accent);">✓</strong> Type-safe Gleam DSL</li>
+            <li style="display: flex; gap: var(--spacing-2);"><strong style="color: var(--color-accent);">✓</strong> Dynamic request handling</li>
+            <li style="display: flex; gap: var(--spacing-2);"><strong style="color: var(--color-accent);">✓</strong> Custom auth integrations</li>
+            <li style="display: flex; gap: var(--spacing-2);"><strong style="color: var(--color-accent);">✓</strong> Advanced traffic shaping</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card" style="display: grid; grid-template-columns: 1fr 2fr; gap: var(--spacing-8); align-items: center; padding: var(--spacing-8); border-color: var(--color-accent); box-shadow: var(--shadow-md);">
+        <div>
+          <span class="tag" style="background: var(--color-accent); color: var(--color-white); margin-bottom: var(--spacing-4);">Enterprise</span>
+          <h2 style="margin-bottom: var(--spacing-2);">nginz-token</h2>
+          <p class="muted">AI Gateway and control layer for the entire org.</p>
+          <a href="/products/nginz-token" class="btn btn-primary" style="margin-top: var(--spacing-4);">View AI Gateway</a>
+        </div>
+        <div style="background: var(--color-paper); padding: var(--spacing-6); border-radius: var(--radius-lg); border: 1px solid var(--color-line);">
+          <ul style="list-style: none; padding: 0; display: grid; gap: var(--spacing-3); margin: 0;">
+            <li style="display: flex; gap: var(--spacing-2);"><strong style="color: var(--color-accent);">✓</strong> Global token quotas</li>
+            <li style="display: flex; gap: var(--spacing-2);"><strong style="color: var(--color-accent);">✓</strong> LLM provider routing</li>
+            <li style="display: flex; gap: var(--spacing-2);"><strong style="color: var(--color-accent);">✓</strong> Cost visibility dashboards</li>
+            <li style="display: flex; gap: var(--spacing-2);"><strong style="color: var(--color-accent);">✓</strong> Organizational security controls</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </section>
+  
+  <section class="section" style="text-align: center; background: var(--color-white); padding: var(--spacing-12); border-radius: var(--radius-xl); border: 1px solid var(--color-line); margin-bottom: var(--spacing-16);">
+    <h2 style="margin-bottom: var(--spacing-4);">Need to compare features?</h2>
+    <p class="muted" style="margin-bottom: var(--spacing-6);">Check our detailed pricing matrix for a complete breakdown of features and support.</p>
+    <a href="/pricing" class="btn btn-primary">View Pricing Matrix</a>
+  </section>
+
+</BaseLayout>

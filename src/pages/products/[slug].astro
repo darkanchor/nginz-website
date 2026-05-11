@@ -1,0 +1,35 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const products = await getCollection('products');
+  return products.map((product: CollectionEntry<'products'>) => ({
+    params: { slug: product.slug },
+    props: { product },
+  }));
+}
+
+type Props = {
+  product: CollectionEntry<'products'>;
+};
+
+const { product } = Astro.props;
+const { Content } = await product.render();
+---
+
+<BaseLayout title={product.data.title} description={product.data.tagline ?? `${product.data.title} in the nginz family.`}>
+  <div class="page-header" style="max-width: 800px; margin: 0 auto var(--spacing-12); text-align: center;">
+    {product.data.category && <span class="tag" style="margin-bottom: var(--spacing-4);">{product.data.category}</span>}
+    <h1>{product.data.title}</h1>
+    {product.data.tagline && <p class="muted" style="font-size: var(--text-lg);">{product.data.tagline}</p>}
+    <div style="margin-top: var(--spacing-6); display: flex; gap: var(--spacing-4); justify-content: center;">
+      <a href="/pricing" class="btn btn-primary">View Pricing</a>
+      <a href="/docs" class="btn btn-outline">Read Docs</a>
+    </div>
+  </div>
+
+  <article class="prose" style="max-width: 800px; margin: 0 auto; padding-bottom: var(--spacing-16);">
+    <Content />
+  </article>
+</BaseLayout>
