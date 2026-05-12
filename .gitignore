@@ -9,3 +9,7 @@ coverage/
 playwright-report/
 test-results/
 wrangler.toml
+
+.dev.vars*
+!.dev.vars.example
+!.env.example

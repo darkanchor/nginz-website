@@ -10,7 +10,7 @@
     "dev:worker": "wrangler dev worker/index.ts --port 8788",
     "build": "bash ./scripts/build.sh",
     "build:worker": "wrangler deploy --dry-run worker/index.ts",
-    "preview": "astro preview",
+    "preview": "npm run build && wrangler dev",
     "check": "astro check",
     "check:worker": "tsc --noEmit -p worker/tsconfig.json",
     "lint": "astro check",
@@ -18,9 +18,12 @@
     "test:watch": "vitest",
     "validate:modules": "bash ./scripts/validate-module-docs.sh",
     "scaffold:module": "bash ./scripts/scaffold-module-doc.sh",
-    "clean": "rm -rf dist .astro .wrangler"
+    "clean": "rm -rf dist .astro .wrangler",
+    "deploy": "npm run build && wrangler deploy",
+    "cf-typegen": "wrangler types"
   },
   "dependencies": {
+    "@astrojs/cloudflare": "12",
     "astro": "^5.0.0"
   },
   "devDependencies": {
@@ -28,6 +31,6 @@
     "@cloudflare/workers-types": "^4.20250201.0",
     "typescript": "^5.6.0",
     "vitest": "^2.1.0",
-    "wrangler": "^4.0.0"
+    "wrangler": "^4.90.0"
   }
 }

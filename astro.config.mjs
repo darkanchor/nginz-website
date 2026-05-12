@@ -1,5 +1,7 @@
 import { defineConfig, passthroughImageService } from "astro/config";
 
+import cloudflare from "@astrojs/cloudflare";
+
 // Static-first: Astro builds HTML content pages.
 // All dynamic API ownership lives in the separate Worker runtime at worker/.
 // No Astro API routes — "/api/*" is exclusively the Worker's domain.
@@ -7,18 +9,23 @@ export default defineConfig({
   devToolbar: { enabled: false },
   output: "static",
   site: "https://darkanchor.com",
+
   image: {
     service: passthroughImageService(),
   },
+
   markdown: {
     syntaxHighlight: false,
   },
+
   build: {
     assets: "_assets",
   },
+
   server: {
     port: 4321,
   },
+
   vite: {
     server: {
       proxy: {
@@ -27,4 +34,6 @@ export default defineConfig({
       },
     },
   },
+
+  adapter: cloudflare()
 });
