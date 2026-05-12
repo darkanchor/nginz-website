@@ -12,23 +12,23 @@ This file provides expanded agent-ingestible content for the nginz product famil
 ### nginz
 - License: Apache-2.0
 - Category: Open Source
-- Tagline: Core Zig nginx module platform for modern HTTP infrastructure.
+- Tagline: Native modules for stock nginx. Active health checks, dynamic upstreams, JWT auth, Prometheus metrics — free, no fork, no patch.
 - URL: /products/nginz
 - Native modules: acme, cache-purge, cache-tags, canary, circuit-breaker, consul, dynamic-upstreams, echoz, graphql, healthcheck, jsonschema, jwt, nftset, njs, oidc, pgrest, prometheus, ratelimit, redis, requestid, transform, upstream-balancer, waf, wechatpay, worker-events
 
 ### nginz-njs
 - License: Apache-2.0
 - Category: Policy Layer
-- Tagline: Gleam→njs programmable policy layer for dynamic request handling.
+- Tagline: Scripted policy layer for nginx njs. Compose authorization, feature flags, and workflow orchestration — testable, reusable, no second runtime.
 - URL: /products/nginz-njs
 - Scripted modules: authz, control-api, feature-flags, health-gateway, http-client, metrics, mlcache, request-tracing, response-templating, response-transform, session, webhook, workflow
 
 ### nginz-token
 - License: BSL-1.1
 - Category: AI Gateway
-- Tagline: Paid control layer for quotas, cost visibility, and organizational AI routing.
+- Tagline: AI gateway inside your nginx. Token-level rate limiting, cost tracking, semantic caching, prompt security — no SaaS proxy.
 - URL: /products/nginz-token
-- Status: Coming soon
+- Status: In development
 
 ## Documentation
 
@@ -36,45 +36,45 @@ All module documentation is under /docs/reference/modules/ (native) and /docs/re
 
 ### nginz native modules
 - /docs/reference/modules/acme — ACME / Let's Encrypt: automatic TLS certificate issuance and renewal
-- /docs/reference/modules/cache-purge — Cache Purge API: selective cache invalidation
-- /docs/reference/modules/cache-tags — Cache Tags: tag-based cache grouping and purging
-- /docs/reference/modules/canary — Canary Routing: percentage-based traffic splitting
-- /docs/reference/modules/circuit-breaker — Circuit Breaker: upstream failure detection and automatic circuit opening
-- /docs/reference/modules/consul — Consul Integration: service discovery via HashiCorp Consul
-- /docs/reference/modules/dynamic-upstreams — Dynamic Upstreams: runtime upstream configuration without reload
-- /docs/reference/modules/echoz — Echoz Debug Output: request/response debugging
-- /docs/reference/modules/graphql — GraphQL Gateway: GraphQL query routing and execution
-- /docs/reference/modules/healthcheck — Health Checks: active and passive upstream health monitoring
-- /docs/reference/modules/jsonschema — JSON Schema Validation: request/response validation
-- /docs/reference/modules/jwt — JWT Authentication: bearer token validation and claim extraction
-- /docs/reference/modules/nftset — nftables IP Policy: IP allowlist/blocklist via nftables
-- /docs/reference/modules/njs — NJS Orchestration: JavaScript runtime for advanced request processing
-- /docs/reference/modules/oidc — OpenID Connect: OIDC authentication flow support
-- /docs/reference/modules/pgrest — PostgREST API: direct PostgreSQL REST API gateway
-- /docs/reference/modules/prometheus — Prometheus Metrics: request metrics for Prometheus scraping
-- /docs/reference/modules/ratelimit — Rate Limiting: configurable request rate limiting
-- /docs/reference/modules/redis — Redis: Redis integration for caching and key-value lookups
-- /docs/reference/modules/requestid — Request ID: unique request tracing identifiers
-- /docs/reference/modules/transform — JSON Transform: in-flight JSON response transformation
-- /docs/reference/modules/upstream-balancer — Upstream Balancer: weighted load balancing strategies
-- /docs/reference/modules/waf — WAF: web application firewall rules
-- /docs/reference/modules/wechatpay — WeChat Pay: WeChat Pay integration
-- /docs/reference/modules/worker-events — Worker Events: inter-worker event broadcasting
+- /docs/reference/modules/cache-purge — Cache Purge API: operator-facing cache invalidation by tag and prefix
+- /docs/reference/modules/cache-tags — Cache Tags: group cached responses for grouped invalidation
+- /docs/reference/modules/canary — Canary Routing: gradual traffic rollout by percentage or header
+- /docs/reference/modules/circuit-breaker — Circuit Breaker: fail fast with half-open recovery
+- /docs/reference/modules/consul — Consul Integration: service discovery and KV store at the edge
+- /docs/reference/modules/dynamic-upstreams — Dynamic Upstreams: change backend membership without reloads
+- /docs/reference/modules/echoz — Echoz Debug Output: inspect variables and request bodies during development
+- /docs/reference/modules/graphql — GraphQL Gateway: depth limiting and introspection control
+- /docs/reference/modules/healthcheck — Health Checks: active probes, readiness, and Prometheus metrics
+- /docs/reference/modules/jsonschema — JSON Schema Validation: reject bad payloads at the edge
+- /docs/reference/modules/jwt — JWT Authentication: validate bearer tokens and extract claims
+- /docs/reference/modules/nftset — nftables IP Policy: kernel-level IP allow/block via nftables
+- /docs/reference/modules/njs — NJS Orchestration: QuickJS engine for request-time scripting
+- /docs/reference/modules/oidc — OpenID Connect: browser SSO login flow with PKCE
+- /docs/reference/modules/pgrest — PostgREST API: PostgreSQL REST API with JWT auth
+- /docs/reference/modules/prometheus — Prometheus Metrics: native /metrics endpoint with histograms
+- /docs/reference/modules/ratelimit — Rate Limiting: fixed-window counters shared across workers
+- /docs/reference/modules/redis — Redis: direct access to hot data via RESP protocol
+- /docs/reference/modules/requestid — Request ID: UUID4 generation and X-Request-ID propagation
+- /docs/reference/modules/transform — JSON Transform: trim upstream JSON to the shape clients need
+- /docs/reference/modules/upstream-balancer — Upstream Balancer: sticky sessions with cookie/header affinity
+- /docs/reference/modules/waf — WAF: SQL injection and XSS pattern detection
+- /docs/reference/modules/wechatpay — WeChat Pay: signature signing and verification
+- /docs/reference/modules/worker-events — Worker Events: cross-worker shared-memory event ring
 
 ### nginz-njs scripted modules
-- /docs/reference/scripted-modules/authz — Authorization Policy Engine
-- /docs/reference/scripted-modules/control-api — Control API: runtime inspection and management
-- /docs/reference/scripted-modules/feature-flags — Feature Flags: toggle features at the edge
-- /docs/reference/scripted-modules/health-gateway — Health Gateway: upstream health aggregation
-- /docs/reference/scripted-modules/http-client — HTTP Client: outbound HTTP from njs
-- /docs/reference/scripted-modules/metrics — Metrics: application-level metric reporting
-- /docs/reference/scripted-modules/mlcache — MLCache: machine learning model response caching
-- /docs/reference/scripted-modules/request-tracing — Request Tracing: distributed trace propagation
-- /docs/reference/scripted-modules/response-templating — Response Templating: dynamic response formatting
-- /docs/reference/scripted-modules/response-transform — Response Transform: programmatic response modification
-- /docs/reference/scripted-modules/session — Session: stateful session management
-- /docs/reference/scripted-modules/webhook — Webhook: outbound webhook delivery
-- /docs/reference/scripted-modules/workflow — Workflow: multi-step request orchestration
+- /docs/reference/scripted-modules/authz — Authorization: composable rules for method, path, header, JWT claim, and remote OPA
+- /docs/reference/scripted-modules/control-api — Control API: operator surface over flags, cache, sessions, and tracing
+- /docs/reference/scripted-modules/feature-flags — Feature Flags: deterministic per-user bucketing for gradual rollouts
+- /docs/reference/scripted-modules/health-gateway — Health Gateway: multi-source health aggregation (deferred)
+- /docs/reference/scripted-modules/http-client — HTTP Client: typed ngx.fetch() wrapper with retry and middleware
+- /docs/reference/scripted-modules/metrics — Metrics: cross-module instrumentation and StatsD rendering
+- /docs/reference/scripted-modules/mlcache — MLCache: two-level cache with stale-while-revalidate
+- /docs/reference/scripted-modules/request-tracing — Request Tracing: distributed trace context propagation
+- /docs/reference/scripted-modules/response-templating — Response Templating: generate responses from request facts
+- /docs/reference/scripted-modules/response-transform — Response Transform: JSON field masking, dropping, and renaming
+- /docs/reference/scripted-modules/session — Session: cookie lifecycle and shared-dictionary store
+- /docs/reference/scripted-modules/webhook — Webhook: signed delivery composition over HTTP Client
+- /docs/reference/scripted-modules/workflow — Workflow: parallel and sequential subrequest orchestration
 
 ## Other Pages
 - /products — Product overview

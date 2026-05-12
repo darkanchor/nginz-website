@@ -1,10 +1,10 @@
 # darkanchor / nginz
-> Zig-based nginx infrastructure: native modules, programmable policy, and AI gateway control.
+> nginx infrastructure, without the Plus price tag. Native modules, scripted policy, and AI gateway control — all running on stock nginx.
 
 ## Products
-- [/products/nginz](/products/nginz) — Core Zig nginx module platform. Apache-2.0. 27 native modules for authentication, caching, routing, observability, and security.
-- [/products/nginz-njs](/products/nginz-njs) — Gleam→njs programmable policy layer. Apache-2.0. 13 scripted modules for authorization, feature flags, sessions, webhooks, and workflows.
-- [/products/nginz-token](/products/nginz-token) — AI gateway control layer. BSL-1.1. Quotas, cost visibility, and organizational AI routing.
+- [/products/nginz](/products/nginz) — Native modules for stock nginx. Apache-2.0. 26 modules covering auth, traffic control, observability, and edge processing — no fork, no patch, no Plus license.
+- [/products/nginz-njs](/products/nginz-njs) — Scripted policy layer for nginx njs. Apache-2.0. 13 modules for authorization, feature flags, workflow orchestration, and response transforms — testable, reusable, no second runtime.
+- [/products/nginz-token](/products/nginz-token) — AI gateway inside your nginx. BSL-1.1. Token-level rate limiting, per-user cost tracking, semantic caching, and prompt security — no SaaS proxy.
 
 ## Documentation
 
