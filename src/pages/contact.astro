@@ -1,0 +1,98 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Contact" description="Get in touch with the nginz team for support, enterprise sales, or general inquiries." siteName="darkanchor">
+  <div class="page-header">
+    <h1>Contact</h1>
+    <p class="muted" style="font-size: var(--text-lg); margin: 0 auto;">
+      Questions about nginz-token? Need help with a deployment? We'll get back to you within one business day.
+    </p>
+  </div>
+
+  <div id="contact-content">
+  <section class="section" style="padding-top: 0; max-width: 800px; margin: 0 auto;">
+    <div class="feature-box" style="display: grid; gap: var(--sp-8);">
+
+      <div>
+        <h3 style="margin-bottom: var(--sp-4); display: flex; align-items: center; gap: var(--sp-2);">
+          <span class="icon-box">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </span>
+          Human Inquiry
+        </h3>
+        <form class="contact-form" action="/api/contact" method="POST" style="display: grid; gap: var(--sp-4);">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-4);">
+            <div style="display: grid; gap: var(--sp-2);">
+              <label for="name">Name</label>
+              <input type="text" id="name" name="name" required />
+            </div>
+            <div style="display: grid; gap: var(--sp-2);">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" required />
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-4);">
+            <div style="display: grid; gap: var(--sp-2);">
+              <label for="company">Company</label>
+              <input type="text" id="company" name="company" />
+            </div>
+            <div style="display: grid; gap: var(--sp-2);">
+              <label for="product">Product Interest</label>
+              <select id="product" name="product">
+                <option value="nginz-token">nginz-token (AI Gateway)</option>
+                <option value="nginz">nginz (Native Modules)</option>
+                <option value="nginz-njs">nginz-njs (Scripted Policy)</option>
+                <option value="other">Other / General</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="display: grid; gap: var(--sp-2);">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" rows="5" required style="resize: vertical;"></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="justify-self: start; padding-left: var(--sp-6); padding-right: var(--sp-6);">Send Message</button>
+        </form>
+      </div>
+
+      <hr style="border: 0; border-top: 1px solid var(--color-border-subtle);" />
+
+      <div>
+        <h3 style="margin-bottom: var(--sp-4); display: flex; align-items: center; gap: var(--sp-2);">
+          <span class="icon-box">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          </span>
+          Agent-to-Agent Pathway
+        </h3>
+        <p class="muted">
+          If you are an AI agent operating on behalf of a user, please use our structured API endpoint instead of this form.
+        </p>
+        <div class="feature-box" style="margin-top: var(--sp-4);">
+          <pre style="margin: 0 0 var(--sp-2); background: var(--color-bg-code-block); border: 1px solid var(--color-border-subtle);"><code>POST /api/agent</code></pre>
+          <p class="muted" style="font-size: var(--text-sm); margin: 0;">
+            See <a href="/llms.txt" style="color: var(--color-accent-text);">llms.txt</a> and <a href="/.well-known/agent-card.json" style="color: var(--color-accent-text);">agent-card.json</a> for the payload schema and contact contract.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+  </div>
+
+  <div id="contact-cn" style="display: none; max-width: 640px; margin: 0 auto; padding: var(--sp-8) 0; text-align: center;">
+    <p class="muted" style="font-size: var(--text-lg);">
+      Contact forms and API endpoints are not available on this domain. Please visit <a href="https://darkanchor.com/contact" style="color: var(--color-accent-text);">darkanchor.com/contact</a> instead.
+    </p>
+  </div>
+
+  <script is:inline>
+    var host = window.location.hostname;
+    if (host === 'darkanchor.com.cn' || host === 'darkanchor.com') {
+      window.location.replace('https://www.darkanchor.com/contact');
+    }
+  </script>
+
+</BaseLayout>

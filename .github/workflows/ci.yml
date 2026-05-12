@@ -1,0 +1,43 @@
+name: ci
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build-and-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Astro type check
+        run: npx astro check
+
+      - name: Worker type check
+        run: npx tsc --noEmit -p worker/tsconfig.json
+
+      - name: Build static site
+        run: npx astro build
+
+      - name: Smoke test — built files exist
+        run: |
+          test -f dist/index.html
+          test -f dist/products/nginz/index.html
+          test -f dist/products/nginz-njs/index.html
+          test -f dist/products/nginz-token/index.html
+          test -f dist/docs/index.html
+          test -f dist/contact/index.html
+          test -f dist/llms.txt
+          test -f dist/robots.txt
+
+

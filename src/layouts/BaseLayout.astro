@@ -1,0 +1,142 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description?: string;
+  siteName?: string;
+}
+
+const { title, description = "The nginz family: nginx + nginz, nginz-njs, and nginz-token for HTTP infrastructure and AI gateways.", siteName = "darkanchor" } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title} | {siteName}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="site-header">
+        <a href="/" class="site-logo"><img src="/icons/logo.png" alt="nginz" class="site-logo-icon" /></a>
+        <nav class="site-nav">
+          <a href="/products">Products</a>
+          <a href="/docs">Docs</a>
+          <div class="header-actions">
+            <button class="theme-toggle" aria-label="Toggle theme" id="theme-toggle">
+              <svg class="icon-sun" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5A.75.75 0 0 1 8 1Zm0 11a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5A.75.75 0 0 1 8 12Zm4.25-7.25a.75.75 0 0 1 1.06 0l1.06 1.06a.75.75 0 1 1-1.06 1.06L12.25 5.81a.75.75 0 0 1 0-1.06ZM4.19 12.81a.75.75 0 0 1 0 1.06l-1.06 1.06a.75.75 0 0 1-1.06-1.06l1.06-1.06a.75.75 0 0 1 1.06 0Zm9.06-1.06a.75.75 0 0 1 0 1.06l-1.06 1.06a.75.75 0 1 1-1.06-1.06l1.06-1.06a.75.75 0 0 1 1.06 0ZM4.19 3.19A.75.75 0 0 1 3.13 4.25L2.07 3.19a.75.75 0 0 1 1.06-1.06l1.06 1.06a.75.75 0 0 1 0 1.06ZM8 5a3 3 0 1 0 0 6 3 3 0 0 0 0-6ZM1 8a.75.75 0 0 1 .75-.75h1.5a.75.75 0 0 1 0 1.5h-1.5A.75.75 0 0 1 1 8Zm11.75 0a.75.75 0 0 1 .75-.75h1.5a.75.75 0 0 1 0 1.5h-1.5A.75.75 0 0 1 12.75 8Z"/></svg>
+              <svg class="icon-moon" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1Zm0 12.5a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11Zm2.5-5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z"/></svg>
+            </button>
+            <a href="/contact" class="btn btn-secondary">Contact</a>
+            <a href="/products/nginz-token" class="btn btn-primary">Get nginz-token</a>
+          </div>
+        </nav>
+      </header>
+
+      <main class="site-main">
+        <slot />
+      </main>
+    </div>
+
+    <footer class="site-footer">
+      <div class="site-shell">
+        <div class="footer-grid">
+          <div>
+            <h4>darkanchor <span style="font-weight: 400; color: var(--color-text-secondary);">— The infra anchor of the AI age</span></h4>
+            <p class="footer-desc">The nginz family is a product portfolio of darkanchor — native modules, scripted policy, and AI gateway control, all running on stock nginx.</p>
+            <p class="footer-icp" id="icp-com" style="display: none; font-size: var(--text-xs); color: var(--color-text-tertiary); margin-top: var(--sp-2);"><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener" style="color: inherit;">沪ICP备2024057943号-4</a></p>
+            <p class="footer-icp" id="icp-cn" style="display: none; font-size: var(--text-xs); color: var(--color-text-tertiary); margin-top: var(--sp-2);"><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener" style="color: inherit;">沪ICP备2024057943号-2</a></p>
+          </div>
+          <div>
+            <h4>Products</h4>
+            <ul>
+              <li><a href="/products/nginz">nginz</a></li>
+              <li><a href="/products/nginz-njs">nginz-njs</a></li>
+              <li><a href="/products/nginz-token">nginz-token</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4>Developers</h4>
+            <ul>
+              <li><a href="/docs">Documentation</a></li>
+              <li><a href="https://github.com/darkanchor" target="_blank" rel="noopener">GitHub</a></li>
+              <li><a href="/llms.txt">Agent Docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script is:inline>
+      // Theme toggle
+      (function() {
+        const KEY = 'nginz-theme';
+        function getTheme() {
+          const stored = localStorage.getItem(KEY);
+          if (stored === 'light' || stored === 'dark') return stored;
+          return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        function apply(theme) {
+          document.documentElement.classList.add('theme-transition');
+          if (theme === 'dark') {
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+          }
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              document.documentElement.classList.remove('theme-transition');
+            });
+          });
+        }
+        apply(getTheme());
+        document.getElementById('theme-toggle').addEventListener('click', function() {
+          const current = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+          const next = current === 'dark' ? 'light' : 'dark';
+          localStorage.setItem(KEY, next);
+          apply(next);
+        });
+      })();
+    </script>
+    <script is:inline>
+      // Show ICP备案号 on darkanchor.com and darkanchor.com.cn
+      (function() {
+        var host = window.location.hostname;
+        if (host === 'darkanchor.com') {
+          var el = document.getElementById('icp-com');
+          if (el) el.style.display = '';
+        } else if (host === 'darkanchor.com.cn') {
+          var el = document.getElementById('icp-cn');
+          if (el) el.style.display = '';
+        }
+      })();
+    </script>
+    <script is:inline>
+      // Copy-to-clipboard for code blocks
+      document.querySelectorAll('pre').forEach(function(pre) {
+        var btn = document.createElement('button');
+        btn.className = 'code-copy-btn';
+        btn.title = 'Copy';
+        btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+        pre.style.position = 'relative';
+        pre.appendChild(btn);
+        btn.addEventListener('click', function() {
+          var code = pre.querySelector('code');
+          var text = code ? code.textContent : pre.textContent;
+          navigator.clipboard.writeText(text).then(function() {
+            btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+            btn.classList.add('copied');
+            setTimeout(function() {
+              btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+              btn.classList.remove('copied');
+            }, 1500);
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

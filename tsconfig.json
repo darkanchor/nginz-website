@@ -1,0 +1,16 @@
+{
+	"extends": "astro/tsconfigs/strict",
+	"compilerOptions": {
+		"jsx": "preserve",
+		"jsxImportSource": "astro"
+	},
+	"include": [
+		"src/**/*",
+		"./worker-configuration.d.ts"
+	],
+	"exclude": [
+		"node_modules",
+		"dist",
+		".astro"
+	]
+}

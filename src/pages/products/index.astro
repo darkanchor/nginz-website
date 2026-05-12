@@ -1,0 +1,84 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const products = [
+  {
+    href: "/products/nginz",
+    tag: "Free",
+    tagClass: "",
+    title: "nginz",
+    desc: "Native modules for stock nginx. 26 modules covering auth, traffic control, observability, and edge processing — no fork, no patch, no Plus license.",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5Z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>`,
+    features: ["Active health checks & dynamic upstreams", "JWT / OIDC authentication", "Rate limiting & circuit breaking", "Prometheus metrics & WAF"],
+    btnLabel: "Learn more",
+    btnClass: "btn-secondary",
+  },
+  {
+    href: "/products/nginz-njs",
+    tag: "Free",
+    tagClass: "",
+    title: "nginz-njs",
+    desc: "Scripted policy layer running in nginx njs. Compose authorization, feature flags, and workflow orchestration as reusable modules — no second runtime.",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>`,
+    features: ["Policy-based authorization", "Feature flags & A/B routing", "Subrequest orchestration", "Response transforms & webhooks"],
+    btnLabel: "Learn more",
+    btnClass: "btn-secondary",
+  },
+  {
+    href: "/products/nginz-token",
+    tag: "Paid",
+    tagClass: "tag-mint",
+    title: "nginz-token",
+    desc: "AI gateway inside your nginx binary. Token-level rate limiting, per-user cost tracking, semantic caching, and prompt security — no SaaS proxy, your data stays yours.",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`,
+    features: ["Per-user token rate limiting", "Per-request cost tracking", "Semantic response caching", "Prompt security & PII filtering"],
+    btnLabel: "Learn more",
+    btnClass: "btn-secondary",
+  },
+];
+
+const checkIcon = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+---
+
+<BaseLayout title="Products" description="Native modules, scripted policy, and AI gateway — all running on stock nginx with zero patches." siteName="darkanchor">
+  <div class="page-header">
+    <h1>Products</h1>
+    <p class="muted" style="font-size: var(--text-lg); margin: 0 auto;">
+      Everything loads into stock nginx via standard <code>load_module</code> or <code>--add-module</code>. No fork. No patch. No second runtime.
+    </p>
+  </div>
+
+  <section class="section" style="padding-top: 0;">
+    <div style="display: grid; gap: var(--sp-6); grid-template-columns: 1fr;">
+
+      {products.map((p) => (
+        <div class="card" style={`display: grid; grid-template-columns: 1fr 2fr; gap: var(--sp-8); align-items: center; padding: var(--sp-8);`}>
+          <div>
+            <div style="display: flex; align-items: center; gap: var(--sp-3); margin-bottom: var(--sp-3);">
+              <div class="icon-box">
+                <Fragment set:html={p.icon} />
+              </div>
+              <span class={`tag ${p.tagClass}`}>{p.tag}</span>
+            </div>
+            <h2 style="margin-bottom: var(--sp-2);">{p.title}</h2>
+            <p class="muted">{p.desc}</p>
+            <a href={p.href} class={`btn ${p.btnClass}`} style="margin-top: var(--sp-4);">{p.btnLabel}</a>
+          </div>
+          <div class="feature-box">
+            <ul style="list-style: none; padding: 0; display: grid; gap: var(--sp-3); margin: 0;">
+              {p.features.map((f) => (
+                <li style="display: flex; gap: var(--sp-2); align-items: start;">
+                  <span class="icon-box" style="width: 20px; height: 20px; min-width: 20px;">
+                    <Fragment set:html={checkIcon} />
+                  </span>
+                  <span>{f}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      ))}
+
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,36 @@
+{
+  "name": "darkanchor nginz agent",
+  "description": "Agent card for the darkanchor nginz product family. Native nginx modules, scripted policy, and AI gateway control — all running on stock nginx with no fork, no patch, no second runtime.",
+  "url": "https://darkanchor.com",
+  "version": "0.2.0",
+  "capabilities": {
+    "streaming": false,
+    "pushNotifications": false
+  },
+  "skills": [
+    {
+      "id": "product-info",
+      "name": "Product Information",
+      "description": "Explains the nginz product family: nginz (26 native modules for stock nginx), nginz-njs (13 scripted policy modules), and nginz-token (AI gateway). Covers licensing, capabilities, and use cases.",
+      "tags": ["products", "nginz", "nginz-njs", "nginz-token"]
+    },
+    {
+      "id": "docs-reference",
+      "name": "Documentation Reference",
+      "description": "Lists and describes all native and scripted modules with links to documentation pages covering use cases, config examples, and integration guidance.",
+      "tags": ["docs", "modules", "reference"]
+    },
+    {
+      "id": "contact",
+      "name": "Contact",
+      "description": "Submit inquiries via POST /api/contact or the contact page.",
+      "tags": ["contact"]
+    }
+  ],
+  "defaultInputModes": ["text/plain"],
+  "defaultOutputModes": ["text/plain"],
+  "provider": {
+    "organization": "darkanchor",
+    "url": "https://github.com/darkanchor"
+  }
+}

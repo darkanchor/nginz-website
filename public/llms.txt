@@ -1,0 +1,55 @@
+# darkanchor / nginz
+> nginx infrastructure, without the Plus price tag. Native modules, scripted policy, and AI gateway control — all running on stock nginx.
+
+## Products
+- [/products/nginz](/products/nginz) — Native modules for stock nginx. Apache-2.0. 26 modules covering auth, traffic control, observability, and edge processing — no fork, no patch, no Plus license.
+- [/products/nginz-njs](/products/nginz-njs) — Scripted policy layer for nginx njs. Apache-2.0. 13 modules for authorization, feature flags, workflow orchestration, and response transforms — testable, reusable, no second runtime.
+- [/products/nginz-token](/products/nginz-token) — AI gateway inside your nginx. BSL-1.1. Token-level rate limiting, per-user cost tracking, semantic caching, and prompt security — no SaaS proxy.
+
+## Documentation
+
+### nginz — Native Modules
+- [/docs/reference/modules/acme](/docs/reference/modules/acme) — ACME / Let's Encrypt
+- [/docs/reference/modules/cache-purge](/docs/reference/modules/cache-purge) — Cache Purge API
+- [/docs/reference/modules/cache-tags](/docs/reference/modules/cache-tags) — Cache Tags
+- [/docs/reference/modules/canary](/docs/reference/modules/canary) — Canary Routing
+- [/docs/reference/modules/circuit-breaker](/docs/reference/modules/circuit-breaker) — Circuit Breaker
+- [/docs/reference/modules/consul](/docs/reference/modules/consul) — Consul Integration
+- [/docs/reference/modules/dynamic-upstreams](/docs/reference/modules/dynamic-upstreams) — Dynamic Upstreams
+- [/docs/reference/modules/echoz](/docs/reference/modules/echoz) — Echoz Debug Output
+- [/docs/reference/modules/graphql](/docs/reference/modules/graphql) — GraphQL Gateway
+- [/docs/reference/modules/healthcheck](/docs/reference/modules/healthcheck) — Health Checks
+- [/docs/reference/modules/jsonschema](/docs/reference/modules/jsonschema) — JSON Schema Validation
+- [/docs/reference/modules/jwt](/docs/reference/modules/jwt) — JWT Authentication
+- [/docs/reference/modules/nftset](/docs/reference/modules/nftset) — nftables IP Policy
+- [/docs/reference/modules/njs](/docs/reference/modules/njs) — NJS Orchestration
+- [/docs/reference/modules/oidc](/docs/reference/modules/oidc) — OpenID Connect
+- [/docs/reference/modules/pgrest](/docs/reference/modules/pgrest) — PostgREST API
+- [/docs/reference/modules/prometheus](/docs/reference/modules/prometheus) — Prometheus Metrics
+- [/docs/reference/modules/ratelimit](/docs/reference/modules/ratelimit) — Rate Limiting
+- [/docs/reference/modules/redis](/docs/reference/modules/redis) — Redis
+- [/docs/reference/modules/requestid](/docs/reference/modules/requestid) — Request ID
+- [/docs/reference/modules/transform](/docs/reference/modules/transform) — JSON Transform
+- [/docs/reference/modules/upstream-balancer](/docs/reference/modules/upstream-balancer) — Upstream Balancer
+- [/docs/reference/modules/waf](/docs/reference/modules/waf) — WAF
+- [/docs/reference/modules/wechatpay](/docs/reference/modules/wechatpay) — WeChat Pay
+- [/docs/reference/modules/worker-events](/docs/reference/modules/worker-events) — Worker Events
+
+### nginz-njs — Scripted Modules
+- [/docs/reference/scripted-modules/authz](/docs/reference/scripted-modules/authz) — Authorization Policy Engine
+- [/docs/reference/scripted-modules/control-api](/docs/reference/scripted-modules/control-api) — Control API
+- [/docs/reference/scripted-modules/feature-flags](/docs/reference/scripted-modules/feature-flags) — Feature Flags
+- [/docs/reference/scripted-modules/health-gateway](/docs/reference/scripted-modules/health-gateway) — Health Gateway
+- [/docs/reference/scripted-modules/http-client](/docs/reference/scripted-modules/http-client) — HTTP Client
+- [/docs/reference/scripted-modules/metrics](/docs/reference/scripted-modules/metrics) — Metrics
+- [/docs/reference/scripted-modules/mlcache](/docs/reference/scripted-modules/mlcache) — MLCache
+- [/docs/reference/scripted-modules/request-tracing](/docs/reference/scripted-modules/request-tracing) — Request Tracing
+- [/docs/reference/scripted-modules/response-templating](/docs/reference/scripted-modules/response-templating) — Response Templating
+- [/docs/reference/scripted-modules/response-transform](/docs/reference/scripted-modules/response-transform) — Response Transform
+- [/docs/reference/scripted-modules/session](/docs/reference/scripted-modules/session) — Session
+- [/docs/reference/scripted-modules/webhook](/docs/reference/scripted-modules/webhook) — Webhook
+- [/docs/reference/scripted-modules/workflow](/docs/reference/scripted-modules/workflow) — Workflow
+
+## Other Pages
+- [/products](/products) — Product overview
+- [/contact](/contact) — Contact form
