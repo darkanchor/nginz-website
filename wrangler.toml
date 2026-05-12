@@ -7,9 +7,9 @@ compatibility_date = "2025-04-01"
 #
 # Production routes should be configured at the Cloudflare dashboard
 # or via a custom-domain setup that splits:
-#   - *.nginz.dev/*        → Cloudflare Pages (Astro static build)
-#   - *.nginz.dev/api/*    → This Worker
-#   - *.nginz.dev/webhooks/* → This Worker
+#   - darkanchor.com/*        → Cloudflare Pages (Astro static build)
+#   - darkanchor.com/api/*    → This Worker
+#   - darkanchor.com/webhooks/* → This Worker
 #
 # For local dev, run the Worker on a separate port (8788) and
 # the Astro dev server on its default port (4321).
@@ -19,3 +19,7 @@ compatibility_date = "2025-04-01"
 
 [env.production]
 # Production environment variables and secrets
+# Bind a KV namespace for contact form durability:
+# kv_namespaces = [
+#   { binding = "CONTACT_KV", id = "<your-namespace-id>" }
+# ]

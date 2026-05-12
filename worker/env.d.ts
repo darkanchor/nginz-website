@@ -18,6 +18,11 @@ declare global {
     // Secrets
     CONTACT_WEBHOOK_URL?: string;
     PADDLE_WEBHOOK_SECRET?: string;
+    TELEGRAM_BOT_TOKEN?: string;
+    TELEGRAM_CHAT_ID?: string;
+
+    // KV namespace for contact form storage (optional but recommended)
+    CONTACT_KV?: KVNamespace;
 
     // --- Future bindings (uncomment as needed) ---
     // KV_NAMESPACE: KVNamespace;

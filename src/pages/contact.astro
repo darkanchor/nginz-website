@@ -6,10 +6,11 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   <div class="page-header">
     <h1>Contact</h1>
     <p class="muted" style="font-size: var(--text-lg); margin: 0 auto;">
-      Reach out for enterprise pricing, custom module development, or technical support.
+      Questions about nginz-token? Need help with a deployment? We'll get back to you within one business day.
     </p>
   </div>
 
+  <div id="contact-content">
   <section class="section" style="padding-top: 0; max-width: 800px; margin: 0 auto;">
     <div class="feature-box" style="display: grid; gap: var(--sp-8);">
 
@@ -40,9 +41,9 @@ import BaseLayout from "../layouts/BaseLayout.astro";
             <div style="display: grid; gap: var(--sp-2);">
               <label for="product">Product Interest</label>
               <select id="product" name="product">
-                <option value="nginz-token">nginz-token (Enterprise AI Gateway)</option>
-                <option value="nginz-njs">nginz-njs (Pro Policy Layer)</option>
-                <option value="nginz-core">nginz core</option>
+                <option value="nginz-token">nginz-token (AI Gateway)</option>
+                <option value="nginz">nginz (Native Modules)</option>
+                <option value="nginz-njs">nginz-njs (Scripted Policy)</option>
                 <option value="other">Other / General</option>
               </select>
             </div>
@@ -79,11 +80,18 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
     </div>
   </section>
+  </div>
 
-  <script>
-    document.querySelector('.contact-form')?.addEventListener('submit', (e) => {
-      e.preventDefault();
-      alert('Form submission stubbed. In production, this posts to /api/contact Worker endpoint.');
-    });
+  <div id="contact-cn" style="display: none; max-width: 640px; margin: 0 auto; padding: var(--sp-8) 0; text-align: center;">
+    <p class="muted" style="font-size: var(--text-lg);">
+      Contact forms and API endpoints are not available on this domain. Please visit <a href="https://darkanchor.com/contact" style="color: var(--color-accent-text);">darkanchor.com/contact</a> instead.
+    </p>
+  </div>
+
+  <script is:inline>
+    if (window.location.hostname === 'darkanchor.com.cn') {
+      window.location.replace('https://darkanchor.com/contact');
+    }
   </script>
+
 </BaseLayout>
