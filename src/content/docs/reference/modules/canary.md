@@ -55,6 +55,6 @@ Defines a request header and value that force canary routing when they match. Th
 ## Works well with
 
 - Stock nginx `split_clients` and `map` — use standard nginx directives to route traffic based on the canary variable this module sets.
-- **Upstream Balancer** when the canary backend itself needs sticky behavior.
-- **Request ID** for tracing whether a request hit stable or canary.
-- **Prometheus Metrics** for watching the rollout effect on latency and error rate.
+- [Upstream Balancer](/docs/reference/modules/upstream-balancer) when the canary backend itself needs sticky behavior.
+- [Request ID](/docs/reference/modules/requestid) for tracing whether a request hit stable or canary.
+- [Prometheus Metrics](/docs/reference/modules/prometheus) for watching the rollout effect on latency and error rate.

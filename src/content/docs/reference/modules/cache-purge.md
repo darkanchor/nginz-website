@@ -92,6 +92,6 @@ Names the worker-events channel used for purge notifications. Set it when anothe
 ## Works well with
 
 - Stock nginx `proxy_cache_purge` — use the standard purge directive for simple URL-based invalidation; cache-purge adds tag, prefix, and operator auth controls.
-- **Cache Tags** because tags create the metadata this module invalidates.
-- **Worker Events** when you need purge notifications across workers.
-- **Prometheus Metrics** if you want purge traffic and purge outcomes visible in monitoring.
+- [Cache Tags](/docs/reference/modules/cache-tags) because tags create the metadata this module invalidates.
+- [Worker Events](/docs/reference/modules/worker-events) when you need purge notifications across workers.
+- [Prometheus Metrics](/docs/reference/modules/prometheus) if you want purge traffic and purge outcomes visible in monitoring.

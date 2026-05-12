@@ -55,6 +55,6 @@ Controls whether introspection requests are allowed. Turn it off on public produ
 ## Works well with
 
 - Stock nginx `proxy_pass` — the GraphQL module sits in front of your standard proxy configuration.
-- **JWT Authentication** or **OpenID Connect** when your GraphQL API is protected.
-- **Rate Limiting** for abuse control beyond depth checks.
-- **Web Application Firewall** for broader request inspection around the GraphQL route.
+- [JWT Authentication](/docs/reference/modules/jwt) or [OpenID Connect](/docs/reference/modules/oidc) when your GraphQL API is protected.
+- [Rate Limiting](/docs/reference/modules/ratelimit) for abuse control beyond depth checks.
+- [Web Application Firewall](/docs/reference/modules/waf) for broader request inspection around the GraphQL route.
