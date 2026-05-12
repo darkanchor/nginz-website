@@ -421,14 +421,14 @@ html.dark .theme-toggle .icon-moon { display: none; }
 }
 
 .btn-secondary {
-  background: var(--color-bg);
-  color: var(--color-text);
-  border-color: var(--color-border);
+  background: transparent;
+  color: var(--color-text-secondary);
+  border-color: transparent;
 }
 .btn-secondary:hover {
-  border-color: var(--color-text-secondary);
-  color: var(--color-text);
-  background: var(--color-bg-sunken);
+  background: var(--color-btn-primary-bg);
+  border-color: var(--color-btn-primary-bg);
+  color: var(--color-btn-primary-text);
 }
 
 .btn-outline {

@@ -104,6 +104,7 @@ The module reads `$ngz_request_id` from the native `requestid` module, falls bac
 
 ## Works well with
 
+- Stock nginx `log_format` — include trace IDs in access logs for end-to-end correlation across nginx and upstream services.
 - [Request ID](/docs/reference/modules/requestid) (native) for `$ngz_request_id` UUIDv4 generation per request.
 - [Workflow](/docs/reference/scripted-modules/workflow) for span recording during subrequest orchestration.
 - [HTTP Client](/docs/reference/scripted-modules/http-client) for injecting trace headers into upstream fetch calls.

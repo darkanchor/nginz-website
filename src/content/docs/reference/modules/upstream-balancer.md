@@ -119,6 +119,7 @@ Exposes a JSON status endpoint with sticky decision counters, cookie lifecycle m
 
 ## Works well with
 
+- Stock nginx `proxy_pass` and `upstream` — the balancer integrates with standard upstream blocks and respects `max_fails`, `fail_timeout`, and `max_conns`.
 - [Health Checks](/docs/reference/modules/healthcheck) for excluding unhealthy and recovering peers from sticky selection.
 - [Dynamic Upstreams](/docs/reference/modules/dynamic-upstreams) for runtime peer set changes that the balancer consumes at request time.
 - [Worker Events](/docs/reference/modules/worker-events) for receiving upstream change notifications.

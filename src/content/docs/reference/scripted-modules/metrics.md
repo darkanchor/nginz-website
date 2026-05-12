@@ -117,6 +117,7 @@ Sink transport (StatsD UDP, log emission, or another delivery mechanism) is a se
 
 ## Works well with
 
+- Stock nginx `access_log` — metrics enriches what you can log; use `log_format` to include metric values in access logs.
 - [HTTP Client](/docs/reference/scripted-modules/http-client) for request outcome and latency metrics.
 - [AuthZ](/docs/reference/scripted-modules/authz) for decision and external call metrics.
 - [Response Transform](/docs/reference/scripted-modules/response-transform) for transform and pass-through counters.

@@ -80,6 +80,8 @@ Controls whether the request ID is added to response headers. Set to `off` when 
 
 ## Works well with
 
+- Stock nginx `log_format` — include `$ngz_request_id` in your access log for end-to-end request correlation.
+- Stock nginx `proxy_set_header` — forward the request ID to upstreams so backend logs include the same trace handle.
 - [Rate Limiting](/docs/reference/modules/ratelimit) for correlating rate-limited requests in logs.
 - [Health Checks](/docs/reference/modules/healthcheck) when you want to trace probe activity alongside user traffic.
 - [Upstream Balancer](/docs/reference/modules/upstream-balancer) for correlating sticky session requests across retries.

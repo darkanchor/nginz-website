@@ -105,6 +105,7 @@ Enables the Prometheus metrics endpoint at this location. Returns metrics in Pro
 
 ## Works well with
 
+- Stock nginx stub_status — the built-in status page gives basic connection and request counts; Prometheus metrics adds histograms, per-status breakdowns, and shared-memory aggregation.
 - [Circuit Breaker](/docs/reference/modules/circuit-breaker) for feeding error rate data into circuit-breaker decisions.
 - [NJS Orchestration](/docs/reference/modules/njs) for reading variables and making load-aware routing choices.
 - [Consul](/docs/reference/modules/consul) for health-status-aware scrape target registration.

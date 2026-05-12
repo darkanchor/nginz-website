@@ -98,6 +98,7 @@ Associates a TLS server block with the domain that should receive a certificate.
 
 ## Works well with
 
+- Stock nginx `ssl_certificate` and `ssl_certificate_key` — the ACME module places certificates where these directives expect them.
 - **Request ID** for tracing trigger and renewal calls through logs.
 - **Prometheus Metrics** for tracking whether the certificate management endpoints are being exercised as expected.
 - **Health Checks** when you want HTTPS endpoints observed after certificate rollout.

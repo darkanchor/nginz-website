@@ -53,6 +53,7 @@ Turns the location into a simple purge endpoint for exact-tag invalidation. It i
 
 ## Works well with
 
+- Stock nginx `proxy_cache` and `proxy_cache_key` — cache responses with standard nginx caching; cache-tags adds grouped invalidation on top.
 - **Cache Purge API** when you want the richer operational purge surface.
 - **Worker Events** if you want invalidation signals fanned out to other consumers.
 - **Transform** when you cache API responses but still want shaped output for clients.

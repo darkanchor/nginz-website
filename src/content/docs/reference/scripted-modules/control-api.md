@@ -131,6 +131,7 @@ In production, this surface should be internal-only, protected by network policy
 
 ## Works well with
 
+- Stock nginx `allow` and `deny` — protect the control API surface with IP-level access control.
 - [Feature Flags](/docs/reference/scripted-modules/feature-flags) for runtime-backed flag state inspection and mutation.
 - [MLCache](/docs/reference/scripted-modules/mlcache) for shared-dict reachability probes and cache inspection.
 - [Session](/docs/reference/scripted-modules/session) for session store reachability probes.

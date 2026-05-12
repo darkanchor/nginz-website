@@ -95,6 +95,7 @@ Adds the ACL token required by secured Consul environments. Set it anywhere the 
 
 ## Works well with
 
+- Stock nginx `resolver` and upstream blocks — use these for DNS-based discovery; Consul adds service-level health filtering and KV configuration.
 - **Dynamic Upstreams** because it can use Consul as a live discovery source.
 - **Health Checks** when discovered services still need readiness verification before traffic shifts.
 - **njs Runtime** for higher-level orchestration that combines KV and service discovery results.

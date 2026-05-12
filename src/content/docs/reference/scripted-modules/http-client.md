@@ -150,6 +150,7 @@ Each variant maps to a distinct HTTP response status in the demo handlers, showi
 
 ## Works well with
 
+- Stock nginx `proxy_set_header` — set custom headers on outbound requests the HTTP client makes.
 - [Workflow](/docs/reference/scripted-modules/workflow) — uses `http_client/fetch` as its external HTTP backend for `fetch_step` and `fetch_step_with_opts`.
 - [NJS](/docs/reference/modules/njs) — njs provides the underlying `ngx.fetch()` runtime that http_client wraps.
 - [Healthcheck](/docs/reference/modules/healthcheck) — combine with healthcheck probes to gate fetch targets.

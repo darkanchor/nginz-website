@@ -65,6 +65,7 @@ Takes an inline JSON Schema string as its argument. Validates request bodies in 
 
 ## Works well with
 
+- Stock nginx `proxy_pass` — validate payloads at the edge before forwarding to your backend.
 - [Echoz](/docs/reference/modules/echoz) for testing validation rules with a local echo endpoint.
 - [JWT Authentication](/docs/reference/modules/jwt) when you want to validate both the token and the payload shape at the edge.
 - [Web Application Firewall](/docs/reference/modules/waf) for layered input inspection.

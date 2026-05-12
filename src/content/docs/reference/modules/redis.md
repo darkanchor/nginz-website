@@ -165,6 +165,7 @@ Selects the Redis command to execute. See supported commands above.
 
 ## Works well with
 
+- Stock nginx `proxy_cache` — use Redis for hot data lookups and `proxy_cache` for response caching; they solve different caching problems.
 - [NJS Orchestration](/docs/reference/modules/njs) for caching, counters, and read-through patterns that combine Redis with other backends.
 - [PostgREST](/docs/reference/modules/pgrest) for caching query results and warming cache from database writes.
 - [Circuit Breaker](/docs/reference/modules/circuit-breaker) when `$redis_connection_state` feeds into backend health decisions.

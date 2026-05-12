@@ -93,6 +93,7 @@ For outbound delivery, runtime overrides like `$webhook_demo_url` and `$webhook_
 
 ## Works well with
 
+- Stock nginx `proxy_set_header` — set custom headers on webhook delivery requests.
 - [HTTP Client](/docs/reference/scripted-modules/http-client) for outbound delivery, retry, and timeout semantics.
 - [Response Transform](/docs/reference/scripted-modules/response-transform) for shaping callback payloads before delivery.
 - [Metrics](/docs/reference/scripted-modules/metrics) for tracking webhook delivery success and failure rates.

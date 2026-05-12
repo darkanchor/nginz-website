@@ -125,6 +125,7 @@ Queries a specific Consul datacenter. Use it when the source of truth must come 
 
 ## Works well with
 
+- Stock nginx `upstream` blocks — dynamic-upstreams replaces static server lists with runtime-managed snapshots.
 - **Upstream Balancer** because it consumes the runtime peer graph at request time.
 - **Health Checks** because unhealthy peers can be kept out of activation.
 - **Worker Events** for snapshot activation and refresh-failure notifications.

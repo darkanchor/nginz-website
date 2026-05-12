@@ -54,6 +54,7 @@ Controls how many successful half-open requests are needed before the circuit fu
 
 ## Works well with
 
+- Stock nginx `proxy_next_upstream` and `fail_timeout` — use these for basic retry and failure handling; the circuit breaker adds half-open recovery and state visibility.
 - **Health Checks** when you want active probe visibility alongside passive failure handling.
 - **Prometheus Metrics** for watching breaker behavior and recovery trends.
 - **Dynamic Upstreams** if you also need runtime control of the backend set.

@@ -113,6 +113,7 @@ The module exports these nginx variables for observability:
 
 ## Works well with
 
+- Stock nginx `limit_req` and `limit_conn` — these handle request and connection limits; ratelimit adds variable-driven keys, cost weighting, and shared-memory counters.
 - [Request ID](/docs/reference/modules/requestid) for correlating rate-limited requests across logs.
 - [JWT Authentication](/docs/reference/modules/jwt) or [OpenID Connect](/docs/reference/modules/oidc) when you want to rate limit by authenticated identity rather than IP address.
 - [Circuit Breaker](/docs/reference/modules/circuit-breaker) for a second layer of protection when rate limits are not enough.

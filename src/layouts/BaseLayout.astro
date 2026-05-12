@@ -22,7 +22,7 @@ const { title, description = "The nginz family: nginx + nginz, nginz-njs, and ng
   <body>
     <div class="site-shell">
       <header class="site-header">
-        <a href="/" class="site-logo"><img src="/icons/logo.png" alt="" class="site-logo-icon" /><span class="logo-text">darkanchor</span></a>
+        <a href="/" class="site-logo"><img src="/icons/logo.png" alt="nginz" class="site-logo-icon" /></a>
         <nav class="site-nav">
           <a href="/products">Products</a>
           <a href="/docs">Docs</a>
@@ -47,12 +47,13 @@ const { title, description = "The nginz family: nginx + nginz, nginz-njs, and ng
         <div class="footer-grid">
           <div>
             <h4>darkanchor</h4>
-            <p class="footer-desc">The modern Zig-based platform for nginx infrastructure. Core modules, programmable policy, and AI gateway control.</p>
+            <p class="footer-desc">nginx infrastructure, without the Plus price tag. Native modules, scripted policy, and AI gateway control — all running on stock nginx.</p>
+            <p class="footer-icp" style="display: none; font-size: var(--text-xs); color: var(--color-text-tertiary); margin-top: var(--sp-2);"><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener" style="color: inherit;">沪ICP备2024057943号-2</a></p>
           </div>
           <div>
             <h4>Products</h4>
             <ul>
-              <li><a href="/products/nginz">nginz core</a></li>
+              <li><a href="/products/nginz">nginz</a></li>
               <li><a href="/products/nginz-njs">nginz-njs</a></li>
               <li><a href="/products/nginz-token">nginz-token</a></li>
             </ul>
@@ -98,6 +99,15 @@ const { title, description = "The nginz family: nginx + nginz, nginz-njs, and ng
           localStorage.setItem(KEY, next);
           apply(next);
         });
+      })();
+    </script>
+    <script is:inline>
+      // Show ICP备案号 only on darkanchor.com.cn
+      (function() {
+        if (window.location.hostname === 'darkanchor.com.cn') {
+          var el = document.querySelector('.footer-icp');
+          if (el) el.style.display = '';
+        }
       })();
     </script>
     <script is:inline>

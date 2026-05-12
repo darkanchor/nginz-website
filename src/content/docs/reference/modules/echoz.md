@@ -128,6 +128,7 @@ Adds a response header. This is useful for debug metadata, test contracts, and s
 
 ## Works well with
 
+- Stock nginx `return` and `rewrite` — use these for simple redirects and static responses; echoz adds variable interpolation, request body inspection, and response wrapping.
 - **Request ID** when you want debug endpoints to expose tracing values.
 - **JSON Schema Validation** for quick validation-and-echo test flows.
 - **njs Runtime** when you need more logic than static echo directives provide.

@@ -101,6 +101,7 @@ http {
 
 ## Works well with
 
+- Stock nginx `return` — use `return` for simple fixed responses; templating adds variable interpolation, conditional selection, and JSON rendering.
 - [Response Transform](/docs/reference/scripted-modules/response-transform) for mutating existing payloads. Templating generates fresh output; transform edits output that already exists. They are complements, not alternatives.
 - [AuthZ](/docs/reference/scripted-modules/authz) for rendering richer deny or challenge responses.
 - [Workflow](/docs/reference/scripted-modules/workflow) for generating one-time diagnostic or maintenance responses during orchestration.

@@ -145,6 +145,8 @@ These variables let you log WAF decisions, inject them into upstream headers, or
 
 ## Works well with
 
+- Stock nginx `deny` and `allow` — combine IP-level access control with content-level attack detection.
+- Stock nginx `limit_except` — restrict HTTP methods alongside WAF body inspection.
 - [JWT Authentication](/docs/reference/modules/jwt) for layered API security.
 - [OpenID Connect](/docs/reference/modules/oidc) when authenticated applications also need attack detection.
 - [nftables IP Policy](/docs/reference/modules/nftset) for kernel-level IP blocking of repeat WAF offenders.

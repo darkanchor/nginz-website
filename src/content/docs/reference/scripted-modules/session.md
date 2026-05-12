@@ -310,6 +310,7 @@ Sticky rollout assignment persistence alongside sessions.
 
 ## Works well with
 
+- Stock nginx cookie directives — session builds on standard nginx cookie handling for `Set-Cookie` and `Cookie` header processing.
 - [Authz](/docs/reference/scripted-modules/authz) for session-backed access control via `session_gate` and policy trees that consume session identity.
 - [Feature Flags](/docs/reference/scripted-modules/feature-flags) for session-backed bucket key resolution and sticky rollout assignment.
 - [OpenID Connect](/docs/reference/modules/oidc) when OIDC-backed sessions are started from native OIDC claims.

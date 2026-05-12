@@ -344,6 +344,7 @@ The pure evaluation core. No side effects, fully unit-testable without nginx.
 
 ## Works well with
 
+- Stock nginx `map`, `split_clients`, and `set` — use standard nginx directives to define flag keys and percentages; feature-flags evaluates them deterministically.
 - [Session](/docs/reference/scripted-modules/session) for session-backed bucket key resolution and sticky rollout assignment.
 - [Authz](/docs/reference/scripted-modules/authz) when flag decisions need to feed into authorization policy rules.
 - [OpenID Connect](/docs/reference/modules/oidc) when OIDC subject claims drive stable per-user flag targeting.

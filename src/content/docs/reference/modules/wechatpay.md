@@ -140,6 +140,7 @@ Enables WeChat Pay signature verification in the access phase. Takes an optional
 
 ## Works well with
 
+- Stock nginx `proxy_pass` and `ssl_*` — wechatpay_proxy_pass builds on standard proxy and SSL infrastructure.
 - [JWT Authentication](/docs/reference/modules/jwt) for additional token checks on payment-related endpoints.
 - [Prometheus Metrics](/docs/reference/modules/prometheus) for monitoring notification volume and error rates.
 - [Request ID](/docs/reference/modules/requestid) for correlating WeChat Pay callback requests through logs.

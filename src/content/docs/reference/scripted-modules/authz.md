@@ -315,6 +315,8 @@ The foundational types and combinators.
 
 ## Works well with
 
+- Stock nginx `auth_request`, `satisfy`, and `allow`/`deny` — authz adds composable, testable policy rules on top of nginx's built-in access control primitives.
+- Stock nginx `map` — use `map` to convert authz decisions into routing or header values.
 - [JWT Authentication](/docs/reference/modules/jwt) for cryptographic token verification that feeds claims into policy rules.
 - [OpenID Connect](/docs/reference/modules/oidc) for the full OIDC discovery and redirect flow that populates identity claims.
 - [Session](/docs/reference/scripted-modules/session) for cookie-based session lifecycle that authz can gate on.

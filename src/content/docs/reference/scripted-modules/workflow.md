@@ -230,6 +230,7 @@ The main module `nginz_njs_workflow.gleam` exports these handlers for `js_conten
 
 ## Works well with
 
+- Stock nginx `internal` directive — mark workflow step locations as internal so they can only be reached via subrequest.
 - [HTTP Client](/docs/reference/scripted-modules/http-client) — provides the external HTTP backend for `fetch_step` and `fetch_step_with_opts`.
 - [MLCache](/docs/reference/scripted-modules/mlcache) — provides read-through and stale-while-refresh cache semantics for workflow steps via `workflow/cache`.
 - [NJS](/docs/reference/modules/njs) — njs subrequests are the primary internal backend for workflow steps.

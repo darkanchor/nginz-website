@@ -260,6 +260,7 @@ curl -X POST "http://localhost/api/employees?on_conflict=name" \
 
 ## Works well with
 
+- Stock nginx `proxy_cache` — cache pgrest responses at the nginx level for read-heavy workloads.
 - [NJS Orchestration](/docs/reference/modules/njs) for orchestrating subrequests across pgrest and Redis.
 - [Redis](/docs/reference/modules/redis) for caching pgrest responses or offloading hot data.
 - [JWT Authentication](/docs/reference/modules/jwt) for token validation before requests reach pgrest.

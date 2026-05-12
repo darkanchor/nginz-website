@@ -85,6 +85,8 @@ Takes a JSON path expression and extracts that sub-path from the upstream respon
 
 ## Works well with
 
+- Stock nginx `sub_filter` — use transform for JSON path extraction and `sub_filter` for plain text replacement; they solve complementary problems.
+- Stock nginx `proxy_set_header` — strip upstream headers that clients shouldn't see when reshaping responses.
 - [Echoz](/docs/reference/modules/echoz) for testing transforms against known response shapes.
 - [Circuit Breaker](/docs/reference/modules/circuit-breaker) for protecting upstreams that serve the data you are transforming.
 - [Cache Purge](/docs/reference/modules/cache-purge) when transformed responses are cached and need invalidation.

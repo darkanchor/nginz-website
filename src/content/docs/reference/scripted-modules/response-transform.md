@@ -85,6 +85,8 @@ The `js_header_filter main.clear_content_length` is required when the transform 
 
 ## Works well with
 
+- Stock nginx `sub_filter` — use transform for JSON reshaping and `sub_filter` for plain text replacement; they solve complementary problems.
+- Stock nginx `proxy_set_header` — strip upstream headers that shouldn't reach clients after transforms change the body.
 - [Response Templating](/docs/reference/scripted-modules/response-templating) for generating fresh responses instead of mutating existing ones. Transform edits; templating generates.
 - [Workflow](/docs/reference/scripted-modules/workflow) for shaping upstream call results before returning to the client.
 - [Webhook](/docs/reference/scripted-modules/webhook) for payload normalization in outbound deliveries.

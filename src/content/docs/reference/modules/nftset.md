@@ -185,6 +185,8 @@ When `nftset_autoban_set` is configured, an over-limit client IP is inserted int
 
 ## Works well with
 
+- Stock nginx `allow` and `deny` — use these for static IP rules and nftset for dynamic, kernel-backed sets.
+- Stock nginx `geo` — map client IPs to variables for GeoIP-aware routing alongside nftset membership checks.
 - [Web Application Firewall](/docs/reference/modules/waf) for content-layer attack detection alongside IP-level blocking.
 - [Rate Limiting](/docs/reference/modules/ratelimit) for threshold-based abuse control beyond simple set membership.
 - [Dynamic Upstreams](/docs/reference/modules/dynamic-upstreams) when blocked clients should also be routed away from sensitive backends.

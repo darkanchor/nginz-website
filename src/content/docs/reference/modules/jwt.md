@@ -146,6 +146,8 @@ Use `jwt_claim` to extract individual claims into named variables. The full payl
 
 ## Works well with
 
+- Stock nginx `auth_request` — use JWT for token validation and `auth_request` to gate protected locations.
+- Stock nginx `proxy_set_header` and `map` — forward extracted claims to backends or branch routing on claim values.
 - [OpenID Connect](/docs/reference/modules/oidc) when you need the full discovery and redirect flow instead of bare token validation.
 - [Web Application Firewall](/docs/reference/modules/waf) for layered request inspection alongside authentication.
 - [GraphQL Gateway](/docs/reference/modules/graphql) for protecting GraphQL endpoints with token checks.

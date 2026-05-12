@@ -226,6 +226,7 @@ The module exports these nginx variables for use in logging or scripting:
 
 ## Works well with
 
+- Stock nginx `proxy_pass` and upstream `server` directives — health checks feed peer eligibility into standard nginx upstream selection.
 - [Upstream Balancer](/docs/reference/modules/upstream-balancer) because it excludes unhealthy and slow-starting peers at request time.
 - [Worker Events](/docs/reference/modules/worker-events) for publishing health transition notifications across workers.
 - [Prometheus Metrics](/docs/reference/modules/prometheus) for scraping health state into monitoring.

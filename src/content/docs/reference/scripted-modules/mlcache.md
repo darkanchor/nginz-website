@@ -154,6 +154,7 @@ case lookup.can_serve(result, cfg.refresh_policy) {
 
 ## Works well with
 
+- Stock nginx `proxy_cache` — use `proxy_cache` for response-level caching and mlcache for in-memory, cross-request data caching inside scripted handlers.
 - [Workflow](/docs/reference/scripted-modules/workflow) — wraps workflow steps with `cached_step` and `stale_while_refresh` helpers from `workflow/cache`.
 - [HTTP Client](/docs/reference/scripted-modules/http-client) — combine cache lookups with http_client fetch calls to build read-through caching for external APIs.
 - [NJS](/docs/reference/modules/njs) — provides the `js_shared_dict` runtime that mlcache uses as its cross-worker backend.

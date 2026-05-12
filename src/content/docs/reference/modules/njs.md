@@ -215,6 +215,7 @@ Creates or references a shared in-memory key-value dictionary accessible from al
 
 ## Works well with
 
+- Stock nginx `js_*` directives — njs is a standard nginx module; our njs integration is compiled in by default so you can use `js_import`, `js_content`, and `js_set` without extra setup.
 - [Redis](/docs/reference/modules/redis) for caching, counters, and session state accessed via subrequest.
 - [PostgREST](/docs/reference/modules/pgrest) for database queries orchestrated through subrequests.
 - [JWT Authentication](/docs/reference/modules/jwt) when handlers need to inspect or forward claims.

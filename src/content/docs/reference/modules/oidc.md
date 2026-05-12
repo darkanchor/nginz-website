@@ -115,6 +115,8 @@ These variables are populated after successful authentication and can be forward
 
 ## Works well with
 
+- Stock nginx `proxy_set_header` — forward OIDC identity claims to backends via standard headers.
+- Stock nginx `ssl_*` directives — OIDC flows require HTTPS; use standard nginx SSL configuration alongside this module.
 - [JWT Authentication](/docs/reference/modules/jwt) when some routes need bare token validation and others need the full OIDC redirect flow.
 - [Web Application Firewall](/docs/reference/modules/waf) for layered security in front of authenticated applications.
 - [Rate Limiting](/docs/reference/modules/ratelimit) to control authentication endpoint traffic.
