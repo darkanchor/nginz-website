@@ -64,6 +64,16 @@ export default {
     }
 
     // ── Human Contact Form ──
+    if (request.method === "GET" && url.pathname === "/api/contact") {
+      return json({
+        endpoint: "/api/contact",
+        method: "POST",
+        description: "Human contact form endpoint. Accepts form-encoded or JSON POST. Fields: name, email, company (optional), product (optional), message.",
+        example_form: "name=Jane&email=jane@example.com&company=Acme&product=nginz-token&message=Hello",
+        example_json: { name: "Jane", email: "jane@example.com", company: "Acme", product: "nginz-token", message: "Hello" },
+      });
+    }
+
     if (request.method === "POST" && url.pathname === "/api/contact") {
       let name = "", email = "", company = "", product = "", message = "";
 
