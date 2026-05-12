@@ -1,4 +1,4 @@
-name = "nginz-website-worker"
+name = "nginz-website"
 main = "worker/index.ts"
 compatibility_date = "2025-04-01"
 
