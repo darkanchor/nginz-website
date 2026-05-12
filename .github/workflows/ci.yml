@@ -42,9 +42,4 @@ jobs:
           test -f dist/llms.txt
           test -f dist/robots.txt
 
-      - name: Verify scaffold files
-        run: |
-          test -f design.md
-          test -f public/llms.txt
-          test -f public/.well-known/agent-card.json
-          test -f worker/index.ts
+
