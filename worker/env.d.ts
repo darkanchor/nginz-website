@@ -20,6 +20,8 @@ declare global {
     PADDLE_WEBHOOK_SECRET?: string;
     TELEGRAM_BOT_TOKEN?: string;
     TELEGRAM_CHAT_ID?: string;
+    TELEGRAM_BOT_TOKEN_2?: string;
+    TELEGRAM_CHAT_ID_2?: string;
 
     // KV namespace for contact form storage (optional but recommended)
     CONTACT_KV?: KVNamespace;

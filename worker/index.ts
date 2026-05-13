@@ -4,6 +4,10 @@ export interface Env {
   CONTACT_KV?: KVNamespace;
   TELEGRAM_BOT_TOKEN?: string;
   TELEGRAM_CHAT_ID?: string;
+  // Optional second bot for automated storage + reply.
+  // Falls back to TELEGRAM_BOT_TOKEN when only a second chat id is set.
+  TELEGRAM_BOT_TOKEN_2?: string;
+  TELEGRAM_CHAT_ID_2?: string;
 }
 
 function json(body: unknown, status = 200): Response {
@@ -126,6 +130,14 @@ export default {
         await notifyTelegram(env.TELEGRAM_BOT_TOKEN, env.TELEGRAM_CHAT_ID, text);
       }
 
+      if (env.TELEGRAM_CHAT_ID_2) {
+        const token2 = env.TELEGRAM_BOT_TOKEN_2 || env.TELEGRAM_BOT_TOKEN;
+        if (token2) {
+          const text2 = `<b>📬 New contact</b>\n<b>Name:</b> ${name}\n<b>Email:</b> ${email}\n<b>Company:</b> ${company || "—"}\n<b>Product:</b> ${product || "—"}\n<b>Message:</b> ${message}`;
+          await notifyTelegram(token2, env.TELEGRAM_CHAT_ID_2, text2);
+        }
+      }
+
       // Return a friendly HTML confirmation
       return html(`<!DOCTYPE html>
 <html lang="en">
@@ -190,6 +202,17 @@ export default {
         const contact = String(body.contact || body.email || "not provided");
         const text = `<b>🤖 Agent inquiry</b>\n<b>Intent:</b> ${intent}\n<b>Contact:</b> ${contact}\n<b>Message:</b> ${msg}`;
         await notifyTelegram(env.TELEGRAM_BOT_TOKEN, env.TELEGRAM_CHAT_ID, text);
+      }
+
+      if (env.TELEGRAM_CHAT_ID_2) {
+        const token2 = env.TELEGRAM_BOT_TOKEN_2 || env.TELEGRAM_BOT_TOKEN;
+        if (token2) {
+          const intent = String(body.intent || "general");
+          const msg = String(body.message || "");
+          const contact = String(body.contact || body.email || "not provided");
+          const text2 = `<b>🤖 Agent inquiry</b>\n<b>Intent:</b> ${intent}\n<b>Contact:</b> ${contact}\n<b>Message:</b> ${msg}`;
+          await notifyTelegram(token2, env.TELEGRAM_CHAT_ID_2, text2);
+        }
       }
 
       return json({ ok: true, message: "Inquiry received. A human will follow up if needed." }, 202);
