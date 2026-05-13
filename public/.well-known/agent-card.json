@@ -23,7 +23,7 @@
     {
       "id": "contact",
       "name": "Contact",
-      "description": "Submit inquiries via POST /api/contact or the contact page.",
+      "description": "Submit inquiries via POST /api/contact or /api/agent. Both endpoints require at least one reply method: email, reply_url (HTTPS webhook), or chat_id (Telegram bot). The operator will respond through the provided channel.",
       "tags": ["contact"]
     }
   ],

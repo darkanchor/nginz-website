@@ -72,14 +72,24 @@ export default {
       return json({
         endpoint: "/api/contact",
         method: "POST",
-        description: "Human contact form endpoint. Accepts form-encoded or JSON POST. Fields: name, email, company (optional), product (optional), message.",
+        description: "Human contact form endpoint. Accepts form-encoded or JSON POST.",
+        required: "name, message, and at least one reply method (email, reply_url, or chat_id).",
+        fields: {
+          name: "string (required)",
+          message: "string (required)",
+          email: "string (optional) — email for human follow-up",
+          reply_url: "string (optional) — HTTPS webhook for automated replies",
+          chat_id: "string (optional) — Telegram chat ID for bot replies",
+          company: "string (optional)",
+          product: "string (optional)",
+        },
         example_form: "name=Jane&email=jane@example.com&company=Acme&product=nginz-token&message=Hello",
         example_json: { name: "Jane", email: "jane@example.com", company: "Acme", product: "nginz-token", message: "Hello" },
       });
     }
 
     if (request.method === "POST" && url.pathname === "/api/contact") {
-      let name = "", email = "", company = "", product = "", message = "";
+      let name = "", email = "", company = "", product = "", message = "", replyUrl = "", chatId = "";
 
       const contentType = request.headers.get("content-type") || "";
       if (contentType.includes("application/json")) {
@@ -89,6 +99,8 @@ export default {
         company = body.company || "";
         product = body.product || "";
         message = body.message || "";
+        replyUrl = body.reply_url || "";
+        chatId = body.chat_id || "";
       } else {
         const formData = await request.formData();
         name = (formData.get("name") as string) || "";
@@ -96,16 +108,28 @@ export default {
         company = (formData.get("company") as string) || "";
         product = (formData.get("product") as string) || "";
         message = (formData.get("message") as string) || "";
+        replyUrl = (formData.get("reply_url") as string) || "";
+        chatId = (formData.get("chat_id") as string) || "";
       }
 
-      if (!name || !email || !message) {
-        return json({ error: "name, email, and message are required" }, 400);
+      if (!name || !message) {
+        return json({ error: "name and message are required" }, 400);
+      }
+
+      const hasReply = email.trim() || replyUrl.trim() || chatId.trim();
+      if (!hasReply) {
+        return json({
+          error: "missing_reply_target",
+          message: "At least one of email, reply_url, or chat_id is required so the operator can respond.",
+        }, 400);
       }
 
       const payload = {
         kind: "contact",
         name,
-        email,
+        email: email || undefined,
+        reply_url: replyUrl || undefined,
+        chat_id: chatId || undefined,
         company,
         product,
         message,
@@ -119,22 +143,30 @@ export default {
 
       // Store in KV if available (durable backup)
       if (env.CONTACT_KV) {
-        const key = `contact:${Date.now()}:${email}`;
+        const key = `contact:${Date.now()}:${email || replyUrl || chatId}`;
         try {
           await env.CONTACT_KV.put(key, JSON.stringify(payload), { expirationTtl: 60 * 60 * 24 * 90 });
         } catch { /* KV write is best-effort */ }
       }
 
       if (env.TELEGRAM_BOT_TOKEN && env.TELEGRAM_CHAT_ID) {
-        const text = `<b>📬 New contact</b>\n<b>Name:</b> ${name}\n<b>Email:</b> ${email}\n<b>Company:</b> ${company || "—"}\n<b>Product:</b> ${product || "—"}\n<b>Message:</b> ${message.slice(0, 500)}`;
-        await notifyTelegram(env.TELEGRAM_BOT_TOKEN, env.TELEGRAM_CHAT_ID, text);
+        const lines = [`<b>📬 New contact</b>`, `<b>Name:</b> ${name}`];
+        if (email) lines.push(`<b>Email:</b> ${email}`);
+        if (replyUrl) lines.push(`<b>Reply URL:</b> ${replyUrl}`);
+        if (chatId) lines.push(`<b>Chat ID:</b> ${chatId}`);
+        lines.push(`<b>Company:</b> ${company || "—"}`, `<b>Product:</b> ${product || "—"}`, `<b>Message:</b> ${message.slice(0, 500)}`);
+        await notifyTelegram(env.TELEGRAM_BOT_TOKEN, env.TELEGRAM_CHAT_ID, lines.join("\n"));
       }
 
       if (env.TELEGRAM_CHAT_ID_2) {
         const token2 = env.TELEGRAM_BOT_TOKEN_2 || env.TELEGRAM_BOT_TOKEN;
         if (token2) {
-          const text2 = `<b>📬 New contact</b>\n<b>Name:</b> ${name}\n<b>Email:</b> ${email}\n<b>Company:</b> ${company || "—"}\n<b>Product:</b> ${product || "—"}\n<b>Message:</b> ${message}`;
-          await notifyTelegram(token2, env.TELEGRAM_CHAT_ID_2, text2);
+          const lines = [`<b>📬 New contact</b>`, `<b>Name:</b> ${name}`];
+          if (email) lines.push(`<b>Email:</b> ${email}`);
+          if (replyUrl) lines.push(`<b>Reply URL:</b> ${replyUrl}`);
+          if (chatId) lines.push(`<b>Chat ID:</b> ${chatId}`);
+          lines.push(`<b>Company:</b> ${company || "—"}`, `<b>Product:</b> ${product || "—"}`, `<b>Message:</b> ${message}`);
+          await notifyTelegram(token2, env.TELEGRAM_CHAT_ID_2, lines.join("\n"));
         }
       }
 
@@ -164,10 +196,19 @@ export default {
         endpoint: "/api/agent",
         method: "POST",
         description: "Agent-to-agent structured inquiry endpoint. Accepts JSON payloads from AI agents operating on behalf of users. POST your inquiry as JSON and the operator will be notified.",
+        required_reply_field: "At least one of reply_url, email, or chat_id must be provided so the operator can respond.",
+        schema: {
+          intent: "string (optional) — e.g. sales, support, partnership",
+          message: "string (required) — the inquiry body",
+          reply_url: "string (optional) — HTTPS webhook URL the operator can POST replies to",
+          email: "string (optional) — email address for human follow-up",
+          chat_id: "string (optional) — Telegram chat ID if you are a Telegram bot",
+        },
         contact: hasTelegram
           ? { via: "telegram", note: "The operator receives inquiries via Telegram. POST your message here and they will be notified." }
           : { note: "Inquiries are stored and forwarded. The operator will follow up if needed." },
-        example: { intent: "sales", contact: "user@example.com", message: "I represent a company interested in nginz-token." },
+        example: { intent: "sales", email: "user@example.com", reply_url: "https://myagent.example/webhook", message: "I represent a company interested in nginz-token." },
+        example_telegram_bot: { intent: "support", chat_id: "123456789", message: "User 456 needs help with nginz-token rate limiting." },
       });
     }
 
@@ -179,9 +220,25 @@ export default {
         return json({ error: "invalid JSON body" }, 400);
       }
 
+      // Validate: at least one reply channel must be provided
+      const replyUrl = typeof body.reply_url === "string" ? body.reply_url.trim() : "";
+      const email = typeof body.email === "string" ? body.email.trim() : "";
+      const chatId = typeof body.chat_id === "string" ? body.chat_id.trim() : "";
+
+      if (!replyUrl && !email && !chatId) {
+        return json({
+          error: "missing_reply_target",
+          message: "At least one of reply_url, email, or chat_id is required so the operator can respond.",
+        }, 400);
+      }
+
       const payload = {
         kind: "agent_inquiry",
-        ...body,
+        intent: body.intent,
+        message: body.message,
+        reply_url: replyUrl || undefined,
+        email: email || undefined,
+        chat_id: chatId || undefined,
         received_at: new Date().toISOString(),
       };
 
@@ -199,9 +256,12 @@ export default {
       if (env.TELEGRAM_BOT_TOKEN && env.TELEGRAM_CHAT_ID) {
         const intent = String(body.intent || "general");
         const msg = String(body.message || "").slice(0, 500);
-        const contact = String(body.contact || body.email || "not provided");
-        const text = `<b>🤖 Agent inquiry</b>\n<b>Intent:</b> ${intent}\n<b>Contact:</b> ${contact}\n<b>Message:</b> ${msg}`;
-        await notifyTelegram(env.TELEGRAM_BOT_TOKEN, env.TELEGRAM_CHAT_ID, text);
+        const lines = [`<b>🤖 Agent inquiry</b>`, `<b>Intent:</b> ${intent}`];
+        if (email) lines.push(`<b>Email:</b> ${email}`);
+        if (replyUrl) lines.push(`<b>Reply URL:</b> ${replyUrl}`);
+        if (chatId) lines.push(`<b>Chat ID:</b> ${chatId}`);
+        lines.push(`<b>Message:</b> ${msg}`);
+        await notifyTelegram(env.TELEGRAM_BOT_TOKEN, env.TELEGRAM_CHAT_ID, lines.join("\n"));
       }
 
       if (env.TELEGRAM_CHAT_ID_2) {
@@ -209,9 +269,12 @@ export default {
         if (token2) {
           const intent = String(body.intent || "general");
           const msg = String(body.message || "");
-          const contact = String(body.contact || body.email || "not provided");
-          const text2 = `<b>🤖 Agent inquiry</b>\n<b>Intent:</b> ${intent}\n<b>Contact:</b> ${contact}\n<b>Message:</b> ${msg}`;
-          await notifyTelegram(token2, env.TELEGRAM_CHAT_ID_2, text2);
+          const lines = [`<b>🤖 Agent inquiry</b>`, `<b>Intent:</b> ${intent}`];
+          if (email) lines.push(`<b>Email:</b> ${email}`);
+          if (replyUrl) lines.push(`<b>Reply URL:</b> ${replyUrl}`);
+          if (chatId) lines.push(`<b>Chat ID:</b> ${chatId}`);
+          lines.push(`<b>Message:</b> ${msg}`);
+          await notifyTelegram(token2, env.TELEGRAM_CHAT_ID_2, lines.join("\n"));
         }
       }
 
