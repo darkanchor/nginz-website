@@ -5,6 +5,16 @@
 - Do not add Astro API routes here. `astro.config.mjs` is `output: "static"`, and local dev proxies `/api` + `/webhooks` to the Worker on `127.0.0.1:8788`.
 - Local ports are fixed by repo scripts/config: Astro `:4321`, Worker `:8788`.
 
+### Dev servers that survive shell exit
+```bash
+# Start both (survives terminal close):
+nohup npx wrangler dev worker/index.ts --port 8788 > /tmp/worker.log 2>&1 &
+nohup npx astro dev --host --port 4321 > /tmp/astro.log 2>&1 &
+
+# Kill both:
+pkill -f "wrangler dev"; pkill -f "astro dev"
+```
+
 ## Deployment
 - Two separate deployables — deploy whichever changed:
   - **Worker** (`/api/*`, `/webhooks/*`): `npm run deploy` (builds + `npx wrangler deploy --env production`)

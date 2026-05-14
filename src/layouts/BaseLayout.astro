@@ -18,6 +18,15 @@ const { title, description = "The nginz family: nginx + nginz, nginz-njs, and ng
     <title>{title} | {siteName}</title>
     <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <!-- Blocking theme script: must run before first paint to prevent flash -->
+    <script is:inline>
+      (function() {
+        var theme = localStorage.getItem('nginz-theme');
+        if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
   </head>
   <body>
     <div class="site-shell">
@@ -72,35 +81,18 @@ const { title, description = "The nginz family: nginx + nginz, nginz-njs, and ng
     </footer>
 
     <script is:inline>
-      // Theme toggle
-      (function() {
-        const KEY = 'nginz-theme';
-        function getTheme() {
-          const stored = localStorage.getItem(KEY);
-          if (stored === 'light' || stored === 'dark') return stored;
-          return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      // Theme toggle (initial class already set in <head>, no flash)
+      document.getElementById('theme-toggle').addEventListener('click', function() {
+        var html = document.documentElement;
+        var isDark = html.classList.contains('dark');
+        if (isDark) {
+          html.classList.remove('dark');
+          localStorage.setItem('nginz-theme', 'light');
+        } else {
+          html.classList.add('dark');
+          localStorage.setItem('nginz-theme', 'dark');
         }
-        function apply(theme) {
-          document.documentElement.classList.add('theme-transition');
-          if (theme === 'dark') {
-            document.documentElement.classList.add('dark');
-          } else {
-            document.documentElement.classList.remove('dark');
-          }
-          requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-              document.documentElement.classList.remove('theme-transition');
-            });
-          });
-        }
-        apply(getTheme());
-        document.getElementById('theme-toggle').addEventListener('click', function() {
-          const current = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
-          const next = current === 'dark' ? 'light' : 'dark';
-          localStorage.setItem(KEY, next);
-          apply(next);
-        });
-      })();
+      });
     </script>
     <script is:inline>
       // Show ICP备案号 on darkanchor.com and darkanchor.com.cn
