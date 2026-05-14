@@ -72,7 +72,10 @@ export default {
       return json({
         endpoint: "/api/contact",
         method: "POST",
-        description: "Human contact form endpoint. Accepts form-encoded or JSON POST.",
+        audience: "humans",
+        description: "Contact form for human users. Accepts form-encoded or JSON POST. Returns an HTML confirmation page on success. If you are an AI agent or bot, use /api/agent instead.",
+        agent_endpoint: "/api/agent",
+        agent_note: "AI agents and bots should POST to /api/agent, which accepts structured JSON and returns JSON responses (no HTML).",
         required: "name, message, and at least one reply method (email, reply_url, or chat_id).",
         fields: {
           name: "string (required)",
@@ -170,6 +173,18 @@ export default {
         }
       }
 
+      // Content negotiation: JSON callers get JSON, form submissions get HTML
+      const accept = request.headers.get("accept") || "";
+      const wantsJson = contentType.includes("application/json") || accept.includes("application/json");
+
+      if (wantsJson) {
+        return json({
+          ok: true,
+          message: `Thanks, ${name}. We'll get back to you soon — a human, maybe a bot, we cannot be sure. 🤖`,
+          note: "For a fully structured agent-to-agent experience, consider POST /api/agent instead.",
+        }, 202);
+      }
+
       // Return a friendly HTML confirmation
       return html(`<!DOCTYPE html>
 <html lang="en">
@@ -183,7 +198,7 @@ export default {
 </style></head>
 <body>
   <h1>Message sent</h1>
-  <p>Thanks, ${name}. We'll get back to you within one business day.</p>
+  <p>Thanks, ${name}. We'll get back to you soon — a human, maybe a bot, we cannot be sure. 🤖</p>
   <p><a href="/">Back to darkanchor</a></p>
 </body>
 </html>`);
@@ -195,7 +210,10 @@ export default {
       return json({
         endpoint: "/api/agent",
         method: "POST",
-        description: "Agent-to-agent structured inquiry endpoint. Accepts JSON payloads from AI agents operating on behalf of users. POST your inquiry as JSON and the operator will be notified.",
+        audience: "ai_agents_and_bots",
+        description: "Agent-to-agent structured inquiry endpoint. This is the canonical contact endpoint for AI agents, bots, and automated systems. Accepts JSON payloads from AI agents operating on behalf of users. POST your inquiry as JSON and the operator will be notified. Human users should use /api/contact instead.",
+        human_endpoint: "/api/contact",
+        human_note: "Human users should POST to /api/contact, which accepts form-encoded data and returns an HTML confirmation page.",
         required_reply_field: "At least one of reply_url, email, or chat_id must be provided so the operator can respond.",
         schema: {
           intent: "string (optional) — e.g. sales, support, partnership",

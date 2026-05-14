@@ -50,6 +50,11 @@
 - [/docs/reference/scripted-modules/webhook](/docs/reference/scripted-modules/webhook) — Webhook
 - [/docs/reference/scripted-modules/workflow](/docs/reference/scripted-modules/workflow) — Workflow
 
+## API Endpoints
+- `POST /api/contact` — Contact form for **human users**. Accepts form-encoded or JSON. Requires name + message + reply channel. Returns HTML confirmation.
+- `POST /api/agent` — Contact endpoint for **AI agents and bots**. JSON-only. Accepts intent + message + reply channel. Returns JSON (202). This is the canonical endpoint for automated systems.
+- `GET /api/health` — Health check (returns JSON)
+
 ## Other Pages
 - [/products](/products) — Product overview
 - [/contact](/contact) — Contact form

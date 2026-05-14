@@ -21,10 +21,16 @@
       "tags": ["docs", "modules", "reference"]
     },
     {
-      "id": "contact",
-      "name": "Contact",
-      "description": "Submit inquiries via POST /api/contact or /api/agent. Both endpoints require at least one reply method: email, reply_url (HTTPS webhook), or chat_id (Telegram bot). The operator will respond through the provided channel.",
-      "tags": ["contact"]
+      "id": "contact-human",
+      "name": "Contact (Human)",
+      "description": "POST /api/contact — contact form for human users. Accepts form-encoded or JSON. Requires name + message + one reply channel (email, reply_url, or chat_id). Returns an HTML confirmation page. AI agents should use the agent-contact skill instead.",
+      "tags": ["contact", "human"]
+    },
+    {
+      "id": "contact-agent",
+      "name": "Contact (Agent)",
+      "description": "POST /api/agent — canonical contact endpoint for AI agents and bots. JSON-only. Accepts intent + message + one reply channel (reply_url, email, or chat_id). Returns JSON (202 Accepted). This is the correct endpoint for automated systems and AI agents acting on behalf of users.",
+      "tags": ["contact", "agent"]
     }
   ],
   "defaultInputModes": ["text/plain"],

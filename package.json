@@ -19,7 +19,7 @@
     "validate:modules": "bash ./scripts/validate-module-docs.sh",
     "scaffold:module": "bash ./scripts/scaffold-module-doc.sh",
     "clean": "rm -rf dist .astro .wrangler",
-    "deploy": "npm run build && wrangler deploy",
+    "deploy": "npm run build && npx wrangler deploy --env production",
     "cf-typegen": "wrangler types"
   },
   "dependencies": {

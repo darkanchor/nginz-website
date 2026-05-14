@@ -5,6 +5,13 @@
 - Do not add Astro API routes here. `astro.config.mjs` is `output: "static"`, and local dev proxies `/api` + `/webhooks` to the Worker on `127.0.0.1:8788`.
 - Local ports are fixed by repo scripts/config: Astro `:4321`, Worker `:8788`.
 
+## Deployment
+- Two separate deployables — deploy whichever changed:
+  - **Worker** (`/api/*`, `/webhooks/*`): `npm run deploy` (builds + `npx wrangler deploy --env production`)
+  - **Static site** (HTML, `agent-card.json`, `llms.txt`, etc.): `npx wrangler pages deploy dist --project-name nginz-website --branch main`
+- Worker secrets are set once: `npx wrangler secret put <NAME> --env production`
+- No git-connected auto-deploy — both are manual.
+
 ## Commands that matter
 - `npm run dev` starts both runtimes via `scripts/dev.sh`: Worker in background, Astro in foreground. If dev shutdown goes badly, check for a leftover Worker on `:8788`.
 - `npm run build` runs `astro build` first, then `tsc --noEmit -p worker/tsconfig.json`. It validates Worker TypeScript but does not deploy or bundle the Worker.
