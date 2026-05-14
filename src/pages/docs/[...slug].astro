@@ -129,6 +129,15 @@ if (currentSlug.startsWith("reference/scripted-modules")) {
       </div>
     </aside>
 
+    <script is:inline>
+      // Mobile: show all sidebar sections by default, onclick still toggles
+      if (window.matchMedia('(max-width: 768px)').matches) {
+        document.querySelectorAll('.sidebar-pages').forEach(function(el) {
+          el.style.display = 'block';
+        });
+      }
+    </script>
+
     <div class="docs-content">
       <div class="docs-content-inner">
         <div class="prose" style="max-width: none;">
