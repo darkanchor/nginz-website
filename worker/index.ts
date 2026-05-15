@@ -2,6 +2,7 @@ export interface Env {
   SITE_URL?: string;
   CONTACT_WEBHOOK_URL?: string;
   CONTACT_KV?: KVNamespace;
+  RATELIMIT_KV?: KVNamespace;
   TELEGRAM_BOT_TOKEN?: string;
   TELEGRAM_CHAT_ID?: string;
   // Optional second bot for automated storage + reply.
@@ -80,6 +81,8 @@ function pageTemplate(title: string, heading: string, bodyHtml: string, isError 
 // ── Rate limiting ──
 // Uses KV for durable state across Worker invocations.
 // One submission per IP per 5-minute window.
+// Stores a timestamp as the value so retryAfter can be calculated precisely.
+// Fails open: if KV is unavailable, requests are allowed through.
 
 const RATE_WINDOW_SEC = 300; // 5 minutes
 
@@ -87,16 +90,31 @@ async function checkRateLimit(kv: KVNamespace | undefined, ip: string): Promise<
   if (!kv) return { allowed: true, retryAfter: 0 }; // No KV → rate limiting disabled
 
   const key = `ratelimit:${ip}`;
-  const existing = await kv.get(key);
-  if (existing) {
-    // Existing key → within window, calculate remaining time if possible
-    const ttl = await kv.get(key, "ttl" as never); // ttl in seconds
-    const retryAfter = typeof ttl === "number" && ttl > 0 ? ttl : RATE_WINDOW_SEC;
-    return { allowed: false, retryAfter };
+
+  try {
+    const existing = await kv.get(key);
+    if (existing) {
+      const storedAt = parseInt(existing, 10);
+      if (!isNaN(storedAt)) {
+        const elapsed = (Date.now() - storedAt) / 1000;
+        if (elapsed < RATE_WINDOW_SEC) {
+          const retryAfter = Math.ceil(RATE_WINDOW_SEC - elapsed);
+          return { allowed: false, retryAfter };
+        }
+        // Key exists but window expired — fall through to refresh
+      }
+    }
+  } catch {
+    // KV read failed — allow the request (fail open)
+    return { allowed: true, retryAfter: 0 };
   }
 
-  // No key → first request in window. Set with TTL.
-  await kv.put(key, "1", { expirationTtl: RATE_WINDOW_SEC });
+  // No valid key → first request in window. Set with TTL.
+  try {
+    await kv.put(key, String(Date.now()), { expirationTtl: RATE_WINDOW_SEC });
+  } catch {
+    // KV write failed — allow the request but don't enforce (fail open)
+  }
   return { allowed: true, retryAfter: 0 };
 }
 
@@ -230,7 +248,7 @@ export default {
 
       // Rate limiting
       const clientIp = getClientIp(request);
-      const rateCheck = await checkRateLimit(env.CONTACT_KV, clientIp);
+      const rateCheck = await checkRateLimit(env.RATELIMIT_KV, clientIp);
       if (!rateCheck.allowed) {
         return errorReply(`Too many requests. Please wait ${Math.ceil(rateCheck.retryAfter / 60)} minute(s) before trying again.`, 429);
       }
@@ -395,7 +413,7 @@ export default {
     if (request.method === "POST" && url.pathname === "/api/agent") {
       // Rate limiting
       const clientIp = getClientIp(request);
-      const rateCheck = await checkRateLimit(env.CONTACT_KV, clientIp);
+      const rateCheck = await checkRateLimit(env.RATELIMIT_KV, clientIp);
       if (!rateCheck.allowed) {
         return json({
           error: "rate_limited",

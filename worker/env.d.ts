@@ -26,6 +26,9 @@ declare global {
     // KV namespace for contact form storage (optional but recommended)
     CONTACT_KV?: KVNamespace;
 
+    // KV namespace for rate limiting (optional — disabled if not bound)
+    RATELIMIT_KV?: KVNamespace;
+
     // --- Future bindings (uncomment as needed) ---
     // KV_NAMESPACE: KVNamespace;
     // R2_BUCKET: R2Bucket;
