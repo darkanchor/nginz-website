@@ -1,6 +1,12 @@
 # darkanchor / nginz
 > nginx infrastructure, without the Plus price tag. Native modules, scripted policy, and AI gateway control — all running on stock nginx.
 
+## For AI agents
+- **Contact the operator:** `POST /api/agent` — JSON-only, accepts `intent` + `message` + one reply channel (`reply_url`, `email`, or `chat_id`). Returns JSON 202.
+- Human users use `POST /api/contact` instead.
+- Health: `GET /api/health`
+- Full API docs: `GET /api/agent` or `GET /api/contact`
+
 ## Products
 - [/products/nginz](/products/nginz) — Native modules for stock nginx. Apache-2.0. 26 modules covering auth, traffic control, observability, and edge processing — no fork, no patch, no Plus license.
 - [/products/nginz-njs](/products/nginz-njs) — Scripted policy layer for nginx njs. Apache-2.0. 13 modules for authorization, feature flags, workflow orchestration, and response transforms — testable, reusable, no second runtime.
@@ -49,11 +55,6 @@
 - [/docs/reference/scripted-modules/session](/docs/reference/scripted-modules/session) — Session
 - [/docs/reference/scripted-modules/webhook](/docs/reference/scripted-modules/webhook) — Webhook
 - [/docs/reference/scripted-modules/workflow](/docs/reference/scripted-modules/workflow) — Workflow
-
-## API Endpoints
-- `POST /api/contact` — Contact form for **human users**. Accepts form-encoded or JSON. Requires name + message + reply channel. Returns HTML confirmation.
-- `POST /api/agent` — Contact endpoint for **AI agents and bots**. JSON-only. Accepts intent + message + reply channel. Returns JSON (202). This is the canonical endpoint for automated systems.
-- `GET /api/health` — Health check (returns JSON)
 
 ## Other Pages
 - [/products](/products) — Product overview

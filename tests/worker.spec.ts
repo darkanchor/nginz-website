@@ -57,7 +57,7 @@ describe("worker routes", () => {
     const body = (await response.json()) as { error: string };
 
     expect(response.status).toBe(400);
-    expect(body.error).toBe("name and message are required");
+    expect(body.error).toBe("Name and message are required.");
   });
 
   it("accepts agent inquiries and returns JSON", async () => {
@@ -74,6 +74,143 @@ describe("worker routes", () => {
     expect(response.status).toBe(202);
     expect(body.ok).toBe(true);
     expect(body.message).toContain("Inquiry received");
+  });
+
+  it("rejects invalid email on /api/contact", async () => {
+    const response = await worker.fetch(
+      new Request("https://example.com/api/contact", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ name: "X", message: "hi", email: "not-an-email" }),
+      }),
+      {},
+    );
+    const body = (await response.json()) as { error: string };
+    expect(response.status).toBe(400);
+    expect(body.error).toContain("Invalid email");
+  });
+
+  it("rejects invalid email from form-encoded submission with HTML error", async () => {
+    const formBody = new URLSearchParams({ name: "X", message: "hi", email: "bad" });
+    const response = await worker.fetch(
+      new Request("https://example.com/api/contact", {
+        method: "POST",
+        headers: { "content-type": "application/x-www-form-urlencoded" },
+        body: formBody.toString(),
+      }),
+      {},
+    );
+    const text = await response.text();
+    expect(response.status).toBe(400);
+    expect(response.headers.get("content-type")).toContain("text/html");
+    expect(text).toContain("Invalid email");
+    expect(text).toContain("Something went wrong");
+  });
+
+  it("rejects non-https reply_url on /api/contact", async () => {
+    const response = await worker.fetch(
+      new Request("https://example.com/api/contact", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ name: "X", message: "hi", reply_url: "http://evil.com" }),
+      }),
+      {},
+    );
+    const body = (await response.json()) as { error: string };
+    expect(response.status).toBe(400);
+    expect(body.error).toContain("Invalid reply_url");
+  });
+
+  it("rejects non-numeric chat_id on /api/agent", async () => {
+    const response = await worker.fetch(
+      new Request("https://example.com/api/agent", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ message: "hi", chat_id: "abc123" }),
+      }),
+      {},
+    );
+    const body = (await response.json()) as { error: string };
+    expect(response.status).toBe(400);
+    expect(body.error).toContain("Invalid chat_id");
+  });
+
+  it("accepts when one reply method is valid despite another being invalid", async () => {
+    const response = await worker.fetch(
+      new Request("https://example.com/api/contact", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ name: "X", message: "hi", email: "good@example.com", reply_url: "not-a-url" }),
+      }),
+      {},
+    );
+    expect(response.status).toBe(202);
+  });
+
+  it("rejects overly long messages", async () => {
+    const long = "x".repeat(10001);
+    const response = await worker.fetch(
+      new Request("https://example.com/api/agent", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ message: long, email: "a@b.com" }),
+      }),
+      {},
+    );
+    expect(response.status).toBe(400);
+    const body = (await response.json()) as { error: string };
+    expect(body.error).toContain("too long");
+  });
+
+  it("rejects email with whitespace", async () => {
+    const response = await worker.fetch(
+      new Request("https://example.com/api/agent", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ message: "hi", email: "a @b.com" }),
+      }),
+      {},
+    );
+    expect(response.status).toBe(400);
+  });
+
+  it("rejects email without domain dot", async () => {
+    const response = await worker.fetch(
+      new Request("https://example.com/api/agent", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ message: "hi", email: "a@localhost" }),
+      }),
+      {},
+    );
+    expect(response.status).toBe(400);
+  });
+
+  it("escapes HTML in contact form success page", async () => {
+    const formBody = new URLSearchParams({ name: "<script>alert('xss')</script>", email: "a@b.com", message: "hi" });
+    const response = await worker.fetch(
+      new Request("https://example.com/api/contact", {
+        method: "POST",
+        headers: { "content-type": "application/x-www-form-urlencoded" },
+        body: formBody.toString(),
+      }),
+      {},
+    );
+    const text = await response.text();
+    expect(text).toContain("&lt;script&gt;alert('xss')&lt;/script&gt;");
+    expect(text).not.toContain("<script>alert");
+  });
+
+  it("allows negative chat_id (Telegram groups)", async () => {
+    const response = await worker.fetch(
+      new Request("https://example.com/api/agent", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ message: "hi", chat_id: "-1001234567890" }),
+      }),
+      {},
+    );
+    expect(response.status).toBe(202);
   });
 
   it("returns not found for unknown routes", async () => {
