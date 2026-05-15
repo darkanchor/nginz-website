@@ -201,6 +201,12 @@ async function notifyTelegram(token: string, chatId: string, text: string): Prom
   }
 }
 
+// Escape user-provided values for Telegram's HTML parse mode.
+// Only <b>, <i>, <u>, <s>, <code>, <pre>, <a> are safe; escape others.
+function tgEscape(s: string): string {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
@@ -255,14 +261,18 @@ export default {
 
       let name = "", email = "", company = "", product = "", message = "", replyUrl = "", chatId = "";
       if (contentType.includes("application/json")) {
-        const body = await request.json() as Record<string, string>;
-        name = body.name || "";
-        email = body.email || "";
-        company = body.company || "";
-        product = body.product || "";
-        message = body.message || "";
-        replyUrl = body.reply_url || "";
-        chatId = body.chat_id || "";
+        try {
+          const body = await request.json() as Record<string, string>;
+          name = body.name || "";
+          email = body.email || "";
+          company = body.company || "";
+          product = body.product || "";
+          message = body.message || "";
+          replyUrl = body.reply_url || "";
+          chatId = body.chat_id || "";
+        } catch {
+          return errorReply("Invalid JSON body.");
+        }
       } else {
         const formData = await request.formData();
         name = (formData.get("name") as string) || "";
@@ -343,22 +353,22 @@ export default {
       }
 
       if (env.TELEGRAM_BOT_TOKEN && env.TELEGRAM_CHAT_ID) {
-        const lines = [`<b>📬 New contact</b>`, `<b>Name:</b> ${name}`];
-        if (finalEmail) lines.push(`<b>Email:</b> ${finalEmail}`);
-        if (finalReplyUrl) lines.push(`<b>Reply URL:</b> ${finalReplyUrl}`);
-        if (finalChatId) lines.push(`<b>Chat ID:</b> ${finalChatId}`);
-        lines.push(`<b>Company:</b> ${company || "—"}`, `<b>Product:</b> ${product || "—"}`, `<b>Message:</b> ${message.slice(0, 500)}`);
+        const lines = [`<b>📬 New contact</b>`, `<b>Name:</b> ${tgEscape(name)}`];
+        if (finalEmail) lines.push(`<b>Email:</b> ${tgEscape(finalEmail)}`);
+        if (finalReplyUrl) lines.push(`<b>Reply URL:</b> ${tgEscape(finalReplyUrl)}`);
+        if (finalChatId) lines.push(`<b>Chat ID:</b> ${tgEscape(finalChatId)}`);
+        lines.push(`<b>Company:</b> ${tgEscape(company) || "—"}`, `<b>Product:</b> ${tgEscape(product) || "—"}`, `<b>Message:</b> ${tgEscape(message.slice(0, 500))}`);
         await notifyTelegram(env.TELEGRAM_BOT_TOKEN, env.TELEGRAM_CHAT_ID, lines.join("\n"));
       }
 
       if (env.TELEGRAM_CHAT_ID_2) {
         const token2 = env.TELEGRAM_BOT_TOKEN_2 || env.TELEGRAM_BOT_TOKEN;
         if (token2) {
-          const lines = [`<b>📬 New contact</b>`, `<b>Name:</b> ${name}`];
-          if (finalEmail) lines.push(`<b>Email:</b> ${finalEmail}`);
-          if (finalReplyUrl) lines.push(`<b>Reply URL:</b> ${finalReplyUrl}`);
-          if (finalChatId) lines.push(`<b>Chat ID:</b> ${finalChatId}`);
-          lines.push(`<b>Company:</b> ${company || "—"}`, `<b>Product:</b> ${product || "—"}`, `<b>Message:</b> ${message}`);
+          const lines = [`<b>📬 New contact</b>`, `<b>Name:</b> ${tgEscape(name)}`];
+          if (finalEmail) lines.push(`<b>Email:</b> ${tgEscape(finalEmail)}`);
+          if (finalReplyUrl) lines.push(`<b>Reply URL:</b> ${tgEscape(finalReplyUrl)}`);
+          if (finalChatId) lines.push(`<b>Chat ID:</b> ${tgEscape(finalChatId)}`);
+          lines.push(`<b>Company:</b> ${tgEscape(company) || "—"}`, `<b>Product:</b> ${tgEscape(product) || "—"}`, `<b>Message:</b> ${tgEscape(message)}`);
           await notifyTelegram(token2, env.TELEGRAM_CHAT_ID_2, lines.join("\n"));
         }
       }
@@ -492,12 +502,12 @@ export default {
       }
 
       if (env.TELEGRAM_BOT_TOKEN && env.TELEGRAM_CHAT_ID) {
-        const intent = String(body.intent || "general");
-        const msg = String(body.message || "").slice(0, 500);
+        const intent = tgEscape(String(body.intent || "general"));
+        const msg = tgEscape(String(body.message || "").slice(0, 500));
         const lines = [`<b>🤖 Agent inquiry</b>`, `<b>Intent:</b> ${intent}`];
-        if (finalEmail) lines.push(`<b>Email:</b> ${finalEmail}`);
-        if (finalReplyUrl) lines.push(`<b>Reply URL:</b> ${finalReplyUrl}`);
-        if (finalChatId) lines.push(`<b>Chat ID:</b> ${finalChatId}`);
+        if (finalEmail) lines.push(`<b>Email:</b> ${tgEscape(finalEmail)}`);
+        if (finalReplyUrl) lines.push(`<b>Reply URL:</b> ${tgEscape(finalReplyUrl)}`);
+        if (finalChatId) lines.push(`<b>Chat ID:</b> ${tgEscape(finalChatId)}`);
         lines.push(`<b>Message:</b> ${msg}`);
         await notifyTelegram(env.TELEGRAM_BOT_TOKEN, env.TELEGRAM_CHAT_ID, lines.join("\n"));
       }
@@ -505,12 +515,12 @@ export default {
       if (env.TELEGRAM_CHAT_ID_2) {
         const token2 = env.TELEGRAM_BOT_TOKEN_2 || env.TELEGRAM_BOT_TOKEN;
         if (token2) {
-          const intent = String(body.intent || "general");
-          const msg = String(body.message || "");
+          const intent = tgEscape(String(body.intent || "general"));
+          const msg = tgEscape(String(body.message || ""));
           const lines = [`<b>🤖 Agent inquiry</b>`, `<b>Intent:</b> ${intent}`];
-          if (finalEmail) lines.push(`<b>Email:</b> ${finalEmail}`);
-          if (finalReplyUrl) lines.push(`<b>Reply URL:</b> ${finalReplyUrl}`);
-          if (finalChatId) lines.push(`<b>Chat ID:</b> ${finalChatId}`);
+          if (finalEmail) lines.push(`<b>Email:</b> ${tgEscape(finalEmail)}`);
+          if (finalReplyUrl) lines.push(`<b>Reply URL:</b> ${tgEscape(finalReplyUrl)}`);
+          if (finalChatId) lines.push(`<b>Chat ID:</b> ${tgEscape(finalChatId)}`);
           lines.push(`<b>Message:</b> ${msg}`);
           await notifyTelegram(token2, env.TELEGRAM_CHAT_ID_2, lines.join("\n"));
         }
