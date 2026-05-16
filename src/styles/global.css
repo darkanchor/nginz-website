@@ -4,7 +4,11 @@
    Dark mode: mild contrast. */
 
 /* ─── Fonts ─── */
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap');
+/* Self-hosted variable fonts — works identically on Cloudflare & Aliyun OSS (no Google dependency). */
+/* Roboto Flex: weight axis 100–1000 (covers 400/500/600/700), latin + latin-ext + cyrillic + greek + vietnamese */
+@import '@fontsource-variable/roboto-flex';
+/* Roboto Mono: weight axis 100–700 (covers 400/500), latin + latin-ext + cyrillic + greek + vietnamese */
+@import '@fontsource-variable/roboto-mono';
 
 :root {
   color-scheme: light dark;
@@ -53,8 +57,8 @@
   --shadow-lg: 0 8px 24px rgba(27, 31, 36, 0.12);
 
   /* Typography — Docker-matching */
-  --font-sans: "Roboto Flex", "Roboto", system-ui, -apple-system, sans-serif;
-  --font-mono: "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-sans: "Roboto Flex Variable", "Roboto Flex", "Roboto", system-ui, -apple-system, sans-serif;
+  --font-mono: "Roboto Mono Variable", "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
   --text-xs: 0.75rem;
   --text-sm: 0.875rem;

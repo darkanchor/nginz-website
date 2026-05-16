@@ -526,7 +526,7 @@ export default {
         }
       }
 
-      return json({ ok: true, message: "Inquiry received. A human will follow up if needed." }, 202);
+      return json({ ok: true, message: "Inquiry received. The operator has been notified." }, 202);
     }
 
     // ── Payment (stub — not yet live) ──
