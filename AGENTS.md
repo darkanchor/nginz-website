@@ -49,6 +49,19 @@ pkill -f "wrangler dev"; pkill -f "astro dev"
 - Product routes are intentionally preserved at `/products/nginz`, `/products/nginz-njs`, and `/products/nginz-token`.
 - Nested docs routes come directly from file paths under `src/content/docs/`.
 
+## Blog writing
+- When writing blog posts, you are a **technical writer**, not a coder. The goal is to boost the nginz ecosystem through professional, enlightening articles.
+- Blog categories are directory-driven: create a directory under `src/content/blogs/` and it becomes a sidebar category. Add `.md` files inside — they appear as posts sorted by date descending.
+- Tone: authoritative but approachable. Assume the reader is an experienced engineer or operator who runs infrastructure in production. They don't need hand-holding, but they do value clarity, honesty, and depth.
+- Every post should leave the reader with at least one concrete insight they can apply — a design principle, an operational pattern, a mental model, or a sharp critique of a common practice.
+- Good post types:
+  - **Design decisions** — why a module works the way it does, what alternatives were considered, what was rejected and why.
+  - **Technical deep dives** — how something works under the hood, with enough detail that a reader could reimplement the idea.
+  - **Operational stories** — real production patterns, failures, lessons learned. Specifics over generalities.
+  - **Ecosystem context** — where nginz fits in the broader landscape, what it replaces, what it complements, what it deliberately does not do.
+- Avoid: marketing fluff, empty adjectives ("powerful," "robust"), comparisons that dunk on competitors, and anything that reads like a press release.
+- Frontmatter: `title` (required), `description` (optional but recommended for SEO and previews), `date` (required), `author` (optional).
+
 ## Worker boundary
 - Worker entrypoint is `worker/index.ts`. Current concrete routes are:
   - `GET /api/health` → `200`

@@ -47,6 +47,18 @@ const categories: BlogCategory[] = Array.from(categoryMap.entries())
   .sort((a, b) => a.label.localeCompare(b.label));
 ---
 
+<style>
+  .blog-title {
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.2;
+    color: var(--color-accent-text);
+    margin: 0 0 var(--sp-3);
+  }
+  .blog-prose > h1:first-child { display: none; }
+</style>
+
 <BaseLayout title={blog.data.title} description={blog.data.description ?? `${blog.data.title} — darkanchor engineering blog.`} siteName="darkanchor">
   <div class="docs-layout">
     <aside class="docs-sidebar" id="docs-sidebar">
@@ -88,9 +100,10 @@ const categories: BlogCategory[] = Array.from(categoryMap.entries())
 
     <div class="docs-content">
       <div class="docs-content-inner">
-        <div style="margin-bottom: var(--sp-6);">
+        <div style="margin-bottom: var(--sp-4);">
           <a href={`/blogs?category=${currentCategory}`} style="font-size: var(--text-sm); color: var(--color-text-secondary); text-decoration: none;">← Back to {categories.find(c => c.category === currentCategory)?.label || currentCategory}</a>
         </div>
+        <h1 class="blog-title">{blog.data.title}</h1>
         <div class="blog-meta" style="margin-bottom: var(--sp-6);">
           <span class="tag tag-mint" style="margin-bottom: var(--sp-2); display: inline-block;">{categories.find(c => c.category === currentCategory)?.label || currentCategory}</span>
           <div style="display: flex; gap: var(--sp-4); font-size: var(--text-sm); color: var(--color-text-tertiary);">
@@ -98,7 +111,7 @@ const categories: BlogCategory[] = Array.from(categoryMap.entries())
             <span>{blog.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
           </div>
         </div>
-        <div class="prose" style="max-width: none;">
+        <div class="prose blog-prose" style="max-width: none;">
           <Content />
         </div>
       </div>
