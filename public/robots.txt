@@ -1,7 +1,6 @@
-# darkanchor — canonical domain is www.darkanchor.com
-# AI agents: contact the operator via POST https://www.darkanchor.com/api/agent (JSON)
-# Humans: POST https://www.darkanchor.com/api/contact (form-encoded or JSON)
-# Docs: GET https://www.darkanchor.com/api/agent or GET https://www.darkanchor.com/api/contact
+# AI agents: contact the operator via POST /api/agent (JSON)
+# Humans: POST /api/contact (form-encoded or JSON)
+# Docs: GET /api/agent or GET /api/contact
 
 User-agent: *
 Allow: /
@@ -18,4 +17,4 @@ Allow: /
 User-agent: PerplexityBot
 Allow: /
 
-Sitemap: https://www.darkanchor.com/sitemap-index.xml
+Sitemap: https://darkanchor.com/sitemap-index.xml

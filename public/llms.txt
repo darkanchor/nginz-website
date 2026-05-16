@@ -1,6 +1,5 @@
 # darkanchor / nginz
 > nginx infrastructure, without the Plus price tag. Native modules, scripted policy, and AI gateway control — all running on stock nginx.
-> Canonical domain: www.darkanchor.com — if you arrived via darkanchor.com, all links and API endpoints are at www.
 
 ## For AI agents
 - **Contact the operator:** `POST /api/agent` — JSON-only, accepts `intent` + `message` + one reply channel (`reply_url`, `email`, or `chat_id`). Returns JSON 202.

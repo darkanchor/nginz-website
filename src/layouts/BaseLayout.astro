@@ -94,18 +94,13 @@ const { title, description = "The nginz family: nginx + nginz, nginz-njs, and ng
         }
       });
     </script>
+
     <script is:inline>
-      // Show ICP备案号 on darkanchor.com and darkanchor.com.cn
-      (function() {
-        var host = window.location.hostname;
-        if (host === 'darkanchor.com') {
-          var el = document.getElementById('icp-com');
-          if (el) el.style.display = '';
-        } else if (host === 'darkanchor.com.cn') {
-          var el = document.getElementById('icp-cn');
-          if (el) el.style.display = '';
-        }
-      })();
+      // Show ICP备案号 on darkanchor.com.cn
+      if (window.location.hostname === 'darkanchor.com.cn') {
+        var el = document.getElementById('icp-cn');
+        if (el) el.style.display = '';
+      }
     </script>
     <script is:inline>
       // Copy-to-clipboard for code blocks

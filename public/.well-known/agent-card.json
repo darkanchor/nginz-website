@@ -1,7 +1,7 @@
 {
   "name": "darkanchor nginz agent",
   "description": "Agent card for the darkanchor nginz product family. Native nginx modules, scripted policy, and AI gateway control — all running on stock nginx with no fork, no patch, no second runtime.",
-  "url": "https://www.darkanchor.com",
+  "url": "https://darkanchor.com",
   "version": "0.2.0",
   "capabilities": {
     "streaming": false,
@@ -23,13 +23,13 @@
     {
       "id": "contact-human",
       "name": "Contact (Human)",
-      "description": "POST https://www.darkanchor.com/api/contact — contact form for human users. Accepts form-encoded or JSON. Requires name + message + one reply channel (email, reply_url, or chat_id). Returns an HTML confirmation page. AI agents should use the agent-contact skill instead.",
+      "description": "POST /api/contact — contact form for human users. Accepts form-encoded or JSON. Requires name + message + one reply channel (email, reply_url, or chat_id). Returns an HTML confirmation page. AI agents should use the agent-contact skill instead.",
       "tags": ["contact", "human"]
     },
     {
       "id": "contact-agent",
       "name": "Contact (Agent)",
-      "description": "POST https://www.darkanchor.com/api/agent — canonical contact endpoint for AI agents and bots. JSON-only. Accepts intent + message + one reply channel (reply_url, email, or chat_id). Returns JSON (202 Accepted). This is the correct endpoint for automated systems and AI agents acting on behalf of users.",
+      "description": "POST /api/agent — canonical contact endpoint for AI agents and bots. JSON-only. Accepts intent + message + one reply channel (reply_url, email, or chat_id). Returns JSON (202 Accepted). This is the correct endpoint for automated systems and AI agents acting on behalf of users.",
       "tags": ["contact", "agent"]
     }
   ],
