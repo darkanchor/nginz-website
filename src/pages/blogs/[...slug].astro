@@ -1,0 +1,107 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const blogs = await getCollection('blogs');
+  return blogs.map((blog: CollectionEntry<'blogs'>) => ({
+    params: { slug: blog.slug },
+    props: { blog },
+  }));
+}
+
+type Props = {
+  blog: CollectionEntry<'blogs'>;
+};
+
+const { blog } = Astro.props;
+const { Content } = await blog.render();
+
+// Determine current category from slug
+const slugSegs = blog.slug.split('/');
+const currentCategory = slugSegs.length > 1 ? slugSegs[0] : 'uncategorized';
+
+// Build the same dynamic sidebar as index
+const allBlogs = await getCollection('blogs');
+
+type BlogCategory = {
+  category: string;
+  label: string;
+  posts: CollectionEntry<'blogs'>[];
+};
+
+const categoryMap = new Map<string, CollectionEntry<'blogs'>[]>();
+for (const b of allBlogs) {
+  const seg = b.slug.split('/');
+  const cat = seg.length > 1 ? seg[0] : 'uncategorized';
+  if (!categoryMap.has(cat)) categoryMap.set(cat, []);
+  categoryMap.get(cat)!.push(b);
+}
+
+for (const posts of categoryMap.values()) {
+  posts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+}
+
+const categories: BlogCategory[] = Array.from(categoryMap.entries())
+  .map(([category, posts]) => ({ category, label: category.charAt(0).toUpperCase() + category.slice(1), posts }))
+  .sort((a, b) => a.label.localeCompare(b.label));
+---
+
+<BaseLayout title={blog.data.title} description={blog.data.description ?? `${blog.data.title} — darkanchor engineering blog.`} siteName="darkanchor">
+  <div class="docs-layout">
+    <aside class="docs-sidebar" id="docs-sidebar">
+      <div class="sidebar-sections">
+        {categories.map((cat) => (
+          <div class="sidebar-category">
+            <button
+              class={`sidebar-category-btn${cat.category === currentCategory ? ' active' : ''}`}
+              data-category={cat.category}
+              onclick={`document.querySelectorAll('.sidebar-pages').forEach(function(el){el.style.display='none';});var t=document.getElementById('pages-'+this.dataset.category);if(t)t.style.display='block';document.querySelectorAll('.sidebar-category-btn').forEach(function(b){b.classList.remove('active');});this.classList.add('active');`}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><polyline points="14 2 14 8 20 8"/></svg>
+              <span>{cat.label}</span>
+              <span style="margin-left: auto; font-size: var(--text-xs); color: var(--color-text-tertiary);">{cat.posts.length}</span>
+            </button>
+          </div>
+        ))}
+      </div>
+
+      {categories.map((cat) => (
+        <div class="sidebar-pages" id={`pages-${cat.category}`} style={cat.category === currentCategory ? '' : 'display: none;'}>
+          <nav class="sidebar-nav">
+            {cat.posts.map((post) => (
+              <a href={`/blogs/${post.slug}`} class={`sidebar-link${post.slug === blog.slug ? ' current' : ''}`}>
+                <div style="display: flex; flex-direction: column; gap: 2px;">
+                  <span>{post.data.title}</span>
+                  <span style="font-size: var(--text-xs); color: var(--color-text-tertiary);">{post.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
+                </div>
+              </a>
+            ))}
+          </nav>
+        </div>
+      ))}
+
+      <div class="sidebar-cta">
+        <a href="/contact" class="btn btn-secondary" style="width: 100%; font-size: var(--text-xs);">Need Help?</a>
+      </div>
+    </aside>
+
+    <div class="docs-content">
+      <div class="docs-content-inner">
+        <div style="margin-bottom: var(--sp-6);">
+          <a href={`/blogs?category=${currentCategory}`} style="font-size: var(--text-sm); color: var(--color-text-secondary); text-decoration: none;">← Back to {categories.find(c => c.category === currentCategory)?.label || currentCategory}</a>
+        </div>
+        <div class="blog-meta" style="margin-bottom: var(--sp-6);">
+          <span class="tag tag-mint" style="margin-bottom: var(--sp-2); display: inline-block;">{categories.find(c => c.category === currentCategory)?.label || currentCategory}</span>
+          <div style="display: flex; gap: var(--sp-4); font-size: var(--text-sm); color: var(--color-text-tertiary);">
+            {blog.data.author && <span>By {blog.data.author}</span>}
+            <span>{blog.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+          </div>
+        </div>
+        <div class="prose" style="max-width: none;">
+          <Content />
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

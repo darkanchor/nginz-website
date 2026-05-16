@@ -76,7 +76,8 @@ const navSections = [
     category: "nginz-token",
     label: "nginz-token",
     items: [
-      { title: "Coming soon" },
+      { divider: true, label: "Modules" },
+      { title: "Overview", slug: "reference/token-modules" },
     ],
   },
 ];
@@ -86,8 +87,9 @@ const currentSlug = doc.slug;
 let currentCategory = "nginz";
 if (currentSlug.startsWith("reference/scripted-modules")) {
   currentCategory = "nginz-njs";
+} else if (currentSlug.startsWith("reference/token-modules")) {
+  currentCategory = "nginz-token";
 }
-// nginz-token category — placeholder for future
 ---
 
 <BaseLayout title={doc.data.title} description={doc.data.description ?? `${doc.data.title} documentation for the nginz family.`} siteName={currentCategory}>

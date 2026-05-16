@@ -387,7 +387,7 @@ export default {
       const successHtml = pageTemplate(
         "Message sent",
         "Message sent",
-        `<p style="margin:0 0 16px;">Thanks, ${esc(name)}. We'll get back to you soon — a human, or a bot, maybe both. 🚀</p><p style="margin:0 0 16px;color:#656D76;font-size:13px;">You'll be taken back to the homepage in <span id="countdown">5</span> seconds.</p><p style="margin:0;"><a href="/" style="color:#2A404A;text-decoration:underline;text-underline-offset:2px;font-weight:500;">← Back to darkanchor</a></p><script>var n=5;var el=document.getElementById('countdown');var t=setInterval(function(){n--;if(n<=0){clearInterval(t);window.location.replace('/');}else{el.textContent=n;}},1000);</script>`,
+        `<p style="margin:0 0 16px;">Thanks, ${esc(name)}. We'll get back to you soon — a human, or a bot, maybe both. 🚀</p><p style="margin:0 0 16px;color:#656D76;font-size:13px;">You'll be taken back to the homepage in <span id="countdown">15</span> seconds.</p><p style="margin:0;"><a href="/" style="color:#2A404A;text-decoration:underline;text-underline-offset:2px;font-weight:500;">← Back to darkanchor</a></p><script>var n=15;var el=document.getElementById('countdown');var t=setInterval(function(){n--;if(n<=0){clearInterval(t);window.location.replace('/');}else{el.textContent=n;}},1000);</script>`,
       );
       return html(successHtml);
     }

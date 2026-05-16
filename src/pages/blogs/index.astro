@@ -1,0 +1,119 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const allBlogs = await getCollection('blogs');
+
+// Group by category (first segment of slug)
+type BlogCategory = {
+  category: string;
+  label: string;
+  posts: CollectionEntry<'blogs'>[];
+};
+
+const categoryMap = new Map<string, CollectionEntry<'blogs'>[]>();
+for (const blog of allBlogs) {
+  const seg = blog.slug.split('/');
+  const cat = seg.length > 1 ? seg[0] : 'uncategorized';
+  if (!categoryMap.has(cat)) categoryMap.set(cat, []);
+  categoryMap.get(cat)!.push(blog);
+}
+
+// Sort posts within each category by date descending
+for (const posts of categoryMap.values()) {
+  posts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+}
+
+const categories: BlogCategory[] = Array.from(categoryMap.entries())
+  .map(([category, posts]) => ({ category, label: category.charAt(0).toUpperCase() + category.slice(1), posts }))
+  .sort((a, b) => a.label.localeCompare(b.label));
+
+const url = new URL(Astro.request.url);
+const currentCategory = url.searchParams.get('category') || (categories.length > 0 ? categories[0].category : '');
+---
+
+<BaseLayout title="Blog" description="Engineering blog from the darkanchor team — design decisions, technical deep dives, and release notes." siteName="darkanchor">
+  <div class="docs-layout">
+    <aside class="docs-sidebar" id="docs-sidebar">
+      <div class="sidebar-sections">
+        {categories.map((cat) => (
+          <div class="sidebar-category">
+            <button
+              class={`sidebar-category-btn${cat.category === currentCategory ? ' active' : ''}`}
+              data-category={cat.category}
+              onclick={`document.querySelectorAll('.sidebar-pages').forEach(function(el){el.style.display='none';});var t=document.getElementById('pages-'+this.dataset.category);if(t)t.style.display='block';document.querySelectorAll('.sidebar-category-btn').forEach(function(b){b.classList.remove('active');});this.classList.add('active');`}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><polyline points="14 2 14 8 20 8"/></svg>
+              <span>{cat.label}</span>
+              <span style="margin-left: auto; font-size: var(--text-xs); color: var(--color-text-tertiary);">{cat.posts.length}</span>
+            </button>
+          </div>
+        ))}
+      </div>
+
+      {categories.map((cat) => (
+        <div class="sidebar-pages" id={`pages-${cat.category}`} style={cat.category === currentCategory ? '' : 'display: none;'}>
+          <nav class="sidebar-nav">
+            {cat.posts.map((post) => (
+              <a href={`/blogs/${post.slug}`} class="sidebar-link">
+                <div style="display: flex; flex-direction: column; gap: 2px;">
+                  <span>{post.data.title}</span>
+                  <span style="font-size: var(--text-xs); color: var(--color-text-tertiary);">{post.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
+                </div>
+              </a>
+            ))}
+          </nav>
+        </div>
+      ))}
+
+      <div class="sidebar-cta">
+        <a href="/contact" class="btn btn-secondary" style="width: 100%; font-size: var(--text-xs);">Need Help?</a>
+      </div>
+    </aside>
+
+    <div class="docs-content">
+      <div class="docs-content-inner">
+        <h1>Blog</h1>
+        <p class="muted" style="font-size: var(--text-lg); margin-bottom: var(--sp-8);">
+          Engineering notes, design decisions, and release updates from the darkanchor team. Select a category in the sidebar to browse posts.
+        </p>
+
+        <div class="card-grid" style="grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));">
+          {categories.map((cat) => (
+            <a href={`/blogs?category=${cat.category}`} style="text-decoration: none; color: inherit;">
+              <div class="card" style="padding: var(--sp-5);">
+                <div style="display: flex; align-items: center; gap: var(--sp-2); margin-bottom: var(--sp-3);">
+                  <div class="icon-box" style="width: 28px; height: 28px; min-width: 28px;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><polyline points="14 2 14 8 20 8"/></svg>
+                  </div>
+                  <span class="tag tag-mint">{cat.label}</span>
+                </div>
+                <h3 style="font-size: var(--text-base);">{cat.label}</h3>
+                <p style="font-size: var(--text-sm); color: var(--color-text-secondary);">{cat.posts.length} post{cat.posts.length !== 1 ? 's' : ''}</p>
+              </div>
+            </a>
+          ))}
+        </div>
+
+        {currentCategory && (
+          <div style="margin-top: var(--sp-10);">
+            <h2 style="margin-bottom: var(--sp-5);">Latest in {categories.find(c => c.category === currentCategory)?.label || currentCategory}</h2>
+            <div style="display: grid; gap: var(--sp-4);">
+              {categories.find(c => c.category === currentCategory)?.posts.map((post) => (
+                <a href={`/blogs/${post.slug}`} style="text-decoration: none; color: inherit;">
+                  <div class="card" style="padding: var(--sp-5);">
+                    <div style="display: flex; align-items: baseline; gap: var(--sp-3); margin-bottom: var(--sp-2);">
+                      <h3 style="font-size: var(--text-base); margin: 0;">{post.data.title}</h3>
+                      <span style="font-size: var(--text-xs); color: var(--color-text-tertiary); white-space: nowrap;">{post.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
+                    </div>
+                    {post.data.description && <p style="font-size: var(--text-sm); color: var(--color-text-secondary); margin: 0;">{post.data.description}</p>}
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+</BaseLayout>

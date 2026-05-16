@@ -22,6 +22,13 @@ pkill -f "wrangler dev"; pkill -f "astro dev"
 - Worker secrets are set once: `npx wrangler secret put <NAME> --env production`
 - No git-connected auto-deploy — both are manual.
 
+### Session-end deploy suggestion
+- When a session's changes are complete and ready for production, always suggest which deployable(s) to deploy:
+  - **Worker changed** (`worker/index.ts`, `worker/tsconfig.json`, Worker tests): `npm run deploy`
+  - **Static site changed** (Astro pages, content, layouts, styles, `public/`, config): `npx wrangler pages deploy dist --project-name nginz-website --branch main`
+  - **Both changed**: run both commands (Worker first, then Pages).
+- Before suggesting deploy, run `npm run test` (or at minimum `npx astro check && npx astro build && npx tsc --noEmit -p worker/tsconfig.json`) to confirm the build is clean.
+
 ## Commands that matter
 - `npm run dev` starts both runtimes via `scripts/dev.sh`: Worker in background, Astro in foreground. If dev shutdown goes badly, check for a leftover Worker on `:8788`.
 - `npm run build` runs `astro build` first, then `tsc --noEmit -p worker/tsconfig.json`. It validates Worker TypeScript but does not deploy or bundle the Worker.
@@ -38,6 +45,7 @@ pkill -f "wrangler dev"; pkill -f "astro dev"
 - Collections are:
   - `products`: `title`, `license`, optional `category`, optional `tagline`
   - `docs`: `title`, optional `description`
+  - `blogs`: `title`, optional `description`, `date`, optional `author` — categories are derived from directory names under `src/content/blogs/`
 - Product routes are intentionally preserved at `/products/nginz`, `/products/nginz-njs`, and `/products/nginz-token`.
 - Nested docs routes come directly from file paths under `src/content/docs/`.
 
