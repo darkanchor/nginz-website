@@ -14,8 +14,11 @@
 
 ## Documentation
 
+### nginz-token — AI Gateway Modules
+- [/docs/reference/token-modules](/docs/reference/token-modules) — nginz-token Module Reference
+
 ### nginz — Native Modules
-- [/docs/reference/modules/acme](/docs/reference/modules/acme) — ACME / Let's Encrypt
+- [/docs/reference/modules/acme](/docs/reference/modules/acme) — ACME and Let's Encrypt
 - [/docs/reference/modules/cache-purge](/docs/reference/modules/cache-purge) — Cache Purge API
 - [/docs/reference/modules/cache-tags](/docs/reference/modules/cache-tags) — Cache Tags
 - [/docs/reference/modules/canary](/docs/reference/modules/canary) — Canary Routing
@@ -25,29 +28,27 @@
 - [/docs/reference/modules/echoz](/docs/reference/modules/echoz) — Echoz Debug Output
 - [/docs/reference/modules/graphql](/docs/reference/modules/graphql) — GraphQL Gateway
 - [/docs/reference/modules/healthcheck](/docs/reference/modules/healthcheck) — Health Checks
+- [/docs/reference/modules/hello](/docs/reference/modules/hello) — Hello
 - [/docs/reference/modules/jsonschema](/docs/reference/modules/jsonschema) — JSON Schema Validation
 - [/docs/reference/modules/jwt](/docs/reference/modules/jwt) — JWT Authentication
 - [/docs/reference/modules/nftset](/docs/reference/modules/nftset) — nftables IP Policy
-- [/docs/reference/modules/njs](/docs/reference/modules/njs) — NJS Orchestration
+- [/docs/reference/modules/njs](/docs/reference/modules/njs) — NJS (JavaScript) Orchestration
 - [/docs/reference/modules/oidc](/docs/reference/modules/oidc) — OpenID Connect
-- [/docs/reference/modules/pgrest](/docs/reference/modules/pgrest) — PostgREST API
+- [/docs/reference/modules/pgrest](/docs/reference/modules/pgrest) — PostgREST-compatible PostgreSQL API
 - [/docs/reference/modules/prometheus](/docs/reference/modules/prometheus) — Prometheus Metrics
 - [/docs/reference/modules/ratelimit](/docs/reference/modules/ratelimit) — Rate Limiting
 - [/docs/reference/modules/redis](/docs/reference/modules/redis) — Redis
 - [/docs/reference/modules/requestid](/docs/reference/modules/requestid) — Request ID
-- [/docs/reference/modules/transform](/docs/reference/modules/transform) — JSON Transform
+- [/docs/reference/modules/transform](/docs/reference/modules/transform) — JSON Response Transform
 - [/docs/reference/modules/upstream-balancer](/docs/reference/modules/upstream-balancer) — Upstream Balancer
-- [/docs/reference/modules/waf](/docs/reference/modules/waf) — WAF
-- [/docs/reference/modules/wechatpay](/docs/reference/modules/wechatpay) — WeChat Pay
+- [/docs/reference/modules/waf](/docs/reference/modules/waf) — Web Application Firewall
+- [/docs/reference/modules/wechatpay](/docs/reference/modules/wechatpay) — WeChat Pay Gateway
 - [/docs/reference/modules/worker-events](/docs/reference/modules/worker-events) — Worker Events
 
-### nginz-token — AI Gateway Modules
-- [/docs/reference/token-modules](/docs/reference/token-modules) — Overview: planned module catalog (llm-proxy, llm-auth, llm-metrics, llm-ratelimit, llm-cost, llm-cache, llm-security)
-
 ### nginz-njs — Scripted Modules
-- [/docs/reference/scripted-modules/authz](/docs/reference/scripted-modules/authz) — Authorization Policy Engine
+- [/docs/reference/scripted-modules/authz](/docs/reference/scripted-modules/authz) — Authz (Authorization Policy Engine)
 - [/docs/reference/scripted-modules/control-api](/docs/reference/scripted-modules/control-api) — Control API
-- [/docs/reference/scripted-modules/feature-flags](/docs/reference/scripted-modules/feature-flags) — Feature Flags
+- [/docs/reference/scripted-modules/feature-flags](/docs/reference/scripted-modules/feature-flags) — Feature Flags (Rollout and Experimentation)
 - [/docs/reference/scripted-modules/health-gateway](/docs/reference/scripted-modules/health-gateway) — Health Gateway
 - [/docs/reference/scripted-modules/http-client](/docs/reference/scripted-modules/http-client) — HTTP Client
 - [/docs/reference/scripted-modules/metrics](/docs/reference/scripted-modules/metrics) — Metrics
@@ -55,13 +56,13 @@
 - [/docs/reference/scripted-modules/request-tracing](/docs/reference/scripted-modules/request-tracing) — Request Tracing
 - [/docs/reference/scripted-modules/response-templating](/docs/reference/scripted-modules/response-templating) — Response Templating
 - [/docs/reference/scripted-modules/response-transform](/docs/reference/scripted-modules/response-transform) — Response Transform
-- [/docs/reference/scripted-modules/session](/docs/reference/scripted-modules/session) — Session
-- [/docs/reference/scripted-modules/webhook](/docs/reference/scripted-modules/webhook) — Webhook
+- [/docs/reference/scripted-modules/session](/docs/reference/scripted-modules/session) — Session (Cookie and Session Lifecycle)
+- [/docs/reference/scripted-modules/webhook](/docs/reference/scripted-modules/webhook) — Webhook Signing and Delivery
 - [/docs/reference/scripted-modules/workflow](/docs/reference/scripted-modules/workflow) — Workflow
 
 ## Blog
 - [/blogs](/blogs) — Engineering blog index
-- [/blogs/engineering/your-libc-is-your-performance-profile](/blogs/engineering/your-libc-is-your-performance-profile) — Your libc is your performance profile: a perf-stat deep dive into Debian and Alpine nginx images
+- [/blogs/engineering/your-libc-is-your-performance-profile](/blogs/engineering/your-libc-is-your-performance-profile) — Your libc is your performance profile
 
 ## Other Pages
 - [/products](/products) — Product overview

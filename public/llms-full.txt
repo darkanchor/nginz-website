@@ -14,7 +14,7 @@ This file provides expanded agent-ingestible content for the nginz product famil
 - Category: Open Source
 - Tagline: Native modules for stock nginx. Active health checks, dynamic upstreams, JWT auth, Prometheus metrics — free, no fork, no patch.
 - URL: /products/nginz
-- Native modules: acme, cache-purge, cache-tags, canary, circuit-breaker, consul, dynamic-upstreams, echoz, graphql, healthcheck, jsonschema, jwt, nftset, njs, oidc, pgrest, prometheus, ratelimit, redis, requestid, transform, upstream-balancer, waf, wechatpay, worker-events
+- Native modules: acme, cache-purge, cache-tags, canary, circuit-breaker, consul, dynamic-upstreams, echoz, graphql, healthcheck, hello, jsonschema, jwt, nftset, njs, oidc, pgrest, prometheus, ratelimit, redis, requestid, transform, upstream-balancer, waf, wechatpay, worker-events
 
 ### nginz-njs
 - License: Apache-2.0
@@ -34,54 +34,55 @@ This file provides expanded agent-ingestible content for the nginz product famil
 
 All module documentation is under /docs/reference/modules/ (native) and /docs/reference/scripted-modules/ (njs).
 
-### nginz native modules
-- /docs/reference/modules/acme — ACME / Let's Encrypt: automatic TLS certificate issuance and renewal
-- /docs/reference/modules/cache-purge — Cache Purge API: operator-facing cache invalidation by tag and prefix
-- /docs/reference/modules/cache-tags — Cache Tags: group cached responses for grouped invalidation
-- /docs/reference/modules/canary — Canary Routing: gradual traffic rollout by percentage or header
-- /docs/reference/modules/circuit-breaker — Circuit Breaker: fail fast with half-open recovery
-- /docs/reference/modules/consul — Consul Integration: service discovery and KV store at the edge
-- /docs/reference/modules/dynamic-upstreams — Dynamic Upstreams: change backend membership without reloads
-- /docs/reference/modules/echoz — Echoz Debug Output: inspect variables and request bodies during development
-- /docs/reference/modules/graphql — GraphQL Gateway: depth limiting and introspection control
-- /docs/reference/modules/healthcheck — Health Checks: active probes, readiness, and Prometheus metrics
-- /docs/reference/modules/jsonschema — JSON Schema Validation: reject bad payloads at the edge
-- /docs/reference/modules/jwt — JWT Authentication: validate bearer tokens and extract claims
-- /docs/reference/modules/nftset — nftables IP Policy: kernel-level IP allow/block via nftables
-- /docs/reference/modules/njs — NJS Orchestration: QuickJS engine for request-time scripting
-- /docs/reference/modules/oidc — OpenID Connect: browser SSO login flow with PKCE
-- /docs/reference/modules/pgrest — PostgREST API: PostgreSQL REST API with JWT auth
-- /docs/reference/modules/prometheus — Prometheus Metrics: native /metrics endpoint with histograms
-- /docs/reference/modules/ratelimit — Rate Limiting: fixed-window counters shared across workers
-- /docs/reference/modules/redis — Redis: direct access to hot data via RESP protocol
-- /docs/reference/modules/requestid — Request ID: UUID4 generation and X-Request-ID propagation
-- /docs/reference/modules/transform — JSON Transform: trim upstream JSON to the shape clients need
-- /docs/reference/modules/upstream-balancer — Upstream Balancer: sticky sessions with cookie/header affinity
-- /docs/reference/modules/waf — WAF: SQL injection and XSS pattern detection
-- /docs/reference/modules/wechatpay — WeChat Pay: signature signing and verification
-- /docs/reference/modules/worker-events — Worker Events: cross-worker shared-memory event ring
-
 ### nginz-token AI gateway modules
-- /docs/reference/token-modules — Overview: planned module catalog for the AI gateway. Open source (Apache 2.0): llm-proxy, llm-auth, llm-metrics, basic fallback. Paid (BSL 1.1): llm-ratelimit, llm-cost, llm-cache, llm-security, advanced fallback, Dashboard.
+- /docs/reference/token-modules — nginz-token Module Reference
+
+### nginz native modules
+- /docs/reference/modules/acme — ACME and Let's Encrypt
+- /docs/reference/modules/cache-purge — Cache Purge API
+- /docs/reference/modules/cache-tags — Cache Tags
+- /docs/reference/modules/canary — Canary Routing
+- /docs/reference/modules/circuit-breaker — Circuit Breaker
+- /docs/reference/modules/consul — Consul Integration
+- /docs/reference/modules/dynamic-upstreams — Dynamic Upstreams
+- /docs/reference/modules/echoz — Echoz Debug Output
+- /docs/reference/modules/graphql — GraphQL Gateway
+- /docs/reference/modules/healthcheck — Health Checks
+- /docs/reference/modules/hello — Hello
+- /docs/reference/modules/jsonschema — JSON Schema Validation
+- /docs/reference/modules/jwt — JWT Authentication
+- /docs/reference/modules/nftset — nftables IP Policy
+- /docs/reference/modules/njs — NJS (JavaScript) Orchestration
+- /docs/reference/modules/oidc — OpenID Connect
+- /docs/reference/modules/pgrest — PostgREST-compatible PostgreSQL API
+- /docs/reference/modules/prometheus — Prometheus Metrics
+- /docs/reference/modules/ratelimit — Rate Limiting
+- /docs/reference/modules/redis — Redis
+- /docs/reference/modules/requestid — Request ID
+- /docs/reference/modules/transform — JSON Response Transform
+- /docs/reference/modules/upstream-balancer — Upstream Balancer
+- /docs/reference/modules/waf — Web Application Firewall
+- /docs/reference/modules/wechatpay — WeChat Pay Gateway
+- /docs/reference/modules/worker-events — Worker Events
 
 ### nginz-njs scripted modules
-- /docs/reference/scripted-modules/authz — Authorization: composable rules for method, path, header, JWT claim, and remote OPA
-- /docs/reference/scripted-modules/control-api — Control API: operator surface over flags, cache, sessions, and tracing
-- /docs/reference/scripted-modules/feature-flags — Feature Flags: deterministic per-user bucketing for gradual rollouts
-- /docs/reference/scripted-modules/health-gateway — Health Gateway: multi-source health aggregation (deferred)
-- /docs/reference/scripted-modules/http-client — HTTP Client: typed ngx.fetch() wrapper with retry and middleware
-- /docs/reference/scripted-modules/metrics — Metrics: cross-module instrumentation and StatsD rendering
-- /docs/reference/scripted-modules/mlcache — MLCache: two-level cache with stale-while-revalidate
-- /docs/reference/scripted-modules/request-tracing — Request Tracing: distributed trace context propagation
-- /docs/reference/scripted-modules/response-templating — Response Templating: generate responses from request facts
-- /docs/reference/scripted-modules/response-transform — Response Transform: JSON field masking, dropping, and renaming
-- /docs/reference/scripted-modules/session — Session: cookie lifecycle and shared-dictionary store
-- /docs/reference/scripted-modules/webhook — Webhook: signed delivery composition over HTTP Client
-- /docs/reference/scripted-modules/workflow — Workflow: parallel and sequential subrequest orchestration
+- /docs/reference/scripted-modules/authz — Authz (Authorization Policy Engine)
+- /docs/reference/scripted-modules/control-api — Control API
+- /docs/reference/scripted-modules/feature-flags — Feature Flags (Rollout and Experimentation)
+- /docs/reference/scripted-modules/health-gateway — Health Gateway
+- /docs/reference/scripted-modules/http-client — HTTP Client
+- /docs/reference/scripted-modules/metrics — Metrics
+- /docs/reference/scripted-modules/mlcache — MLCache
+- /docs/reference/scripted-modules/request-tracing — Request Tracing
+- /docs/reference/scripted-modules/response-templating — Response Templating
+- /docs/reference/scripted-modules/response-transform — Response Transform
+- /docs/reference/scripted-modules/session — Session (Cookie and Session Lifecycle)
+- /docs/reference/scripted-modules/webhook — Webhook Signing and Delivery
+- /docs/reference/scripted-modules/workflow — Workflow
 
 ## Blog
 - /blogs — Engineering blog index
-- /blogs/engineering/your-libc-is-your-performance-profile — Your libc is your performance profile: when we benchmarked our nginx Docker images, the performance gap had nothing to do with our code. Every percentage point traced back to glibc vs musl, OpenSSL, and the allocator.
+- /blogs/engineering/your-libc-is-your-performance-profile — Your libc is your performance profile: When we benchmarked our nginx Docker images, the performance gap had nothing to do with our code. Every percentage point traced back to glibc vs musl, OpenSSL, and the allocator.
 
 ## Other Pages
 - /products — Product overview
