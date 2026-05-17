@@ -61,6 +61,9 @@ All module documentation is under /docs/reference/modules/ (native) and /docs/re
 - /docs/reference/modules/wechatpay — WeChat Pay: signature signing and verification
 - /docs/reference/modules/worker-events — Worker Events: cross-worker shared-memory event ring
 
+### nginz-token AI gateway modules
+- /docs/reference/token-modules — Overview: planned module catalog for the AI gateway. Open source (Apache 2.0): llm-proxy, llm-auth, llm-metrics, basic fallback. Paid (BSL 1.1): llm-ratelimit, llm-cost, llm-cache, llm-security, advanced fallback, Dashboard.
+
 ### nginz-njs scripted modules
 - /docs/reference/scripted-modules/authz — Authorization: composable rules for method, path, header, JWT claim, and remote OPA
 - /docs/reference/scripted-modules/control-api — Control API: operator surface over flags, cache, sessions, and tracing
@@ -75,6 +78,10 @@ All module documentation is under /docs/reference/modules/ (native) and /docs/re
 - /docs/reference/scripted-modules/session — Session: cookie lifecycle and shared-dictionary store
 - /docs/reference/scripted-modules/webhook — Webhook: signed delivery composition over HTTP Client
 - /docs/reference/scripted-modules/workflow — Workflow: parallel and sequential subrequest orchestration
+
+## Blog
+- /blogs — Engineering blog index
+- /blogs/engineering/your-libc-is-your-performance-profile — Your libc is your performance profile: when we benchmarked our nginx Docker images, the performance gap had nothing to do with our code. Every percentage point traced back to glibc vs musl, OpenSSL, and the allocator.
 
 ## Other Pages
 - /products — Product overview

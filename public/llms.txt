@@ -41,6 +41,9 @@
 - [/docs/reference/modules/wechatpay](/docs/reference/modules/wechatpay) — WeChat Pay
 - [/docs/reference/modules/worker-events](/docs/reference/modules/worker-events) — Worker Events
 
+### nginz-token — AI Gateway Modules
+- [/docs/reference/token-modules](/docs/reference/token-modules) — Overview: planned module catalog (llm-proxy, llm-auth, llm-metrics, llm-ratelimit, llm-cost, llm-cache, llm-security)
+
 ### nginz-njs — Scripted Modules
 - [/docs/reference/scripted-modules/authz](/docs/reference/scripted-modules/authz) — Authorization Policy Engine
 - [/docs/reference/scripted-modules/control-api](/docs/reference/scripted-modules/control-api) — Control API
@@ -55,6 +58,10 @@
 - [/docs/reference/scripted-modules/session](/docs/reference/scripted-modules/session) — Session
 - [/docs/reference/scripted-modules/webhook](/docs/reference/scripted-modules/webhook) — Webhook
 - [/docs/reference/scripted-modules/workflow](/docs/reference/scripted-modules/workflow) — Workflow
+
+## Blog
+- [/blogs](/blogs) — Engineering blog index
+- [/blogs/engineering/your-libc-is-your-performance-profile](/blogs/engineering/your-libc-is-your-performance-profile) — Your libc is your performance profile: a perf-stat deep dive into Debian and Alpine nginx images
 
 ## Other Pages
 - [/products](/products) — Product overview
