@@ -95,7 +95,23 @@ Single-connection throughput for RS256 JWT verification — the most computation
 .big-compare .sub { font-size: var(--text-xs); color: var(--color-text-secondary); margin-top: var(--sp-1); }
 .big-compare .sep { font-size: 28px; color: var(--color-border); font-weight: 300; }
 .big-compare .delta-box { font-size: var(--text-sm); font-weight: 700; margin-top: var(--sp-2); padding: 2px 10px; border-radius: 3px; display: inline-block; }
-.big-compare .delta-box.gap { background: #ffebe9; color: #cf222e; }
+.gap-callout {
+  background: linear-gradient(135deg, #2A404A 0%, #3A5A6A 100%);
+  border-radius: 8px; padding: var(--sp-4) var(--sp-5);
+  display: flex; align-items: center; gap: var(--sp-5);
+  margin: var(--sp-5) 0;
+}
+.gap-big {
+  font-size: 48px; font-weight: 900; letter-spacing: -0.05em;
+  color: #99DDCC; line-height: 1; flex-shrink: 0;
+}
+.gap-body { }
+.gap-title {
+  font-size: 15px; font-weight: 700; color: #fff; letter-spacing: -0.02em; margin-bottom: var(--sp-1);
+}
+.gap-sub {
+  font-size: var(--text-sm); color: rgba(255,255,255,0.75); line-height: 1.6;
+}
 </style>
 
 <div class="big-compare">
@@ -111,8 +127,13 @@ Single-connection throughput for RS256 JWT verification — the most computation
   <div class="sub">requests / sec</div>
 </div>
 </div>
-<div style="text-align:center;margin-top:var(--sp-1);margin-bottom:var(--sp-5);">
-  <span class="delta-box gap">alpine −17% &nbsp;—&nbsp; same nginx, same modules, same config</span>
+
+<div class="gap-callout">
+  <div class="gap-big">−17%</div>
+  <div class="gap-body">
+    <div class="gap-title">Same nginx. Same modules. Same config.</div>
+    <div class="gap-sub">Every cycle of that 17% gap is RSA-2048 Montgomery multiplication — AVX2 SIMD in Debian's OpenSSL vs scalar in musl's bundled libcrypto. Our modules run the exact same instructions on both images.</div>
+  </div>
 </div>
 
 A 17% gap. With identical nginx binaries, identical module code, identical configuration. The entire delta is RSA-2048 Montgomery multiplication — Debian's OpenSSL enables AVX2 SIMD bignum arithmetic; musl's bundled libcrypto uses a scalar implementation. Our modules are running the exact same instructions on both images. OpenSSL is doing something completely different.
@@ -164,7 +185,7 @@ The dynamic-upstreams benchmark exercises six modules: `dynamic-upstreams`, `hea
 </div>
 </div>
 <div style="text-align:center;margin-top:var(--sp-1);margin-bottom:var(--sp-4);">
-  <span class="delta-flat">alpine −12% &nbsp;—&nbsp; within ±10% of native at c=8</span>
+  <span style="display:inline-block;background:var(--color-bg-sunken);border:1px solid var(--color-border);border-radius:4px;padding:var(--sp-1) var(--sp-4);font-size:var(--text-sm);font-weight:600;color:var(--color-text-secondary);">within ±10% of native at c=8</span>
 </div>
 
 At c=1 the gap was dramatic — trixie 1,462 vs alpine 1,719, a 39% spread driven by Docker dispatch overhead compounded by the proxy round-trip. At c=8, concurrent connections overlap the I/O, and the gap collapses to ±10%. The CPU overhead from musl's scalar string functions — 41% more instructions per request — is still there, but it's buried under the proxy latency. The system waits for the upstream, not the CPU.
@@ -173,9 +194,49 @@ This is the practical operating point. Nobody runs production at c=1.
 
 ## The integrity signal
 
+<style>
+.correction-box {
+  background: var(--color-bg-sunken);
+  border: 1px solid #E3A03A;
+  border-radius: 8px; padding: var(--sp-5);
+  display: grid; grid-template-columns: 1fr auto 1fr; gap: var(--sp-3); align-items: center;
+  text-align: center; margin: var(--sp-5) 0;
+}
+.correction-box .col { }
+.correction-box .big {
+  font-size: 28px; font-weight: 900; letter-spacing: -0.04em; line-height: 1;
+}
+.correction-box .big.old { color: #cf222e; }
+.correction-box .big.new { color: var(--color-accent-text); }
+.correction-box .lbl {
+  font-size: var(--text-xs); font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.06em; color: var(--color-text-tertiary); margin-top: var(--sp-1);
+}
+.correction-box .arrow { font-size: 24px; color: #E3A03A; }
+.correction-box .note {
+  grid-column: 1 / -1;
+  font-size: var(--text-sm); color: var(--color-text-secondary);
+  padding-top: var(--sp-3); border-top: 1px solid var(--color-border-subtle);
+  line-height: 1.6;
+}
+</style>
+
 One number in our data didn't look right. The `valid-claims` JWT scenario showed trixie 58% faster than alpine at c=1 — too large to accept uncritically for a pure allocator difference. We flagged it immediately.
 
-We re-ran at 5,000 samples instead of 1,000. The gap settled to +27.7%. The original 1,000-sample run was warmup-inflated: glibc's ptmalloc2 pre-sizes arena bins aggressively on first allocation, giving trixie an artificial head start that averages out over a longer run. The gap is real — musl's allocator has higher per-call overhead for CJSON pool operations — but half the original estimate.
+<div class="correction-box">
+  <div class="col">
+    <div class="big old">+58%</div>
+    <div class="lbl">1,000 samples<br>baseline</div>
+  </div>
+  <div class="arrow">→</div>
+  <div class="col">
+    <div class="big new">+27.7%</div>
+    <div class="lbl">5,000 samples<br>confirmed</div>
+  </div>
+  <div class="note">
+    The original run was warmup-inflated: glibc's ptmalloc2 pre-sizes arena bins aggressively on first allocation, giving trixie an artificial head start. At 5,000 samples both allocators reach steady state. The gap is <strong>real and structural</strong> — musl's allocator has higher per-call overhead for CJSON pool operations — but half the original estimate.
+  </div>
+</div>
 
 We published the correction. If you're going to make claims about performance, you have to trust the numbers enough to challenge the ones that don't add up.
 
@@ -183,16 +244,58 @@ We published the correction. If you're going to make claims about performance, y
 
 The deployment decision is simpler than the data suggests:
 
-<p style="margin:var(--sp-5) 0;padding:var(--sp-4) var(--sp-5);background:var(--color-bg-sunken);border-left:3px solid var(--color-accent);border-radius:0 6px 6px 0;font-size:var(--text-sm);line-height:1.7;">
-<strong>If RSA crypto throughput matters to your workload</strong>, pick Debian. The AVX2 gap is real, structural, and not a compile flag you can toggle on musl.<br><br>
-<strong>If image size or CVE surface matters more</strong>, pick Alpine. The 6× size advantage (26 MB vs 164 MB) is real, and the CPU overhead disappears under concurrency for proxy workloads.<br><br>
-<strong>The modules don't care either way.</strong> Every percentage point of difference traces to the base image, not to our code. We proved that to ourselves with hardware counters — more on that in the next post.
-</p>
+<div class="deploy-box">
+  <div class="deploy-row">
+    <div class="deploy-icon">🔐</div>
+    <div><strong>If RSA crypto throughput matters</strong>, pick Debian. The AVX2 gap is real, structural, and not a compile flag you can toggle on musl.</div>
+  </div>
+  <div class="deploy-row">
+    <div class="deploy-icon">📦</div>
+    <div><strong>If image size or CVE surface matters more</strong>, pick Alpine. The 6× size advantage (26 MB vs 164 MB) is real, and the CPU overhead disappears under concurrency for proxy workloads.</div>
+  </div>
+  <div class="deploy-row">
+    <div class="deploy-icon">⚡</div>
+    <div><strong>The modules don't care either way.</strong> Every percentage point of difference traces to the base image, not to our code.</div>
+  </div>
+</div>
 
 We set out to measure whether our modules slow down nginx. The answer, across two workloads and six scenario types, is that they don't. The performance profile of a nginz deployment is the performance profile of its libc. The rest is concurrency, I/O, and the network.
 
 That's a good answer. It means we built clean modules. It means the foundation is solid. And it means we can spend our energy on what comes next — the AI gateway modules that will actually need every cycle we can give them.
 
----
+<style>
+.deploy-box {
+  background: linear-gradient(135deg, #2A404A 0%, #3A5A6A 100%);
+  border-radius: 8px; padding: var(--sp-5);
+  display: grid; gap: var(--sp-3);
+  margin: var(--sp-5) 0;
+  font-size: var(--text-sm); line-height: 1.7; color: rgba(255,255,255,0.9);
+}
+.deploy-box strong { color: #fff; }
+.deploy-row { display: flex; align-items: flex-start; gap: var(--sp-3); }
+.deploy-icon { flex-shrink: 0; font-size: 18px; line-height: 1.6; }
 
-*In the next post: we attach `perf stat` to the running nginx workers and confirm the AVX2 hypothesis with hardware counters — branches, IPC, and a 5× cache-miss surprise we didn't see coming.*
+.next-post {
+  background: var(--color-bg-sunken);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 8px; padding: var(--sp-4) var(--sp-5);
+  display: flex; align-items: center; gap: var(--sp-4);
+  margin-top: var(--sp-8);
+}
+.next-post .arrow-icon {
+  flex-shrink: 0;
+  width: 32px; height: 32px;
+  background: #99DDCC; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: #2A404A; font-size: 16px; font-weight: 700;
+}
+.next-post .next-text { font-size: var(--text-sm); color: var(--color-text-secondary); line-height: 1.6; }
+.next-post .next-text strong { color: var(--color-accent-text); }
+</style>
+
+<div class="next-post">
+  <div class="arrow-icon">→</div>
+  <div class="next-text">
+    <strong>Next post:</strong> we attach <code>perf stat</code> to the running nginx workers and confirm the AVX2 hypothesis with hardware counters — branches, IPC, and a 5× cache-miss surprise we didn't see coming.
+  </div>
+</div>
