@@ -62,6 +62,7 @@
 
 ## Blog
 - [/blogs](/blogs) — Engineering blog index
+- [/blogs/builds/js-access-authz-gleam](/blogs/builds/js-access-authz-gleam) — js_access shipped today. We compiled Gleam to it.
 - [/blogs/engineering/your-libc-is-your-performance-profile](/blogs/engineering/your-libc-is-your-performance-profile) — Your libc is your performance profile
 
 ## Other Pages

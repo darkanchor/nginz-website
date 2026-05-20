@@ -13,7 +13,13 @@ export default defineConfig({
     service: passthroughImageService(),
   },
   markdown: {
-    syntaxHighlight: false,
+    shikiConfig: {
+      themes: {
+        light: "github-light",
+        dark: "github-dark",
+      },
+      defaultColor: false,
+    },
   },
   build: {
     assets: "_assets",

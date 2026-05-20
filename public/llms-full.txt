@@ -82,6 +82,7 @@ All module documentation is under /docs/reference/modules/ (native) and /docs/re
 
 ## Blog
 - /blogs — Engineering blog index
+- /blogs/builds/js-access-authz-gleam — js_access shipped today. We compiled Gleam to it.: njs PR #1044 landed access-phase scripting. We built a type-safe authorization DSL in Gleam that runs there — denying requests before proxy_pass ever opens a connection, with compile-time guarantees on every decision branch.
 - /blogs/engineering/your-libc-is-your-performance-profile — Your libc is your performance profile: When we benchmarked our nginx Docker images, the performance gap had nothing to do with our code. Every percentage point traced back to glibc vs musl, OpenSSL, and the allocator.
 
 ## Other Pages

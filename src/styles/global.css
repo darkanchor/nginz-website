@@ -190,10 +190,8 @@ code {
   border: none;
 }
 
-/* ─── Code blocks — grayish, not dark ─── */
+/* ─── Code blocks ─── */
 pre {
-  background: var(--color-bg-code-block);
-  color: var(--color-text);
   padding: var(--sp-4);
   padding-right: var(--sp-10);
   border-radius: var(--radius-md);
@@ -210,6 +208,24 @@ pre code {
   padding: 0;
   font-size: inherit;
   border-radius: 0;
+}
+
+/* Shiki dual-theme: light by default, dark under html.dark.
+   Background pinned to site's code-block token so snippets match the
+   overall grey palette — only token colors come from Shiki themes. */
+.astro-code {
+  background-color: var(--color-bg-code-block) !important;
+  color: var(--shiki-light) !important;
+}
+.astro-code span {
+  color: var(--shiki-light);
+}
+html.dark .astro-code {
+  background-color: var(--color-bg-code-block) !important;
+  color: var(--shiki-dark) !important;
+}
+html.dark .astro-code span {
+  color: var(--shiki-dark);
 }
 
 /* ─── Code copy button ─── */
