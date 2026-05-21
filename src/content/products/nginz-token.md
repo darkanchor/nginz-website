@@ -89,13 +89,15 @@ nginz-token modules span two licenses: the platform layer is open source (Apache
 
 **Open source (Apache 2.0)** — the platform. Free, forever. The vehicle the paid modules run on.
 
-- **llm-proxy** — multi-provider routing: accept OpenAI-format requests, route to OpenAI, Anthropic, or local models, rewrite request and response formats transparently
-- **llm-auth** — API key validation with JWT or Redis-backed keys, tier enforcement, model allow-listing
-- **llm-metrics** — request counts, latency distributions, and error rates by model and user
-- **llm-fallback (basic)** — circuit-breaker failover: provider A returns 503 → try provider B
+- **llm-proxy** — multi-provider routing: accept OpenAI-format requests, route to OpenAI, Anthropic, or local models, rewrite request and response formats transparently, and expose per-request runtime variables like provider, model, streaming flag, and extracted usage for downstream modules
+- **llm-auth** — API key validation and provider credential injection, keeping real upstream API keys out of application code
+- **llm-fallback (basic)** — simple provider failover: provider A returns 503 → try provider B
+
+`llm-proxy` stays data-plane only. It routes, rewrites, and exposes request-scoped variables. It does not aggregate metrics, write PostgreSQL rows, or provide management surfaces by itself.
 
 **Paid (BSL 1.1)** — the management layer. Features that solve organizational problems at scale.
 
+- **llm-metrics** — request counts, latency distributions, error rates, and usage telemetry by model and identity
 - **llm-ratelimit** — per-user, per-key RPM and TPM rate limiting with shared-memory counters, in-flight reservation, and reconciliation from actual usage
 - **llm-cost** — per-request cost calculation and asynchronous PostgreSQL logging, with configurable pricing tables per model
 - **llm-cache** — semantic response caching via embedding similarity: local ONNX embedding sidecar, pgvector similarity search, streaming response replay
@@ -111,10 +113,10 @@ Running the AI gateway as nginx modules — rather than as a separate proxy serv
 
 **Zero added latency from a proxy hop.** A SaaS proxy adds a network round trip — 30 to 200 milliseconds — between your application and the LLM provider. nginz-token adds the latency of a JSON parse and a shared-memory lookup — microseconds. For an API that already takes seconds to return, every millisecond of overhead you can remove improves the user experience. For streaming responses, where the user sees tokens appear one by one, proxy latency means the first token arrives noticeably later.
 
-**One binary to operate.** You already run nginx. You already monitor it, already know how to configure it, already have playbooks for it. Adding an AI gateway that's also nginx means one process to manage, not two. One set of metrics. One logging pipeline. One deployment artifact. No new infrastructure to learn, no new failure mode to troubleshoot.
+**One binary to operate.** You already run nginx. You already know how to configure it and already have playbooks for it. Adding an AI gateway that's also nginx means one process to manage, not two. One deployment artifact. No new infrastructure to learn, no new failure mode to troubleshoot.
 
 ## Availability
 
-nginz-token is in active development. The open source modules — llm-proxy, llm-auth, llm-metrics, and basic fallback — will ship under Apache 2.0. The paid management modules — ratelimit, cost, cache, security, advanced fallback, and dashboard — will ship under BSL 1.1, with a 3-year graduation to Apache 2.0.
+nginz-token is in active development. The open source modules — llm-proxy, llm-auth, and basic fallback — will ship under Apache 2.0. The paid management modules — metrics, ratelimit, cost, cache, security, advanced fallback, and dashboard — will ship under BSL 1.1, with a 3-year graduation to Apache 2.0.
 
 [Contact us](/contact) if you want early access or need to discuss your team's requirements.
