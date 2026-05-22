@@ -26,7 +26,7 @@ This file provides expanded agent-ingestible content for the nginz product famil
 ### nginz-token
 - License: BSL-1.1
 - Category: AI Gateway
-- Tagline: AI gateway inside your nginx. Token-level rate limiting, cost tracking, semantic caching, prompt security — no SaaS proxy.
+- Tagline: AI gateway inside your nginx. Source-available under BSL 1.1 for evaluation and non-commercial use, licensed for commercial production use.
 - URL: /products/nginz-token
 - Status: In development
 
@@ -35,7 +35,7 @@ This file provides expanded agent-ingestible content for the nginz product famil
 All module documentation is under /docs/reference/modules/ (native) and /docs/reference/scripted-modules/ (njs).
 
 ### nginz-token AI gateway modules
-- /docs/reference/token-modules — nginz-token Module Reference
+- /docs/reference/token-modules — nginz-token
 
 ### nginz native modules
 - /docs/reference/modules/acme — ACME and Let's Encrypt

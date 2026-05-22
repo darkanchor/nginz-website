@@ -83,27 +83,55 @@ Here's what happens when a client sends a chat completion request through nginz-
 
 **Serve cached responses in microseconds.** When two users ask the same question within the cache window, the second response comes from cache — no API call, no latency, no cost. For customer-facing chatbots where the same "what are your business hours?" query arrives hundreds of times a day, this alone can cut your API bill by 30 to 70 percent.
 
+### Licensing
+
+nginz-token is one product under **BSL 1.1**. It is **source-available**, not Apache-licensed open source.
+
+That means:
+
+- You can read the source.
+- You can evaluate it locally.
+- You can use it for personal and non-commercial work.
+- If you use it in production for a business purpose, you need a license.
+
+We keep this boundary simple on purpose. `nginz` and `nginz-njs` are Apache 2.0. `nginz-token` is the commercial AI gateway layer.
+
+We do **not** split nginz-token into a free Apache subset and a paid subset. The whole value of the gateway is that routing, identity, token governance, cost attribution, prompt security, failover, and management surfaces work together as one product.
+
+BSL is also not a private binary-only model. Buyers can audit what they run. That matters for infrastructure software.
+
 ### Module catalog
 
-nginz-token modules span two licenses: the platform layer is open source (Apache 2.0), the management layer is paid (BSL 1.1, converts to Apache 2.0 after 3 years).
+All nginz-token modules ship under BSL 1.1:
 
-**Open source (Apache 2.0)** — the platform. Free, forever. The vehicle the paid modules run on.
-
-- **llm-proxy** — multi-provider routing: accept OpenAI-format requests, route to OpenAI, Anthropic, or local models, rewrite request and response formats transparently, and expose per-request runtime variables like provider, model, streaming flag, and extracted usage for downstream modules
-- **llm-auth** — API key validation and provider credential injection, keeping real upstream API keys out of application code
-- **llm-fallback (basic)** — simple provider failover: provider A returns 503 → try provider B
-
-`llm-proxy` stays data-plane only. It routes, rewrites, and exposes request-scoped variables. It does not aggregate metrics, write PostgreSQL rows, or provide management surfaces by itself.
-
-**Paid (BSL 1.1)** — the management layer. Features that solve organizational problems at scale.
-
+- **llm-proxy** — multi-provider routing with transparent request and response format rewriting
+- **llm-auth** — API key validation and provider credential injection
 - **llm-metrics** — request counts, latency distributions, error rates, and usage telemetry by model and identity
 - **llm-ratelimit** — per-user, per-key RPM and TPM rate limiting with shared-memory counters, in-flight reservation, and reconciliation from actual usage
 - **llm-cost** — per-request cost calculation and asynchronous PostgreSQL logging, with configurable pricing tables per model
 - **llm-cache** — semantic response caching via embedding similarity: local ONNX embedding sidecar, pgvector similarity search, streaming response replay
 - **llm-security** — prompt injection detection and PII filtering at the gateway, before prompts leave your infrastructure
-- **llm-fallback (advanced)** — load-aware, cost-aware, and latency-aware model switching: "always pick the cheapest model that meets my latency SLA"
+- **llm-fallback** — provider failover and load-aware, cost-aware, latency-aware model switching
 - **Dashboard** — web UI for cost trends, usage by team, quota status, and model performance
+
+### Pricing
+
+nginz-token is sold in two self-serve tiers plus a custom tier:
+
+| Tier | Price | What you get |
+|------|-------|--------------|
+| **Pro** | **$1,499/yr** or **$149/mo** | nginz-token gateway modules under BSL 1.1 |
+| **Enterprise** | **$3,999/yr** or **$399/mo** | Everything in Pro, plus dashboard, PostgreSQL schema/tooling, and email support |
+| **Custom** | Talk to us | SLA, priority support, custom packaging, and enterprise requirements |
+
+Founding pricing for the first 20 customers: **$999/yr Pro** and **$2,499/yr Enterprise** for the first 12 months.
+
+The free layer is not inside nginz-token. The free layer is the rest of the stack:
+
+- **nginz** — Apache 2.0 native nginx modules
+- **nginz-njs** — Apache 2.0 scripted policy modules
+
+Those projects are the funnel. nginz-token is the commercial AI gateway product.
 
 ## Why inside nginx, not a separate service
 
@@ -117,6 +145,6 @@ Running the AI gateway as nginx modules — rather than as a separate proxy serv
 
 ## Availability
 
-nginz-token is in active development. The open source modules — llm-proxy, llm-auth, and basic fallback — will ship under Apache 2.0. The paid management modules — metrics, ratelimit, cost, cache, security, advanced fallback, and dashboard — will ship under BSL 1.1, with a 3-year graduation to Apache 2.0.
+nginz-token is in active development. The full product ships under BSL 1.1, source-visible for evaluation and non-commercial use, with commercial production use licensed.
 
 [Contact us](/contact) if you want early access or need to discuss your team's requirements.
