@@ -26,7 +26,7 @@ This file provides expanded agent-ingestible content for the nginz product famil
 ### nginz-token
 - License: BSL-1.1
 - Category: AI Gateway
-- Tagline: AI gateway inside your nginx. Source-available under BSL 1.1 for evaluation and non-commercial use, licensed for commercial production use.
+- Tagline: AI gateway inside your nginx. Provider routing, token governance, cost tracking, bounded cache policy, and prompt-side security under BSL 1.1.
 - URL: /products/nginz-token
 - Status: In development
 

@@ -76,9 +76,9 @@ Here's what happens when a client sends a chat completion request through nginz-
 
 **Rotate a provider key once, not everywhere.** The real OpenAI key lives in nginx config. The 50 services that call the LLM use Dark Anchor keys. When you rotate the provider key, you edit one config file and reload. The services never know. A Dark Anchor key can be revoked in one place and the user is cut off immediately — no hunting through repositories and `.env` files.
 
-**Pass compliance review.** PII filtering happens at the gateway. Every prompt passes through the filter before it leaves your network. Not every application has to implement it. Not every team has to remember to add the check. It's one place, enforced uniformly.
+**Give compliance one control point.** PII filtering happens at the gateway, before prompts leave your network. Not every application has to implement it separately, and not every team has to remember to add the check. It gives compliance and security teams one place to review, tune, and enforce prompt-side guardrails.
 
-**Switch providers without changing code.** The client sends an OpenAI-format request to `model: "claude-sonnet-4-5"`. The gateway routes it to Anthropic, rewrites the format, and normalizes the response back to OpenAI format. The client doesn't know it just called Anthropic. If OpenAI has an outage, the fallback module routes to Anthropic automatically. If a new provider launches with better pricing, you add a routing rule. Zero application changes.
+**Switch providers without changing code.** The client sends an OpenAI-format request to `model: "claude-sonnet-4-5"`. The gateway routes it to Anthropic, rewrites the format, and normalizes the response back to OpenAI format. The client doesn't know it just called Anthropic. For configured retryable failures, the fallback layer can move the request to a secondary provider before the response is committed. If a new provider launches with better pricing, you add a routing rule. Zero application changes.
 
 **Make cache behavior explicit before you trust it.** LLM caching is easy to oversell and easy to get wrong. Prompt meaning is fuzzy, provider behavior differs, tool use introduces side effects, streaming complicates replay, and cross-tenant reuse can become a correctness or privacy bug. Our current `llm-cache` direction is conservative: define which requests are even eligible for cache consideration, isolate reuse boundaries, and surface explicit bypass reasons. That gives operators something measurable and defensible instead of a vague “AI cache” claim.
 
@@ -109,8 +109,8 @@ All nginz-token modules ship under BSL 1.1:
 - **llm-ratelimit** — per-user, per-key RPM and TPM rate limiting with shared-memory counters, in-flight reservation, and reconciliation from actual usage
 - **llm-cost** — per-request cost calculation and asynchronous PostgreSQL logging, with configurable pricing tables per model
 - **llm-cache** — early-stage cache policy surface for eligibility, isolation, and bypass rules; not positioned today as a general semantic response cache
-- **llm-security** — prompt injection detection and PII filtering at the gateway, before prompts leave your infrastructure
-- **llm-fallback** — provider failover and load-aware, cost-aware, latency-aware model switching
+- **llm-security** — prompt-side inspection and policy enforcement for PII, secrets, and prompt injection patterns, with response-side controls evolving separately
+- **llm-fallback** — policy-driven provider failover for configured retryable failures, with more advanced routing still ahead of the first release
 
 ### Pricing
 
@@ -128,7 +128,7 @@ Running the AI gateway as nginx modules — rather than as a separate proxy serv
 
 **Data stays yours.** Every prompt, every response, every user interaction passes through nginx and stays inside your infrastructure. A SaaS proxy sees your prompts. For companies in healthcare, finance, legal, or any industry with data residency requirements, this isn't negotiable. nginz-token runs where nginx runs — inside your VPC, your data center, your Kubernetes cluster. No third party sees the traffic.
 
-**Zero added latency from a proxy hop.** A SaaS proxy adds a network round trip — 30 to 200 milliseconds — between your application and the LLM provider. nginz-token adds the latency of a JSON parse and a shared-memory lookup — microseconds. For an API that already takes seconds to return, every millisecond of overhead you can remove improves the user experience. For streaming responses, where the user sees tokens appear one by one, proxy latency means the first token arrives noticeably later.
+**Avoid the extra proxy hop.** A SaaS proxy adds a network round trip — 30 to 200 milliseconds — between your application and the LLM provider. nginz-token keeps the control point inside nginx, so the added work is local parsing and shared-memory bookkeeping rather than another external service hop. For an API that already takes seconds to return, that difference matters. For streaming responses, it helps the first token arrive sooner.
 
 **One binary to operate.** You already run nginx. You already know how to configure it and already have playbooks for it. Adding an AI gateway that's also nginx means one process to manage, not two. One deployment artifact. No new infrastructure to learn, no new failure mode to troubleshoot.
 

@@ -89,7 +89,7 @@ function genLlms() {
   lines.push("## Products");
   lines.push("- [/products/nginz](/products/nginz) — Native modules for stock nginx. Apache-2.0. 26 modules covering auth, traffic control, observability, and edge processing — no fork, no patch, no Plus license.");
   lines.push("- [/products/nginz-njs](/products/nginz-njs) — Scripted policy layer for nginx njs. Apache-2.0. 13 modules for authorization, feature flags, workflow orchestration, and response transforms — testable, reusable, no second runtime.");
-  lines.push("- [/products/nginz-token](/products/nginz-token) — AI gateway inside your nginx. BSL-1.1 source-available licensing. Evaluation and non-commercial use are allowed; commercial production use requires a license.");
+  lines.push("- [/products/nginz-token](/products/nginz-token) — AI gateway inside your nginx. BSL-1.1 source-available licensing with provider routing, token governance, cost tracking, bounded cache policy, and prompt-side security.");
   lines.push("");
   lines.push("## Documentation");
   lines.push("");
@@ -176,7 +176,7 @@ function genLlmsFull() {
   lines.push("### nginz-token");
   lines.push("- License: BSL-1.1");
   lines.push("- Category: AI Gateway");
-  lines.push("- Tagline: AI gateway inside your nginx. Source-available under BSL 1.1 for evaluation and non-commercial use, licensed for commercial production use.");
+  lines.push("- Tagline: AI gateway inside your nginx. Provider routing, token governance, cost tracking, bounded cache policy, and prompt-side security under BSL 1.1.");
   lines.push("- URL: /products/nginz-token");
   lines.push("- Status: In development");
   lines.push("");
