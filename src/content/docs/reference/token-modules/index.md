@@ -7,6 +7,8 @@ description: AI gateway modules for stock nginx — source-available under BSL 1
 
 nginz-token is in active development. This section will document the full module catalog once the first release ships.
 
+If you want to see the current dashboard-style product teaser, open [nginz.dev](https://nginz.dev/).
+
 Cache is intentionally described conservatively here. `llm-cache` is a real module boundary and product concern, but the current direction is around cache eligibility, isolation, and bypass observability first. Semantic similarity lookup and general response replay are not the promise we are making for the initial release.
 
 ## License

@@ -127,6 +127,7 @@ const currentCategory = "nginz";
                 </div>
                 <h3 style="font-size: var(--text-base);">{section.label === 'nginz' ? 'Core Platform' : section.label === 'nginz-njs' ? 'Policy Engine' : 'AI Gateway'}</h3>
                 <p style="font-size: var(--text-sm); color: var(--color-text-secondary);">{section.items.length} docs</p>
+                {section.category === 'nginz-token' && <p style="font-size: var(--text-sm); margin-top: var(--sp-3);"><span class="muted">Live demo:</span> <span style="text-decoration: underline;">nginz.dev</span></p>}
               </div>
             </a>
           ))}
@@ -135,4 +136,3 @@ const currentCategory = "nginz";
     </div>
   </div>
 </BaseLayout>
-

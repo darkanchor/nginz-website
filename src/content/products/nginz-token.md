@@ -122,6 +122,10 @@ nginz-token is sold in two self-serve tiers plus a custom tier:
 | **Enterprise** | **$3,999/yr** or **$399/mo** | Everything in Pro, plus dashboard, PostgreSQL schema/tooling, and email support |
 | **Custom** | Talk to us | SLA, priority support, custom packaging, and enterprise requirements |
 
+## Live demo
+
+If you want to see the dashboard and operator surface before talking to us, open the live product teaser at [nginz.dev](https://nginz.dev/).
+
 ## Why inside nginx, not a separate service
 
 Running the AI gateway as nginx modules — rather than as a separate proxy service or SaaS — matters for three reasons.

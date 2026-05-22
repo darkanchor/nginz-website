@@ -62,7 +62,10 @@ const checkIcon = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" s
             </div>
             <h2 style="margin-bottom: var(--sp-2);">{p.title}</h2>
             <p class="muted">{p.desc}</p>
-            <a href={p.href} class={`btn ${p.btnClass}`} style="margin-top: var(--sp-4);">{p.btnLabel}</a>
+            <div style="display: flex; gap: var(--sp-3); flex-wrap: wrap; margin-top: var(--sp-4);">
+              <a href={p.href} class={`btn ${p.btnClass}`}>{p.btnLabel}</a>
+              {p.title === 'nginz-token' && <a href="https://nginz.dev/" target="_blank" rel="noopener" class="btn btn-secondary">Live Demo</a>}
+            </div>
           </div>
           <div class="feature-box">
             <ul style="list-style: none; padding: 0; display: grid; gap: var(--sp-3); margin: 0;">
