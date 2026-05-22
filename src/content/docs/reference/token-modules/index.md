@@ -1,11 +1,13 @@
 ---
 title: nginz-token
-description: AI gateway modules for stock nginx — source-available under BSL 1.1, with token-level rate limiting, per-user cost tracking, semantic caching, and prompt security. Coming soon.
+description: AI gateway modules for stock nginx — source-available under BSL 1.1, with token-level rate limiting, per-user cost tracking, bounded cache policy, and prompt security. Coming soon.
 ---
 
 # nginz-token
 
 nginz-token is in active development. This section will document the full module catalog once the first release ships.
+
+Cache is intentionally described conservatively here. `llm-cache` is a real module boundary and product concern, but the current direction is around cache eligibility, isolation, and bypass observability first. Semantic similarity lookup and general response replay are not the promise we are making for the initial release.
 
 ## License
 
@@ -27,9 +29,8 @@ All nginz-token modules ship under BSL 1.1:
 - **llm-metrics** — request counts, latency distributions, error rates, and usage telemetry by model and identity
 - **llm-ratelimit** — per-user, per-key RPM/TPM rate limiting with shared-memory counters
 - **llm-cost** — per-request cost calculation and asynchronous PostgreSQL logging
-- **llm-cache** — semantic response caching via embedding similarity
+- **llm-cache** — conservative cache policy surface for deciding eligibility, scope, and bypass reasons before heavier replay or semantic-cache features are attempted
 - **llm-security** — prompt injection detection and PII filtering at the gateway
 - **llm-fallback** — provider failover and load-aware, cost-aware, latency-aware model switching
-- **Dashboard** — web UI for cost trends, usage by team, quota status
 
 For early access or to discuss your team's requirements, [contact us](/contact).

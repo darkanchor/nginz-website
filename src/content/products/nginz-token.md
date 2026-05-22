@@ -2,7 +2,7 @@
 title: nginz-token
 license: BSL 1.1
 category: AI Gateway
-tagline: AI gateway inside your nginx. Token-level rate limiting, per-user cost tracking, semantic caching, prompt security — no SaaS proxy.
+tagline: AI gateway inside your nginx. Token-level rate limiting, per-user cost tracking, bounded cache policy, prompt security — no SaaS proxy.
 ---
 
 # nginz-token
@@ -36,14 +36,13 @@ nginx can proxy HTTP requests to an LLM provider. That's the beginning and the e
 - It cannot enforce per-user token budgets — nginx rate limiting counts requests, not tokens.
 - It cannot write cost records to a database.
 - It cannot detect prompt injection or filter PII from request bodies.
-- It cannot cache an LLM response and serve it to the next identical request.
 - It cannot route a request to Anthropic when OpenAI is down, rewriting the request format on the fly.
 
 nginx proxies bytes. nginz-token understands what those bytes mean for LLM traffic.
 
 ## Our approach
 
-nginz-token runs as native and scripted modules inside your nginx binary — the same binary that's already proxying your traffic. When a client sends an LLM request, it arrives at nginx. Before it leaves your infrastructure, the gateway inspects it: who is this user, what model are they calling, are they within their token budget, does the prompt contain PII, should this request be served from cache? When the response returns, the gateway extracts the actual token usage, updates the budget, writes the cost record, and caches the response for next time.
+nginz-token runs as native and scripted modules inside your nginx binary — the same binary that's already proxying your traffic. When a client sends an LLM request, it arrives at nginx. Before it leaves your infrastructure, the gateway inspects it: who is this user, what model are they calling, are they within their token budget, does the prompt contain PII, and does this request fall into a cache-safe class the gateway can reason about? When the response returns, the gateway extracts the actual token usage, updates the budget, writes the cost record, and records the cache-relevant outcome for future bounded reuse work.
 
 All of this happens inside nginx. No separate service. No SaaS proxy. No data leaving your infrastructure. The added latency is microseconds of JSON parsing and shared-memory lookups — not a network hop to an external service.
 
@@ -67,7 +66,7 @@ Here's what happens when a client sends a chat completion request through nginz-
 
 **8. Log the cost.** The gateway calculates the cost: prompt tokens × input rate + completion tokens × output rate, using the pricing table in nginx config. It writes a row to PostgreSQL via an asynchronous, non-blocking connection — the request doesn't wait for the database. If the connection pool is saturated, the write is queued or dropped with a warning. Cost tracking is best-effort, not blocking.
 
-**9. Cache the response.** If semantic caching is enabled, the gateway extracts the prompt embedding from a local sidecar (a small ONNX model running on the host, communicating over a Unix socket), stores the response and its embedding in pgvector, and returns the response to the client. On the next identical or near-identical request, the cache lookup happens at step 0 — before any upstream call is made. The gateway returns the cached response in microseconds.
+**9. Record cache eligibility conservatively.** The cache layer is intentionally narrow today. The immediate goal is to make cache eligibility, isolation boundaries, and bypass reasons explicit so operators can see where reuse is safe. We are not positioning first-generation `llm-cache` as general semantic replay magic.
 
 ### What you can do with this
 
@@ -81,7 +80,7 @@ Here's what happens when a client sends a chat completion request through nginz-
 
 **Switch providers without changing code.** The client sends an OpenAI-format request to `model: "claude-sonnet-4-5"`. The gateway routes it to Anthropic, rewrites the format, and normalizes the response back to OpenAI format. The client doesn't know it just called Anthropic. If OpenAI has an outage, the fallback module routes to Anthropic automatically. If a new provider launches with better pricing, you add a routing rule. Zero application changes.
 
-**Serve cached responses in microseconds.** When two users ask the same question within the cache window, the second response comes from cache — no API call, no latency, no cost. For customer-facing chatbots where the same "what are your business hours?" query arrives hundreds of times a day, this alone can cut your API bill by 30 to 70 percent.
+**Make cache behavior explicit before you trust it.** LLM caching is easy to oversell and easy to get wrong. Prompt meaning is fuzzy, provider behavior differs, tool use introduces side effects, streaming complicates replay, and cross-tenant reuse can become a correctness or privacy bug. Our current `llm-cache` direction is conservative: define which requests are even eligible for cache consideration, isolate reuse boundaries, and surface explicit bypass reasons. That gives operators something measurable and defensible instead of a vague “AI cache” claim.
 
 ### Licensing
 
@@ -109,10 +108,9 @@ All nginz-token modules ship under BSL 1.1:
 - **llm-metrics** — request counts, latency distributions, error rates, and usage telemetry by model and identity
 - **llm-ratelimit** — per-user, per-key RPM and TPM rate limiting with shared-memory counters, in-flight reservation, and reconciliation from actual usage
 - **llm-cost** — per-request cost calculation and asynchronous PostgreSQL logging, with configurable pricing tables per model
-- **llm-cache** — semantic response caching via embedding similarity: local ONNX embedding sidecar, pgvector similarity search, streaming response replay
+- **llm-cache** — early-stage cache policy surface for eligibility, isolation, and bypass rules; not positioned today as a general semantic response cache
 - **llm-security** — prompt injection detection and PII filtering at the gateway, before prompts leave your infrastructure
 - **llm-fallback** — provider failover and load-aware, cost-aware, latency-aware model switching
-- **Dashboard** — web UI for cost trends, usage by team, quota status, and model performance
 
 ### Pricing
 
@@ -123,15 +121,6 @@ nginz-token is sold in two self-serve tiers plus a custom tier:
 | **Pro** | **$1,499/yr** or **$149/mo** | nginz-token gateway modules under BSL 1.1 |
 | **Enterprise** | **$3,999/yr** or **$399/mo** | Everything in Pro, plus dashboard, PostgreSQL schema/tooling, and email support |
 | **Custom** | Talk to us | SLA, priority support, custom packaging, and enterprise requirements |
-
-Founding pricing for the first 20 customers: **$999/yr Pro** and **$2,499/yr Enterprise** for the first 12 months.
-
-The free layer is not inside nginz-token. The free layer is the rest of the stack:
-
-- **nginz** — Apache 2.0 native nginx modules
-- **nginz-njs** — Apache 2.0 scripted policy modules
-
-Those projects are the funnel. nginz-token is the commercial AI gateway product.
 
 ## Why inside nginx, not a separate service
 
