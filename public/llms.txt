@@ -64,6 +64,7 @@
 - [/blogs](/blogs) — Engineering blog index
 - [/blogs/builds/js-access-authz-gleam](/blogs/builds/js-access-authz-gleam) — js_access shipped today. We compiled Gleam to it.
 - [/blogs/engineering/your-libc-is-your-performance-profile](/blogs/engineering/your-libc-is-your-performance-profile) — Your libc is your performance profile
+- [/blogs/engineering/zig-bitfields-c-layout](/blogs/engineering/zig-bitfields-c-layout) — I chose Zig, love it, and still eat my own dogfood
 
 ## Other Pages
 - [/products](/products) — Product overview
