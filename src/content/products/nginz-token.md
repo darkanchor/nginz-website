@@ -42,7 +42,7 @@ nginx proxies bytes. nginz-token understands what those bytes mean for LLM traff
 
 ## Our approach
 
-nginz-token runs as native and scripted modules inside your nginx binary — the same binary that's already proxying your traffic. When a client sends an LLM request, it arrives at nginx. Before it leaves your infrastructure, the gateway inspects it: who is this user, what model are they calling, are they within their token budget, does the prompt contain PII, and does this request fall into a cache-safe class the gateway can reason about? When the response returns, the gateway extracts the actual token usage, updates the budget, writes the cost record, and records the cache-relevant outcome for future bounded reuse work.
+nginz-token runs as native modules inside your nginx binary — the same binary that's already proxying your traffic. When a client sends an LLM request, it arrives at nginx. Before it leaves your infrastructure, the gateway inspects it: which client, project, or org context does this request belong to, what model are they calling, are they within their request and token budget, does the prompt contain PII, and does this request fall into a cache-safe class the gateway can reason about? When the response returns, the gateway extracts the actual token usage, reconciles the budget, writes the cost record, and records the cache-relevant outcome for future bounded reuse work.
 
 All of this happens inside nginx. No separate service. No SaaS proxy. No data leaving your infrastructure. The added latency is microseconds of JSON parsing and shared-memory lookups — not a network hop to an external service.
 
@@ -50,35 +50,35 @@ All of this happens inside nginx. No separate service. No SaaS proxy. No data le
 
 Here's what happens when a client sends a chat completion request through nginz-token:
 
-**1. Authenticate.** The client presents a Dark Anchor API key — not a real OpenAI or Anthropic key. The gateway validates it. If the key is revoked, the request stops here with a 401. The real provider key lives in nginx config or a vault. The client never sees it.
+**1. Resolve provider credentials centrally.** The client never needs the real OpenAI or Anthropic key. The gateway resolves the upstream provider credential from nginx config, environment, or file-backed secrets and injects it just before proxying upstream. Teams rotate one provider credential in one place instead of chasing it through every repository and `.env` file.
 
-**2. Authorize.** The gateway checks what this user is allowed to do. Can they use GPT-4o, or only GPT-4o-mini? Is their team's monthly budget exhausted? Are they calling during allowed hours? This is the policy layer — the same composable authorization engine from nginz-njs, applied to LLM access.
+**2. Scope the request.** The gateway maps the request onto a client, project, or org boundary using nginx variables and location policy. That scope becomes the basis for credential selection, cost attribution, metrics labeling, and shared gateway controls.
 
-**3. Check the token budget.** Before the request reaches the provider, the gateway estimates how many tokens this request will consume. It reads the `messages` array from the request body and applies a fast approximation — character count divided by four gives a rough input token estimate. It checks the user's token-per-minute budget in shared memory. If the estimate plus current in-flight usage exceeds the limit, the gateway returns 429 with a `Retry-After` header. If within budget, it reserves the estimated tokens and lets the request through.
+**3. Check the request and token budget.** Before the request reaches the provider, the gateway enforces request-per-minute and token-per-minute limits in shared memory. It reserves a configured token budget pre-flight, then reconciles against the actual usage extracted from the response. If the caller is already over budget, the gateway returns 429 before the upstream call goes out.
 
 **4. Screen the prompt.** The gateway inspects the request body for PII patterns — email addresses, phone numbers, credit card numbers, API keys. If it finds them, it can block the request, redact the fields, or log a warning depending on your policy. It also checks for prompt injection patterns — attempts to override system instructions or extract hidden context. This is a pattern-matching check in the body filter, not a call to an external scanning service.
 
-**5. Route to the right provider.** The client asked for `gpt-4o`. The gateway rewrites the request to OpenAI's format, injects the real API key into the Authorization header (or `x-api-key` for Anthropic), and sends it upstream. If the request asked for a model that the gateway routes to Anthropic, it rewrites the request body from OpenAI format to Anthropic format — mapping `messages` with roles to Anthropic's `content` structure, adding the required `max_tokens` field, moving the system prompt to the top-level `system` field. The client code only ever speaks OpenAI format. Provider choice is a routing rule in nginx config.
+**5. Route to the right provider.** The gateway resolves the requested model onto a configured upstream route, injects the real provider credential, and sends the request upstream in the provider's native dialect whenever possible. When a route explicitly allows cross-provider translation, the gateway can rewrite the request and normalize the response on the way back. Translation is policy-controlled and generally discouraged unless you intentionally configure it. Provider choice stays a routing rule in nginx config.
 
 **6. Stream the response, watching for usage.** If the client requested streaming, the gateway passes each SSE chunk through immediately — no buffering. It watches for the final chunk that contains the `usage` block (OpenAI with `stream_options: {"include_usage": true}`) or the `message_delta` event (Anthropic). When it sees the usage data, it extracts the actual prompt and completion token counts.
 
 **7. Reconcile the budget.** The actual token count from the response replaces the estimate. The gateway updates the user's token budget in shared memory, subtracting the actual tokens and releasing the in-flight reservation. If the actual count was higher than estimated, the user might tip over their limit — but only for this request, and only by a small margin. The next request will see the updated budget and act accordingly.
 
-**8. Log the cost.** The gateway calculates the cost: prompt tokens × input rate + completion tokens × output rate, using the pricing table in nginx config. It writes a row to PostgreSQL via an asynchronous, non-blocking connection — the request doesn't wait for the database. If the connection pool is saturated, the write is queued or dropped with a warning. Cost tracking is best-effort, not blocking.
+**8. Log the cost.** The gateway calculates the cost: prompt tokens × input rate + completion tokens × output rate, using the pricing table in nginx config. It can write a row to PostgreSQL with the canonical accounting fields — provider, model, requested routing, token totals, org/project/client scope, and cost unit — so finance and engineering can query the same ledger.
 
 **9. Record cache eligibility conservatively.** The cache layer is intentionally narrow today. The immediate goal is to make cache eligibility, isolation boundaries, and bypass reasons explicit so operators can see where reuse is safe. We are not positioning first-generation `llm-cache` as general semantic replay magic.
 
 ### What you can do with this
 
-**Ask "who spent what" and get an answer.** Every request writes cost data — user, team, model, tokens consumed, cost in dollars — to PostgreSQL. You query it. You build dashboards on it. Your finance team gets per-department breakdowns. Your engineering director knows which project drove the $40K. You stop guessing.
+**Ask "who spent what" and get an answer.** Every request can write cost data — org, project, client, model, requested vs effective routing, tokens consumed, cost unit, and total cost — to PostgreSQL. You query it. You build dashboards on it. Your finance team gets per-department breakdowns. Your engineering director knows which project drove the $40K. You stop guessing.
 
 **Prevent the $3,000 overnight bill.** Per-user token-per-minute budgets. Per-team monthly quotas. Hard caps that return 429 instead of racking up provider charges. A runaway job burns through its budget in minutes and stops — it doesn't burn through your credit card for eight hours while everyone sleeps.
 
-**Rotate a provider key once, not everywhere.** The real OpenAI key lives in nginx config. The 50 services that call the LLM use Dark Anchor keys. When you rotate the provider key, you edit one config file and reload. The services never know. A Dark Anchor key can be revoked in one place and the user is cut off immediately — no hunting through repositories and `.env` files.
+**Rotate a provider key once, not everywhere.** The real OpenAI or Anthropic key lives in nginx config, environment, or a file-backed secret source. The 50 services that call the gateway never need to embed the upstream provider key directly. When you rotate the provider key, you update one place and reload — no hunting through repositories and `.env` files.
 
 **Give compliance one control point.** PII filtering happens at the gateway, before prompts leave your network. Not every application has to implement it separately, and not every team has to remember to add the check. It gives compliance and security teams one place to review, tune, and enforce prompt-side guardrails.
 
-**Switch providers without changing code.** The client sends an OpenAI-format request to `model: "claude-sonnet-4-5"`. The gateway routes it to Anthropic, rewrites the format, and normalizes the response back to OpenAI format. The client doesn't know it just called Anthropic. For configured retryable failures, the fallback layer can move the request to a secondary provider before the response is committed. If a new provider launches with better pricing, you add a routing rule. Zero application changes.
+**Switch providers without changing code.** If your applications already speak a provider's native API shape, the gateway can keep that path native and move the route underneath them. If you intentionally enable a translated route, the gateway can bridge request and response formats across providers. For configured retryable failures, the fallback layer can move the request to a secondary provider before the response is committed, subject to the replay and translation policy you set. If a new provider launches with better pricing, you adjust routing policy instead of rewriting every caller.
 
 **Make cache behavior explicit before you trust it.** LLM caching is easy to oversell and easy to get wrong. Prompt meaning is fuzzy, provider behavior differs, tool use introduces side effects, streaming complicates replay, and cross-tenant reuse can become a correctness or privacy bug. Our current `llm-cache` direction is conservative: define which requests are even eligible for cache consideration, isolate reuse boundaries, and surface explicit bypass reasons. That gives operators something measurable and defensible instead of a vague “AI cache” claim.
 
@@ -104,13 +104,13 @@ BSL is also not a private binary-only model. Buyers can audit what they run. Tha
 All nginz-token modules ship under BSL 1.1:
 
 - **llm-proxy** — multi-provider routing with transparent request and response format rewriting
-- **llm-auth** — API key validation and provider credential injection
-- **llm-metrics** — request counts, latency distributions, error rates, and usage telemetry by model and identity
+- **llm-auth** — provider credential resolution and upstream credential injection, with client/project/org scope selection
+- **llm-metrics** — request counts, latency distributions, error rates, and bounded usage telemetry by provider, model, auth status, and tenant scope
 - **llm-ratelimit** — per-user, per-key RPM and TPM rate limiting with shared-memory counters, in-flight reservation, and reconciliation from actual usage
-- **llm-cost** — per-request cost calculation and asynchronous PostgreSQL logging, with configurable pricing tables per model
+- **llm-cost** — per-request cost calculation and PostgreSQL-backed cost event logging, with configurable pricing tables per model
 - **llm-cache** — early-stage cache policy surface for eligibility, isolation, and bypass rules; not positioned today as a general semantic response cache
-- **llm-security** — prompt-side inspection and policy enforcement for PII, secrets, and prompt injection patterns, with response-side controls evolving separately
-- **llm-fallback** — policy-driven provider failover for configured retryable failures, with more advanced routing still ahead of the first release
+- **llm-security** — prompt-side inspection and policy enforcement for PII, secrets, and prompt injection patterns, with org/project policy layering and response-side controls evolving separately
+- **llm-fallback** — policy-driven provider failover for configured retryable failures, with translation-aware replay policy and more advanced routing still ahead of the first release
 
 ### Pricing
 
