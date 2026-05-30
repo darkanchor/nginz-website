@@ -296,6 +296,6 @@ That's a good answer. It means we built clean modules. It means the foundation i
 <div class="next-post">
   <div class="arrow-icon">→</div>
   <div class="next-text">
-    <strong>Coming post:</strong> we attach <code>perf stat</code> to the running nginx workers and confirm the AVX2 hypothesis with hardware counters — branches, IPC, and a 5× cache-miss surprise we didn't see coming.
+    <strong>Coming post:</strong> <a href="/blogs/engineering/perf-regression-and-memory-layout/">we attach <code>perf stat</code> to the running nginx workers</a> — and discover that our single-worker benchmark was hiding a 55% cache-miss penalty. Two rounds of profiling, a cache-line audit, and a shared-memory restructuring later, the tax is gone.
   </div>
 </div>
