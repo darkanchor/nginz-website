@@ -9,7 +9,13 @@ nginz-token is the AI gateway layer for nginz. It runs as native nginx modules a
 
 The design goal is simple: keep the control point inside nginx instead of pushing prompts, responses, and usage policy through an external SaaS proxy. The gateway understands LLM-specific concerns that stock nginx does not: model routing, token accounting, tenant scope, provider dialect boundaries, and prompt-side policy enforcement.
 
-For the current release line, native routing is preferred, cross-provider translation is explicit and policy-controlled, and cache behavior is described conservatively. `llm-cache` is a real module boundary, but the immediate focus is cache eligibility, isolation, and bypass observability rather than broad semantic replay claims.
+For the current release line, native routing is preferred, cross-provider translation is explicit and policy-controlled, and cache behavior is described conservatively. Endpoint dialect is declared by route configuration, not guessed from provider or model names. `llm-cache` is a real module boundary, but the immediate focus is cache eligibility, isolation, and bypass observability rather than broad semantic replay claims.
+
+## Dialect translation
+
+`llm-proxy` can bridge OpenAI-shaped clients to Anthropic Messages endpoints, and Anthropic-shaped clients to OpenAI-compatible endpoints, when the route explicitly declares the endpoint dialect. In cross-dialect paths, the request body is rewritten into the upstream dialect before proxying, and the upstream response can be normalized back to the client dialect on the way out. Native OpenAI and native Anthropic paths stay pass-through unless translation and normalization are intentionally configured.
+
+This keeps the public contract precise: provider names such as `anthropic` or `deepseek-anthropic` are routing labels, not dialect inference. The endpoint dialect is a route property, and translation policy decides whether a cross-dialect path is acceptable.
 
 If you want the broader product narrative, pricing, and positioning, see the [nginz-token product page](/products/nginz-token).
 
@@ -28,7 +34,7 @@ nginz-token is **source-available under BSL 1.1**.
 
 All nginz-token modules ship under BSL 1.1:
 
-- **llm-proxy** — multi-provider routing with transparent request/response format rewriting and per-request variable exposure for downstream modules
+- **llm-proxy** — multi-provider routing with explicit endpoint dialects, bidirectional OpenAI/Anthropic request translation, response normalization back to the client dialect, and per-request variable exposure for downstream modules
 - **llm-auth** — provider credential resolution and upstream credential injection, with client/project/org scope selection
 - **llm-metrics** — request counts, latency distributions, error rates, and bounded usage telemetry by provider, model, auth status, and tenant scope
 - **llm-ratelimit** — per-user, per-key RPM/TPM rate limiting with shared-memory counters, in-flight reservation, and reconciliation from actual usage

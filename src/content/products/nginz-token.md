@@ -58,7 +58,7 @@ Here's what happens when a client sends a chat completion request through nginz-
 
 **4. Screen the prompt.** The gateway inspects the request body for PII patterns — email addresses, phone numbers, credit card numbers, API keys. If it finds them, it can block the request, redact the fields, or log a warning depending on your policy. It also checks for prompt injection patterns — attempts to override system instructions or extract hidden context. This is a pattern-matching check in the body filter, not a call to an external scanning service.
 
-**5. Route to the right provider.** The gateway resolves the requested model onto a configured upstream route, injects the real provider credential, and sends the request upstream in the provider's native dialect whenever possible. When a route explicitly allows cross-provider translation, the gateway can rewrite the request and normalize the response on the way back. Translation is policy-controlled and generally discouraged unless you intentionally configure it. Provider choice stays a routing rule in nginx config.
+**5. Route to the right provider.** The gateway resolves the requested model onto a configured upstream route, injects the real provider credential, and sends the request upstream in the endpoint dialect declared by that route. Provider and model names are labels, not dialect detection rules. Native paths stay native; when you intentionally configure a cross-dialect route, the gateway can translate request bodies between OpenAI chat and Anthropic Messages format, then normalize the upstream response back to the client dialect on the way out. Translation is explicit and policy-controlled, so provider choice stays a routing rule in nginx config instead of a code rewrite.
 
 **6. Stream the response, watching for usage.** If the client requested streaming, the gateway passes each SSE chunk through immediately — no buffering. It watches for the final chunk that contains the `usage` block (OpenAI with `stream_options: {"include_usage": true}`) or the `message_delta` event (Anthropic). When it sees the usage data, it extracts the actual prompt and completion token counts.
 
@@ -78,7 +78,7 @@ Here's what happens when a client sends a chat completion request through nginz-
 
 **Give compliance one control point.** PII filtering happens at the gateway, before prompts leave your network. Not every application has to implement it separately, and not every team has to remember to add the check. It gives compliance and security teams one place to review, tune, and enforce prompt-side guardrails.
 
-**Switch providers without changing code.** If your applications already speak a provider's native API shape, the gateway can keep that path native and move the route underneath them. If you intentionally enable a translated route, the gateway can bridge request and response formats across providers. For configured retryable failures, the fallback layer can move the request to a secondary provider before the response is committed, subject to the replay and translation policy you set. If a new provider launches with better pricing, you adjust routing policy instead of rewriting every caller.
+**Switch providers without changing code.** If your applications already speak a provider's native API shape, the gateway can keep that path native and move the route underneath them. If your callers and the target endpoint speak different dialects, the proxy can translate the request and normalize the response while preserving accounting and routing variables for downstream modules. For configured retryable failures, the fallback layer can move the request to a secondary provider before the response is committed, subject to the replay and translation policy you set. If a new provider launches with better pricing, you adjust routing policy instead of rewriting every caller.
 
 **Make cache behavior explicit before you trust it.** LLM caching is easy to oversell and easy to get wrong. Prompt meaning is fuzzy, provider behavior differs, tool use introduces side effects, streaming complicates replay, and cross-tenant reuse can become a correctness or privacy bug. Our current `llm-cache` direction is conservative: define which requests are even eligible for cache consideration, isolate reuse boundaries, and surface explicit bypass reasons. That gives operators something measurable and defensible instead of a vague “AI cache” claim.
 
@@ -103,7 +103,7 @@ BSL is also not a private binary-only model. Buyers can audit what they run. Tha
 
 All nginz-token modules ship under BSL 1.1:
 
-- **llm-proxy** — multi-provider routing with transparent request and response format rewriting
+- **llm-proxy** — multi-provider routing with explicit endpoint dialects, bidirectional OpenAI/Anthropic request translation, response normalization back to the client dialect, and routing variables for downstream modules
 - **llm-auth** — provider credential resolution and upstream credential injection, with client/project/org scope selection
 - **llm-metrics** — request counts, latency distributions, error rates, and bounded usage telemetry by provider, model, auth status, and tenant scope
 - **llm-ratelimit** — per-user, per-key RPM and TPM rate limiting with shared-memory counters, in-flight reservation, and reconciliation from actual usage
