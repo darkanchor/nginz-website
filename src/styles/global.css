@@ -342,23 +342,20 @@ html.dark .site-nav a.active {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  border: 1px solid var(--color-border);
+  padding: 6px;
+  border: none;
   border-radius: var(--radius-md);
-  background: var(--color-bg);
+  background: transparent;
   color: var(--color-text-secondary);
   cursor: pointer;
   transition: all var(--transition-fast);
-  padding: 0;
   line-height: 1;
 }
 .theme-toggle:hover {
-  border-color: var(--brand-mint);
-  color: var(--brand-mint);
+  color: var(--color-text);
   background: var(--color-accent-soft);
 }
-.theme-toggle svg { width: 16px; height: 16px; }
+.theme-toggle svg { width: 14px; height: 14px; }
 .theme-toggle .icon-sun { display: none; }
 .theme-toggle .icon-moon { display: block; }
 html.dark .theme-toggle .icon-sun { display: block; }
