@@ -45,4 +45,8 @@ All nginz-token modules ship under BSL 1.1:
 
 Together, these modules let nginx act as a bounded AI control plane instead of a blind HTTP pipe: route the request, apply tenant-aware policy, account for what happened, and keep the data path inside your own infrastructure.
 
+## Deployment scenarios
+
+Ready-to-run gateway configurations for common deployment patterns — from a single-team OpenAI endpoint with per-model quotas to multi-provider failover with independent spend caps. Each scenario includes a plain-language use case, the provisioning manifest, and the rendered nginx.conf. See the [deployment scenarios overview](/docs/reference/token-modules/scenarios) for the full set.
+
 For early access or to discuss your team's requirements, [contact us](/contact).

@@ -36,6 +36,19 @@ All module documentation is under /docs/reference/modules/ (native) and /docs/re
 
 ### nginz-token AI gateway modules
 - /docs/reference/token-modules — nginz-token
+- /docs/reference/token-modules/llm-auth — llm-auth
+- /docs/reference/token-modules/llm-cache — llm-cache
+- /docs/reference/token-modules/llm-cost — llm-cost
+- /docs/reference/token-modules/llm-fallback — llm-fallback
+- /docs/reference/token-modules/llm-metrics — llm-metrics
+- /docs/reference/token-modules/llm-proxy — llm-proxy
+- /docs/reference/token-modules/llm-ratelimit — llm-ratelimit
+- /docs/reference/token-modules/llm-security — llm-security
+- /docs/reference/token-modules/scenarios/cost-control — Cost-Control
+- /docs/reference/token-modules/scenarios — Deployment Scenarios
+- /docs/reference/token-modules/scenarios/meter-fallback — Meter-Fallback
+- /docs/reference/token-modules/scenarios/policy-governor — Policy-Governor
+- /docs/reference/token-modules/scenarios/translation-pass — Translation-Pass
 
 ### nginz native modules
 - /docs/reference/modules/acme — ACME and Let's Encrypt
