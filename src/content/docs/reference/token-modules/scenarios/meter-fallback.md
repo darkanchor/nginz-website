@@ -22,12 +22,17 @@ The four allowed models:
 
 Rates are sourced from provider pricing pages as of 2026-06-08.
 
-The gateway enforces two independent monthly hard caps — one per cost unit — and nothing else. There are no per-model RPM or TPM limits in this scenario.
+All three quotas are project-level constraints on the AI Platform project: two monthly spend caps (one per cost unit) and a single rate-limit policy covering both DeepSeek models.
 
-| Provider | Monthly cap | Unit |
+| Cost unit | Monthly cap |
+|---|---:|
+| USD | 800 |
+| Credit | 100,000 |
+
+| Model | RPM | TPM |
 |---|---:|---:|
-| DeepSeek | 800 | USD |
-| Mimo | 100,000 | Credit |
+| `deepseek-v4-pro` | 300 | 250,000 |
+| `deepseek-v4-flash` | 300 | 250,000 |
 
 Fallback fires on any of: `connect_error`, `transport_timeout`, `upstream_5xx`, `rate_limited`. Streaming requests are excluded from fallback to prevent partial output from being duplicated to the client.
 
@@ -150,15 +155,8 @@ organizations:
         enforcement_mode: enforce
         model_allowlist:
           - deepseek-v4-pro
-        notes: rate limit for reasoning model
-      - scope_type: project
-        project_id: "30000000-0000-0000-0001-000000000001"
-        rpm_limit: 300
-        tpm_limit: 250000
-        enforcement_mode: enforce
-        model_allowlist:
           - deepseek-v4-flash
-        notes: rate limit for fast model
+        notes: rate limit for deepseek models
     projects:
       - project_id: "30000000-0000-0000-0001-000000000001"
         project_slug: ai-platform
@@ -254,8 +252,7 @@ organizations:
       "quotas": [
         { "scope_type": "project", "project_id": "30000000-0000-0000-0001-000000000001", "monthly_spend_limit": 800,    "monthly_spend_unit": "usd",    "enforcement_mode": "enforce", "notes": "deepseek monthly spend hard cap" },
         { "scope_type": "project", "project_id": "30000000-0000-0000-0001-000000000001", "monthly_spend_limit": 100000, "monthly_spend_unit": "credit", "enforcement_mode": "enforce", "notes": "mimo monthly credit hard cap" },
-        { "scope_type": "project", "project_id": "30000000-0000-0000-0001-000000000001", "rpm_limit": 300, "tpm_limit": 250000, "enforcement_mode": "enforce", "model_allowlist": ["deepseek-v4-pro"],   "notes": "rate limit for reasoning model" },
-        { "scope_type": "project", "project_id": "30000000-0000-0000-0001-000000000001", "rpm_limit": 300, "tpm_limit": 250000, "enforcement_mode": "enforce", "model_allowlist": ["deepseek-v4-flash"], "notes": "rate limit for fast model" }
+        { "scope_type": "project", "project_id": "30000000-0000-0000-0001-000000000001", "rpm_limit": 300, "tpm_limit": 250000, "enforcement_mode": "enforce", "model_allowlist": ["deepseek-v4-pro", "deepseek-v4-flash"], "notes": "rate limit for deepseek models" }
       ],
       "projects": [
         {

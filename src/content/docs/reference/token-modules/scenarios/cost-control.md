@@ -13,10 +13,16 @@ The team wants a single OpenAI-compatible endpoint for its applications, but it 
 
 The example exposes two OpenAI models:
 
-| Model | Intended use | Project RPM | Project TPM | Monthly spend policy |
-|---|---:|---:|---:|---:|
-| `gpt-5.4-mini` | Default team work | 260 | 120000 | USD 600 |
-| `gpt-5.4` | Higher-quality work | 40 | 60000 | USD 900 |
+| Model | Intended use | RPM | TPM |
+|---|---|---:|---:|
+| `gpt-5.4-mini` | Default team work | 260 | 120,000 |
+| `gpt-5.4` | Higher-quality work | 40 | 60,000 |
+
+All three quotas are project-level constraints on the Team AI project: one monthly spend cap (scoped by cost unit) and per-model RPM and TPM limits on each model.
+
+| Cost unit | Monthly cap |
+|---|---:|
+| USD | 1,200 |
 
 The rendered gateway config enforces RPM, TPM, model allowlist, and the project monthly spend budget. Spend enforcement is gateway-local, reset by the gateway's local calendar month, and tracked in the configured cost unit.
 
