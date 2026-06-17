@@ -101,16 +101,16 @@ BSL is also not a private binary-only model. Buyers can audit what they run. Tha
 
 ### Module catalog
 
-All nginz-token modules ship under BSL 1.1:
+All eight modules ship in both Pro and Enterprise. The difference is operational: Pro is self-hosted (you run the DB and observability stack), Enterprise bundles PostgreSQL, dashboard, and email support.
 
 - **llm-proxy** — multi-provider routing with explicit endpoint dialects, bidirectional OpenAI/Anthropic request translation, response normalization back to the client dialect, and routing variables for downstream modules
 - **llm-auth** — provider credential resolution and upstream credential injection, with client/project/org scope selection
 - **llm-metrics** — request counts, latency distributions, error rates, and bounded usage telemetry by provider, model, auth status, and tenant scope
 - **llm-ratelimit** — per-user, per-key RPM and TPM rate limiting with shared-memory counters, in-flight reservation, and reconciliation from actual usage
-- **llm-cost** — per-request cost calculation and PostgreSQL-backed cost event logging, with configurable pricing tables per model
+- **llm-cost** — per-request cost calculation and cost event emission, with configurable pricing tables per model. Enterprise adds the PostgreSQL backend and dashboard for turnkey aggregated reporting.
 - **llm-cache** — early-stage cache policy surface for eligibility, isolation, and bypass rules; not positioned today as a general semantic response cache
 - **llm-security** — prompt-side inspection and policy enforcement for PII, secrets, and prompt injection patterns, with org/project policy layering and response-side controls evolving separately
-- **llm-fallback** — policy-driven provider failover for configured retryable failures, with translation-aware replay policy and more advanced routing still ahead of the first release
+- **llm-fallback** — policy-driven provider failover for configured retryable failures, with translation-aware replay policy
 
 ### Pricing
 
@@ -118,8 +118,8 @@ nginz-token is sold in two self-serve tiers plus a custom tier:
 
 | Tier | Price | What you get |
 |------|-------|--------------|
-| **Pro** | **$1,499/yr** or **$149/mo** | nginz-token gateway modules under BSL 1.1 |
-| **Enterprise** | **$3,999/yr** or **$399/mo** | Everything in Pro, plus dashboard, PostgreSQL schema/tooling, and email support |
+| **Pro** | **$1,499/yr** or **$149/mo** | All 8 gateway modules. Self-hosted: you run the DB and observability stack. |
+| **Enterprise** | **$3,999/yr** or **$399/mo** | Same modules, plus PostgreSQL backend, dashboard, and email support. |
 | **Custom** | Talk to us | SLA, priority support, custom packaging, and enterprise requirements |
 
 ## Live demo
@@ -138,6 +138,13 @@ Running the AI gateway as nginx modules — rather than as a separate proxy serv
 
 ## Availability
 
-nginz-token is in active development. The full product ships under BSL 1.1, source-visible for evaluation and non-commercial use, with commercial production use licensed.
+nginz-token 1.30 is shipping. All eight gateway modules — proxy, auth, metrics, ratelimit, cost, cache, security, and fallback — are stable and ready for production. The images have passed sustained-load stability testing: zero memory growth, zero unexpected errors, no throughput degradation across 1.54 million requests.
 
-[Contact us](/contact) if you want early access or need to discuss your team's requirements.
+The product is sold under BSL 1.1, source-visible for evaluation and non-commercial use, with commercial production use licensed. Two tiers are available today:
+
+- **Pro** ($1,499/yr): all 8 gateway modules. You run your own database and observability stack for cost aggregation, metrics retention, and dashboards.
+- **Enterprise** ($3,999/yr): same 8 modules, plus a bundled PostgreSQL backend with pre-built cost aggregation, dashboard, and email support.
+
+Both tiers ship as Docker images in two base OS variants: Debian trixie-slim (glibc) and Alpine 3.23 (musl).
+
+[Contact us](/contact) to get started or discuss your team's requirements.

@@ -44,7 +44,11 @@ for (const posts of categoryMap.values()) {
 
 const categories: BlogCategory[] = Array.from(categoryMap.entries())
   .map(([category, posts]) => ({ category, label: category.charAt(0).toUpperCase() + category.slice(1), posts }))
-  .sort((a, b) => a.label.localeCompare(b.label));
+  .sort((a, b) => {
+    if (a.category === 'releases') return -1;
+    if (b.category === 'releases') return 1;
+    return a.label.localeCompare(b.label);
+  });
 ---
 
 <style>
