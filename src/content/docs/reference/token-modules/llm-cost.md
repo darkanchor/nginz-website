@@ -153,6 +153,7 @@ When `llm_cost_backend postgres` is enabled, each request produces one INSERT wi
 
 | Column | Description |
 |---|---|
+| `event_id` | nginx request ID; uniquely indexed for idempotent retries. |
 | `provider` | Effective provider that served the request. |
 | `model` | Effective model. |
 | `cost_unit` | Pricing unit for this provider. |
@@ -190,8 +191,10 @@ When `llm_cost_backend postgres` is enabled, each request produces one INSERT wi
 - `regular_input_tokens` is defensively clamped from `prompt_tokens - cache_read_tokens - cache_create_tokens`; malformed cache splits cannot make regular input negative.
 - Cached-token splits are internal pricing buckets from `llm-proxy`. They are not stored as extra PostgreSQL columns; persisted `prompt_tokens` remains total input and `prompt_cost` carries the blended result.
 - `$llm_cost_status = no_rate` rows are persisted to PostgreSQL with zero-cost columns so unpriced traffic is auditable.
-- `$llm_cost_status = persist_failed` is not re-persisted to avoid re-entry; `usage_missing` and `skipped_error` are not persisted by design.
-- Per-worker PostgreSQL connection caching: each worker maintains its own connection, reconnecting on drop.
-- PostgreSQL persistence uses parameterized `PQexecParams` — no SQL injection.
+- PostgreSQL writes are asynchronous: LOG copies into a fixed 512-record FIFO per worker, and one worker-owned non-blocking connection drains it in order.
+- A full queue never blocks or overwrites. The affected request reports `persist_failed` and emits a recovery record; later SQL failures emit a recovery record while the already-written request log remains `recorded`.
+- The in-memory queue does not survive SIGKILL. Use the structured accounting log as a durable replay source when zero loss is required.
+- Drain capacity depends on PostgreSQL commit latency. Capacity-plan from a measured drain rate and alert on queue-full/drain recovery logs; direct queue-depth export remains a telemetry follow-up.
+- PostgreSQL persistence uses parameterized `PQsendQueryParams` and `ON CONFLICT (event_id) DO NOTHING` for injection safety and idempotent retries.
 - Cost is computed against `effective_provider` / `effective_model`, so fallback traffic is priced correctly against the provider that actually served the response.
 - Only one final usage record is emitted. If the first hop fails and nginx retries to a secondary, the first-hop partial spend is not recorded as a separate event.
