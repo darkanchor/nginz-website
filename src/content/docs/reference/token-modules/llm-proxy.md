@@ -98,7 +98,7 @@ location /v1 {
 | Directive | Contexts | Default | Description |
 |---|---|---|---|
 | `llm_proxy_normalize_response` | `location` | `on` | Enable cross-dialect body mediation. When requested and effective dialects differ, request bodies are translated into the endpoint dialect and responses are normalized back to the requested client dialect. When `off`, bodies pass through unmodified. |
-| `llm_proxy_translation_fail_closed` | `location` | `off` | When `on`, return `400` before contacting the provider if required cross-dialect request translation cannot be completed safely. When omitted or `off`, the original body retains the compatibility pass-through behavior. Enable this on strict provider routes after validating supported request shapes. |
+| `llm_proxy_translation_fail_closed` | `location` | `on` | Return `400` before contacting the provider if required cross-dialect request translation cannot be completed safely. Omission is valid and uses the safe default. Set `off` only as an explicit compatibility escape hatch. |
 | `llm_proxy_inject_usage` | `location` | `on` | Inject `stream_options: {"include_usage": true}` into OpenAI streaming requests so the final SSE chunk carries token counts. |
 | `llm_proxy_provider_version` | `location` | — | Set the `$llm_provider_version` variable for the named provider. For `anthropic`, also sends `anthropic-version: <version>` upstream. Repeatable. |
 | `llm_proxy_max_response_size` | `location` | `10m` | Maximum response-body bytes to buffer for normalization. Responses exceeding this limit are passed through unmodified. Accepts `k`/`K`/`m`/`M` suffixes. |
@@ -206,7 +206,7 @@ location /v1 {
 - Cache buckets are optional sub-buckets for pricing. Missing cache fields default to `0`; OpenAI `cached_tokens` greater than total prompt tokens is ignored.
 - When fallback serves a response from a secondary provider, usage extraction follows the effective provider's wire format, not the originally requested provider.
 - Cross-dialect body translation is bidirectional for OpenAI chat and Anthropic Messages dialects, but URI paths still need explicit nginx rewrite rules when client and upstream endpoints use different paths.
-- `llm_proxy_translation_fail_closed on` applies only when the selected endpoint requires cross-dialect translation. Native-dialect requests are unaffected. The default remains `off`, so existing configurations remain valid.
+- `llm_proxy_translation_fail_closed` applies only when the selected endpoint requires cross-dialect translation. Native-dialect requests are unaffected. The default is `on`; omitting the directive remains valid nginx configuration.
 - For streaming responses, `usage_extracted` is set during the body filter pass — before the log phase fires.
 - OpenAI-style 200 responses with an error body (`{"error": {...}}`) are detected and not normalized.
 - Unknown JSON fields from providers are preserved in normalized output, not dropped.
