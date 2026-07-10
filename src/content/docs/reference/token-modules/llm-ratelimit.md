@@ -84,6 +84,8 @@ location /v1 {
 
     # Monthly project spend budget in the provider's cost unit
     llm_ratelimit_spend_scope project usd $llm_auth_org $llm_auth_project 1200.00;
+    # Reserve a conservative amount before admission; reconcile in LOG
+    llm_ratelimit_reserve_spend usd 0.25;
 
     # Provider-feedback cooldown
     llm_ratelimit_cooldown on;
@@ -147,6 +149,7 @@ location /v1 {
 | Directive | Contexts | Default | Description |
 |---|---|---|---|
 | `llm_ratelimit_spend_scope` | `location` | — | Monthly spend budget for one scope and cost unit. Args: `organization <unit> <org-var> <budget>`, `project <unit> <org-var> <project-var> <budget>`, or `client <unit> <org-var> <project-var> <client-var> <budget>`. The module checks only entries matching the effective provider's `llm_cost_rate_unit`. |
+| `llm_ratelimit_reserve_spend` | `location` | — | Opt into hard ACCESS-phase spend admission. Args: `<unit> <amount>`. The amount is reserved against every configured scope using that unit, then reconciled to authoritative `llm-cost` usage in LOG. Omitted by default, preserving delayed/soft spend enforcement. Choose a conservative upper-bound estimate for one request. At most one reserve directive is allowed per location. |
 
 ## Exported variables
 
@@ -164,7 +167,9 @@ location /v1 {
 - All requests allowed in ACCESS phase consume one quota slot regardless of upstream outcome (2xx, 4xx, 5xx, or transport error). Requests denied by this module (429) do not consume an additional slot.
 - Rejected-before-upstream requests (out-of-scope, unresolvable) have their consumed quota slot returned.
 - Token reconciliation: actual `$llm_total_tokens` from `llm-proxy` replaces the pre-flight reservation. If usage is unavailable (`usage_extracted = 0`), the reservation stands as the documented fallback.
-- Spend budgets are enforced in ACCESS from local shared-memory counters and incremented in LOG after `llm-cost` computes authoritative cost. The request that crosses a monthly spend budget is allowed; the next matching request is denied.
+- Without `llm_ratelimit_reserve_spend`, spend budgets retain delayed/soft enforcement: authoritative cost is added in LOG, so the request that crosses the budget is allowed and the next matching request is denied.
+- With `llm_ratelimit_reserve_spend`, ACCESS atomically reserves the configured amount before admission. Requests that cannot reserve within every matching scope are denied; LOG replaces the reservation with authoritative cost when available.
+- A location accepts one reserve directive and therefore one reserved cost unit. Other configured units retain delayed/soft enforcement; use separate locations when multiple units each require hard reservation. Units are never converted, and scopes whose unit does not match the effective provider are not charged.
 - Spend counters are isolated by scope, cost unit, and local calendar month. The module does not convert between units; `usd` and `credits` are separate counters.
 - The shared-memory ledger is striped into 64 independently locked regions. ACCESS and LOG phase mutations touch only the owning stripe.
 - Ledger entries are padded to 64 bytes (one cache line) to avoid false sharing.

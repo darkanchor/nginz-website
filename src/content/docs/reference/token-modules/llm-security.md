@@ -49,6 +49,8 @@ location /v1 {
     llm_security_mode redact;
     llm_security_rules_file /etc/nginx/security/rules.txt;
     llm_security_inspect_response on;
+    llm_security_reject_oversized_request on;
+    llm_security_reject_oversized_response on;
 
     proxy_pass https://$llm_provider_upstream;
 }
@@ -103,12 +105,14 @@ When the `|action` segment is omitted, the location's `llm_security_mode` suppli
 | `llm_security` | `location` | — | Enable security policy for this location. |
 | `llm_security_mode` | `location` | — | Enforcement mode: `detect`, `block`, or `redact`. `redact` requires `llm_security_inspect_response on`. |
 | `llm_security_rules_file` | `location` | — | Path to the rules file. Parsed at startup. |
+| `llm_security_reject_oversized_request` | `location` | `off` | When `on`, reject request bodies above `llm_proxy_max_body_size` with `413` before provider send instead of passing them through without inspection. Fixed-length and chunked bodies are covered. |
 
 ### Response inspection directives
 
 | Directive | Contexts | Default | Description |
 |---|---|---|---|
 | `llm_security_inspect_response` | `location` | `off` | Enable response-side inspection and redaction. Required for `llm_security_mode redact`. |
+| `llm_security_reject_oversized_response` | `location` | `off` | When `on`, stop a buffered response that grows beyond `llm_proxy_max_response_size` before buffered body bytes are emitted. A late or chunked overflow may close the client connection because response headers may already have entered nginx's filter chain. |
 
 ### Policy layering directives
 
@@ -142,6 +146,8 @@ When the `|action` segment is omitted, the location's `llm_security_mode` suppli
 - `llm_security_mode block` with `llm_security_inspect_response on` is rejected at config load time — response-body blocking needs header-buffering substrate that does not exist yet.
 - `redact` mode on request bodies is canonicalized to `block` (redaction of the outgoing request body is not meaningful — the request is blocked instead).
 - Response-side inspection runs on buffered non-streaming response bodies. Streaming (SSE) response redaction is not yet implemented.
+- Oversized request and response rejection are opt-in. Omitting either directive preserves the existing pass-through behavior and remains valid configuration.
+- Size enforcement uses `llm_proxy_max_body_size` and `llm_proxy_max_response_size`; keep those limits aligned with the largest payloads your policy is expected to inspect.
 - Content-Length is cleared in the header filter when redact mode may change the body length.
 - Redacted matches are replaced with `[REDACTED]` in-place, preserving JSON parseability.
 - Only the strongest single match is recorded. Bodies that violate multiple rules surface only one `rule_id`/`action`.
