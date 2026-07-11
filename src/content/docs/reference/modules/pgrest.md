@@ -25,6 +25,8 @@ http {
         location /api/ {
             pgrest_pass "host=localhost dbname=mydb user=postgres password=secret";
             pgrest_schemas "public, tenant";
+            # Optional: 15s is the built-in default.
+            pgrest_timeout 15s;
         }
 
         # Stored procedure API
@@ -32,6 +34,28 @@ http {
             pgrest_pass "host=localhost dbname=mydb user=postgres password=secret";
         }
     }
+}
+```
+
+## Pool and timeout sizing
+
+Pgrest defaults to a 16-connection pool and a 15-second connect/query socket
+timeout. The timeout is intentionally long enough for monitoring dashboards
+whose analytical reads share PostgreSQL with sustained telemetry ingestion. It
+was validated with a 200 request/second gateway workload and concurrent
+dashboard reads; it is a timeout budget, not a query-performance guarantee.
+
+Do not increase the pool merely because a query is slow. More simultaneous
+aggregate scans can increase disk spills and delay writers. First inspect the
+query plan, remove duplicate scans, add appropriate rollups or indexes, and let
+the dashboard cache data for its normal refresh interval. Override the timeout
+only when the workload needs a different latency contract:
+
+```nginx
+location /api/ {
+    pgrest_pass "host=localhost dbname=monitoring user=dashboard_reader";
+    pgrest_pool_size 16;
+    pgrest_timeout 15s;
 }
 ```
 
@@ -247,6 +271,7 @@ curl -X POST "http://localhost/api/employees?on_conflict=name" \
 |-----------|---------|---------|-------------|
 | `pgrest_pass` | `location` | -- | PostgreSQL connection string. All locations in a worker share one connection pool. |
 | `pgrest_pool_size` | `location` | `16` | Maximum pooled connections (1-16). |
+| `pgrest_timeout` | `location` | `15s` | Connect/query socket timeout. Inherited by nested locations. |
 | `pgrest_schemas` | `location` | -- | Comma-separated schema allowlist. First entry is the default. |
 | `pgrest_jwt_secret` | `location` | -- | HS256 secret for JWT signature validation. |
 | `pgrest_anon_role` | `location` | -- | PostgreSQL role for unauthenticated requests. |
