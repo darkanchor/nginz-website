@@ -368,32 +368,6 @@ map $da_gateway_credential $da_client_auth_tier {
     include /runtime/generated/issuer/tier.map;
 }
 
-# generated manifest-driven gateway servers
-log_format manifest_gateway_json escape=json
-    '{'
-        '"time":"$time_iso8601",'
-        '"org":"$org_id",'
-        '"project":"$project_id",'
-        '"client":"$client_id",'
-        '"gateway_key_id":"$gateway_key_id",'
-        '"provider":"$llm_effective_provider",'
-        '"model":"$llm_effective_model",'
-        '"rate_limit_reason":"$llm_ratelimit_deny_reason",'
-        '"request_remaining":"$llm_ratelimit_quota_remaining",'
-        '"token_remaining":"$llm_ratelimit_token_quota_remaining",'
-        '"fallback_attempted":"$llm_fallback_attempted",'
-        '"fallback_reason":"$llm_fallback_reason",'
-        '"fallback_effective":"$llm_fallback_effective_provider",'
-        '"input_cost":"$llm_cost_prompt",'
-        '"output_cost":"$llm_cost_completion",'
-        '"total_cost":"$llm_cost_total",'
-        '"cost_status":"$llm_cost_status",'
-        '"status":"$status",'
-        '"request_time":"$request_time"'
-    '}';
-
-access_log /var/log/nginx/manifest-gateway.log manifest_gateway_json;
-
 server {
     listen 80;
     server_name ai-platform.gateway.internal;
