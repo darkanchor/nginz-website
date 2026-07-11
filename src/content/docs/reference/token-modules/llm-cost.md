@@ -149,7 +149,7 @@ location /v1 {
 
 ## Persisted PostgreSQL columns
 
-When `llm_cost_backend postgres` is enabled, each request produces one INSERT with these fields:
+When `llm_cost_backend postgres` is enabled, each accounted request produces one row with these fields. The asynchronous writer may persist several rows in one INSERT:
 
 | Column | Description |
 |---|---|
@@ -191,10 +191,11 @@ When `llm_cost_backend postgres` is enabled, each request produces one INSERT wi
 - `regular_input_tokens` is defensively clamped from `prompt_tokens - cache_read_tokens - cache_create_tokens`; malformed cache splits cannot make regular input negative.
 - Cached-token splits are internal pricing buckets from `llm-proxy`. They are not stored as extra PostgreSQL columns; persisted `prompt_tokens` remains total input and `prompt_cost` carries the blended result.
 - `$llm_cost_status = no_rate` rows are persisted to PostgreSQL with zero-cost columns so unpriced traffic is auditable.
-- PostgreSQL writes are asynchronous: LOG copies into a fixed 512-record FIFO per worker, and one worker-owned non-blocking connection drains it in order.
+- PostgreSQL writes are asynchronous: LOG copies into a fixed 512-record FIFO per worker, and one worker-owned non-blocking connection drains it in order. The writer sends up to 64 already-queued events in one parameterized multi-row INSERT, without delaying ordinary low-volume traffic to collect a batch.
 - A full queue never blocks or overwrites. The affected request reports `persist_failed` and emits a recovery record; later SQL failures emit a recovery record while the already-written request log remains `recorded`.
+- If a multi-row INSERT fails, the writer retries its events individually. This isolates and reports a bad event while preserving the other valid events in the batch.
 - The in-memory queue does not survive SIGKILL. Use the structured accounting log as a durable replay source when zero loss is required.
-- Drain capacity depends on PostgreSQL commit latency. Capacity-plan from a measured drain rate and alert on queue-full/drain recovery logs; direct queue-depth export remains a telemetry follow-up.
-- PostgreSQL persistence uses parameterized `PQsendQueryParams` and `ON CONFLICT (event_id) DO NOTHING` for injection safety and idempotent retries.
+- Drain capacity depends on PostgreSQL storage, trigger, and durable-commit latency, but batching amortizes commit cost across queued events. Capacity-plan from a measured drain rate and alert on queue-full/drain recovery logs; direct queue-depth export remains a telemetry follow-up.
+- PostgreSQL persistence uses parameterized `PQsendQueryParams` and `ON CONFLICT (event_id) DO NOTHING` for injection safety and idempotent single-event or batch retries.
 - Cost is computed against `effective_provider` / `effective_model`, so fallback traffic is priced correctly against the provider that actually served the response.
 - Only one final usage record is emitted. If the first hop fails and nginx retries to a secondary, the first-hop partial spend is not recorded as a separate event.
