@@ -52,6 +52,17 @@ Sets how long nginx waits before moving from open to half-open. This is the cool
 
 Controls how many successful half-open requests are needed before the circuit fully closes. Use it to avoid declaring recovery too early.
 
+## Variables
+
+The module exports these nginx variables for response headers, logging, and capacity monitoring:
+
+| Variable | Description |
+|---|---|
+| `$ngz_circuit_state` | Current shared circuit state: `closed`, `open`, or `half_open` |
+| `$ngz_circuit_admission` | Per-request admission result: `allow`, `open`, `half_open_busy`, or `capacity` |
+| `$ngz_circuit_entries` | Number of circuit identities currently allocated in shared memory |
+| `$ngz_circuit_capacity` | Maximum number of circuit identities supported by the shared store |
+
 ## Works well with
 
 - Stock nginx `proxy_next_upstream` and `fail_timeout` — use these for basic retry and failure handling; the circuit breaker adds half-open recovery and state visibility.

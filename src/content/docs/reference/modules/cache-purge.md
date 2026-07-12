@@ -87,7 +87,14 @@ Controls whether successful purges emit no events, one event per target, or a ba
 - **Contexts:** `location`
 - **Default:** none
 
-Names the worker-events channel used for purge notifications. Set it when another module or consumer needs to react to invalidation.
+Names the worker-events channel used for purge notifications. Set it when another module or consumer needs to react to invalidation. Notifications are published only when both this directive and `cache_purge_worker_events_zone` are configured.
+
+### `cache_purge_worker_events_zone`
+
+- **Contexts:** `location`
+- **Default:** none
+
+Selects the explicitly named worker-events shared-memory zone that receives purge notifications. Pair it with `cache_purge_worker_events_channel`; if either value is absent, no purge events are published. Explicit selection prevents notifications from being routed to the wrong zone when multiple worker-events zones exist.
 
 ## Works well with
 

@@ -146,7 +146,14 @@ Match rules for the probe response. Format: `status=<min>-<max> [body=<str>]`. O
 - **Contexts:** `location`
 - **Default:** none
 
-Publishes service-level probe state transitions to the named channel in the worker-events default zone. Set this when other modules or tooling need to observe health flips.
+Names the channel used for service-level probe transition events. Events are published only when this and `health_worker_events_zone` are both configured.
+
+### `health_worker_events_zone`
+
+- **Contexts:** `location`
+- **Default:** none
+
+Selects the explicitly named worker-events shared-memory zone that receives service-level health transitions. Pair it with `health_worker_events_channel`; explicit selection prevents cross-routing when more than one worker-events zone is configured.
 
 ### `health_upstream_probe`
 

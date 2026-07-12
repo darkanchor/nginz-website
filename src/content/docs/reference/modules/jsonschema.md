@@ -18,6 +18,7 @@ Use this module when you want to reject malformed request payloads at the edge b
 ```nginx
 location /api/users {
     jsonschema '{"type":"object","required":["name","email"],"properties":{"name":{"type":"string","minLength":1},"email":{"type":"string"},"age":{"type":"number","minimum":0}}}';
+    jsonschema_body_max_size 1m;
     proxy_pass http://backend;
 }
 ```
@@ -41,6 +42,13 @@ On failure the response is `400` with a JSON body:
 - **Default:** none
 
 Takes an inline JSON Schema string as its argument. Validates request bodies in the access phase against that schema. Only applies to `POST`, `PUT`, and `PATCH` with `Content-Type: application/json`.
+
+### `jsonschema_body_max_size`
+
+- **Contexts:** `location`
+- **Default:** `1m`
+
+Sets the largest JSON request body that may be buffered for schema validation. Larger declared or accumulated bodies return HTTP 413. File-backed bodies are rejected explicitly rather than bypassing validation or being copied without a bound.
 
 ## Supported schema keywords
 

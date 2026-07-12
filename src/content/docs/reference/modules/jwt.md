@@ -114,6 +114,13 @@ jwt_audience my-client-id;
 
 Toggles for expiration and signature validation. You would normally leave both on. Turning off signature validation is useful during development or when another layer already verified the token.
 
+### `jwt_strict_kid`
+
+- **Contexts:** `http`, `server`, `location`
+- **Default:** `on`
+
+Enforces deterministic signing-key selection. A token carrying `kid` must match that exact configured key, and a token without `kid` is rejected when more than one key is available. Set this to `off` only for a deliberate legacy fallback policy; doing so permits the verifier to try compatible keys when the identifier is absent or unknown.
+
 ### `jwt_leeway`
 
 - **Contexts:** `http`, `server`, `location`

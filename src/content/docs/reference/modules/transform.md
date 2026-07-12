@@ -19,6 +19,7 @@ Use this module when an upstream returns more JSON than you want to forward to t
 location /api/users {
     proxy_pass http://backend/users;
     transform_response $.data;
+    transform_response_max_size 1m;
 }
 
 location /api/count {
@@ -71,6 +72,13 @@ Given this upstream response:
 
 Takes a JSON path expression and extracts that sub-path from the upstream response body. Must be used in a location that also has a `proxy_pass` or other upstream directive.
 
+### `transform_response_max_size`
+
+- **Contexts:** `location`
+- **Default:** `1m`
+
+Sets the hard upper bound for a response buffered for transformation. A JSON response must have a known length no greater than this limit; an indeterminate or oversized response is rejected instead of being buffered without a bound. File-backed buffers remain supported within the configured limit.
+
 ## Behavior notes
 
 - Non-JSON responses (missing `application/json` content-type) pass through unchanged.
@@ -80,7 +88,7 @@ Takes a JSON path expression and extracts that sub-path from the upstream respon
 ## Limitations
 
 - Only simple dot-delimited paths with numeric array indices. No array filters, wildcards, or recursive descent.
-- The full response is buffered in memory before transformation.
+- The response is buffered up to `transform_response_max_size` before transformation.
 - Request bodies are not transformed.
 
 ## Works well with

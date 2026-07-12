@@ -86,7 +86,14 @@ Sets how often the source is polled when using background reconciliation. Lower 
 - **Contexts:** `location`
 - **Default:** none
 
-Publishes activation notifications to the worker-events bus. Set it when other modules or tooling need to observe upstream changes.
+Names the channel used for activation and refresh notifications. Notifications are published only when this and `dynamic_upstreams_worker_events_zone` are both configured.
+
+### `dynamic_upstreams_worker_events_zone`
+
+- **Contexts:** `location`
+- **Default:** none
+
+Selects the explicitly named worker-events shared-memory zone for snapshot activation, restoration, drain, and refresh-failure notifications. Pair it with `dynamic_upstreams_worker_events_channel` to avoid ambiguous routing in configurations with multiple event zones.
 
 ### `dynamic_upstreams_consul_address`
 

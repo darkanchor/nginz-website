@@ -52,7 +52,14 @@ Enables OIDC authentication for this location. When turned on, unauthenticated r
 - **Contexts:** `location`
 - **Default:** none
 
-URL of the provider's OpenID Connect discovery document. The module fetches this at runtime to determine the authorization, token, and JWKS endpoints.
+URL of the provider's OpenID Connect discovery document. The module fetches this at runtime to determine the authorization, token, and JWKS endpoints. HTTPS is required unless insecure HTTP is explicitly enabled.
+
+### `oidc_allow_insecure_http`
+
+- **Contexts:** `http`, `server`, `location`
+- **Default:** `off`
+
+Allows plain-HTTP discovery, token, or JWKS endpoints. This is intended only for isolated local test providers. Leave it off in production so provider metadata, keys, and token exchanges use authenticated TLS transport.
 
 ### `oidc_client_id`
 

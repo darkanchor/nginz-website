@@ -59,7 +59,21 @@ Turns ACME management on for the nginx instance. Use this only when you want ngi
 - **Contexts:** `http`
 - **Default:** Let's Encrypt production directory
 
-Changes which ACME directory endpoint nginx talks to. Use it when you need a staging environment or a different ACME provider.
+Changes which ACME directory endpoint nginx talks to. HTTPS is required unless `acme_allow_insecure_http on` is explicitly enabled for local testing.
+
+### `acme_allow_insecure_http`
+
+- **Contexts:** `http`
+- **Default:** `off`
+
+Allows an `http://` ACME directory URL. Keep the secure default in production; this escape hatch is intended for local ACME test servers only because HTTP does not authenticate the directory service or protect protocol traffic.
+
+### `acme_trusted_certificate`
+
+- **Contexts:** `http`
+- **Default:** system trust store only
+
+Adds a PEM CA bundle for verifying a private ACME authority. System roots remain available. Use this for private PKI and local authorities such as Pebble instead of disabling TLS verification; malformed trust files reject the nginx configuration.
 
 ### `acme_staging`
 

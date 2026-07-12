@@ -82,6 +82,20 @@ The module provides three distinct capabilities:
 
 Proxies requests to the WeChat Pay upstream gateway with request signing and response verification. Unlike `proxy_pass`, this directive does not need `$request_uri` because the gateway uses the original URI to compute signatures.
 
+### `wechatpay_body_max_size`
+
+- **Contexts:** `http`, `server`, `location`
+- **Default:** `1m`
+
+Bounds client request bodies used for signing, notification verification, and OAEP operations, as well as upstream response bodies retained for signature verification. The limit covers fixed-length and chunked framing. Oversized client bodies return HTTP 413; oversized or invalidly framed upstream responses return HTTP 502.
+
+### `wechatpay_allow_insecure_http`
+
+- **Contexts:** `http`, `server`, `location`
+- **Default:** `off`
+
+Allows `wechatpay_proxy_pass` to target a plain-HTTP gateway. Keep this off for real WeChat Pay traffic: HTTPS provides certificate and hostname verification for the signed exchange. The directive exists for isolated local mock gateways and must be enabled explicitly before an `http://` target is accepted.
+
 ### `wechatpay_apiclient_key_file`
 
 - **Contexts:** `http`, `server`, `location`

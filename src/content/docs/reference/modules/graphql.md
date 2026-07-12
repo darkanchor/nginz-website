@@ -23,6 +23,7 @@ location /graphql {
     graphql on;
     graphql_max_depth 5;
     graphql_introspection off;
+    graphql_body_max_size 1m;
     proxy_pass http://graphql_backend;
 }
 ```
@@ -51,6 +52,13 @@ Sets the maximum allowed nesting depth for GraphQL queries. Lower values reduce 
 - **Default:** `on`
 
 Controls whether introspection requests are allowed. Turn it off on public production endpoints when schema exploration should be blocked.
+
+### `graphql_body_max_size`
+
+- **Contexts:** `location`
+- **Default:** `1m`
+
+Sets the maximum GraphQL request body that may be buffered for validation. Declared or accumulated bodies over the limit return HTTP 413. File-backed request bodies are rejected rather than copied into request-pool memory, keeping validation memory bounded.
 
 ## Works well with
 

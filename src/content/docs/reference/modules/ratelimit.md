@@ -101,13 +101,16 @@ The module exports these nginx variables for observability:
 | `$ratelimit_key` | The effective key used for accounting on the current request |
 | `$ratelimit_source` | Where the key came from: `ip` or `variable` |
 | `$ratelimit_cost` | The effective token cost applied to the current request |
+| `$ratelimit_entries` | Number of occupied fixed-window buckets in shared memory (maximum 1024) |
+| `$ratelimit_capacity_rejected` | Cumulative new buckets rejected because every stored window is still live |
+| `$ratelimit_reclaimed` | Cumulative expired buckets safely reused for new keys |
 
 ## Behavior notes
 
 - Uses a 1-second fixed window algorithm. Each key gets a counter that resets every second.
 - Returns HTTP 429 (Too Many Requests) when the limit is exceeded.
 - Rate state is stored in nginx shared memory, so the same budget is enforced across all workers.
-- Up to 1024 unique keys are tracked in the shared zone. When full, the oldest entries are reused.
+- Up to 1024 unique keys are tracked in the shared zone. Expired buckets may be reused; if all buckets are still live, a new key is rejected rather than evicting another client's enforcement state.
 - Runs in the access phase. Earlier modules that return a final status (401, 403, 429) will prevent the rate limit decision from running.
 - Counters are location-scoped. Changing `ratelimit_key` changes identity within that location, not across unrelated locations.
 

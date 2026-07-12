@@ -27,6 +27,7 @@ location /api {
     waf_sqli on;
     waf_xss on;
     waf_check_body on;
+    waf_body_max_size 32k;
 
     proxy_pass http://backend;
 }
@@ -96,7 +97,14 @@ Toggle SQL injection and cross-site scripting detection independently. The modul
 - **Contexts:** `location`
 - **Default:** `off`
 
-Enables request body inspection for POST, PUT, and PATCH requests. Body inspection is limited to the first 8 KB of content for performance.
+Enables request body inspection for POST, PUT, and PATCH requests. The entire body is inspected up to `waf_body_max_size`; oversized inspected bodies are rejected with HTTP 413 instead of being silently truncated.
+
+### `waf_body_max_size`
+
+- **Contexts:** `location`
+- **Default:** `8k`
+
+Sets the maximum request body retained and inspected when `waf_check_body` is enabled. The limit applies to fixed-length and chunked request bodies and is enforced before the aggregate analysis buffer is allocated. Requests over the limit return HTTP 413. Increase it only for locations whose legitimate payloads require a larger inspection envelope.
 
 ### `waf_rules_file`
 
@@ -140,6 +148,9 @@ waf_score_decay_window 120;
 | `$waf_rule_id` | Numeric ID of the matched custom rule (empty for built-in matches) |
 | `$waf_score` | Current accumulated threat score for the client IP |
 | `$waf_category` | `sqli`, `xss`, `ban`, `rule`, or empty |
+| `$waf_ban_entries` | Number of occupied entries in the shared reputation store (maximum 256) |
+| `$waf_ban_capacity_rejected` | Cumulative new reputation identities rejected because all entries still hold active state |
+| `$waf_ban_reclaimed` | Cumulative inactive reputation entries safely reused for new identities |
 
 These variables let you log WAF decisions, inject them into upstream headers, or compose them with other modules for unified access policies.
 
