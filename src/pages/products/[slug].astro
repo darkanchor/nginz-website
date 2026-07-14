@@ -26,6 +26,7 @@ const { Content } = await product.render();
       <a href="/contact" class="btn btn-primary">Contact</a>
       <a href={product.slug === 'nginz-njs' ? '/docs/reference/scripted-modules/authz' : product.slug === 'nginz-token' ? '/docs/reference/token-modules' : '/docs'} class="btn btn-secondary">Read Docs</a>
       {product.slug === 'nginz-token' && <a href="https://nginz.dev/" target="_blank" rel="noopener" class="btn btn-secondary">Live Demo</a>}
+      {product.slug === 'nginz-token' && <a href="https://checkout.darkanchor.com" target="_blank" rel="noopener" class="btn btn-secondary">Subscribe</a>}
     </div>
   </div>
 
