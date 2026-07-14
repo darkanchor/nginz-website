@@ -1,11 +1,11 @@
 ---
-title: nginz-token 1.30 — the AI gateway for nginx is shipping
-description: Eight modules. Two tiers. Four Docker images. Zero memory growth, zero errors, ready for production.
-date: 2026-06-17
+title: nginz-token 1.30 is live
+description: Eight native nginx modules, two self-serve tiers, four stability-tested gateway images, and live private-registry delivery.
+date: 2026-07-14
 author: darkanchor team
 ---
 
-nginz-token 1.30 is shipping. It's an AI gateway that runs inside your nginx binary — not beside it, not in front of it, not as a SaaS proxy you have to trust with your prompts.
+nginz-token 1.30 is live. It is an AI gateway that runs inside your nginx binary — not beside it, not in front of it, and not as a SaaS proxy that sees your prompts. Pro and Enterprise subscriptions are now available through our live self-serve checkout.
 
 ## What ships
 
@@ -22,13 +22,22 @@ Eight native modules loaded into stock nginx. They handle the things your LLM pr
 
 | | Pro | Enterprise |
 |---|---|---|
-| **Price** | $1,499/yr | $3,999/yr |
+| **Monthly** | $149/mo | $399/mo |
+| **Annual** | $1,499/yr | $3,999/yr |
+| **Founding annual** | $999/yr | $2,499/yr |
 | **Modules** | all 8 gateway modules | same modules + PostgreSQL backend, dashboard |
-| **Dashboard** | — | ✓ |
-| **PostgreSQL tooling** | — | ✓ |
+| **Private images** | 2 gateway images | 2 gateway images + PostgreSQL + provisioning |
 | **Support** | community | email |
 
-Both tiers ship as Docker images in two base OS variants: Debian trixie-slim (glibc) and Alpine 3.23 (musl). Alpine images are ~40% smaller. Trixie images lead on throughput at moderate concurrency. Pick the tradeoff that fits your environment.
+Founding annual pricing is available to every new annual checkout through **September 14, 2026 at 06:44 UTC**. There is no redemption cap. These are recurring annual prices: customers who subscribe at a founding price keep that renewal price while the subscription remains active. After the window closes, new annual checkouts automatically return to the standard annual prices.
+
+The gateway images come in Debian trixie-slim (glibc) and Alpine 3.23 (musl) variants for `linux/amd64`. Alpine images are ~40% smaller. Trixie images lead on throughput at moderate concurrency. Enterprise also includes the PostgreSQL and provisioning images used by its dashboard stack.
+
+## How access works
+
+Paddle is the Merchant of Record and handles payment, tax, receipts, and subscription billing. After Paddle confirms a transaction, the delivery workflow issues private-registry access by email, along with a secure subscription-management link. Enterprise delivery also includes a stable customer serial UUID.
+
+The checkout presents renewal, refund, privacy, and cancellation terms before purchase. Read the [commercial terms and refund policy](https://checkout.darkanchor.com/subscribe) for the complete rules.
 
 ## Stability
 
@@ -40,6 +49,7 @@ Because you already run nginx. You already know how to configure it, monitor it,
 
 ## What's next
 
-The cache module stays early-stage by design — we're not selling semantic cache magic. The fallback module gets smarter routing in subsequent releases. Everything else is production-ready today.
+The cache module stays early-stage by design — we're not selling semantic cache magic. The fallback module gets smarter routing in subsequent releases. Everything else is available today.
 
-<a href="/products/nginz-token" class="btn btn-primary">See the full product page →</a>
+<a href="https://checkout.darkanchor.com/" class="btn btn-primary" target="_blank" rel="noopener">View live pricing →</a>
+<a href="/products/nginz-token" class="btn btn-secondary" style="margin-left:8px;">Read the product details →</a>

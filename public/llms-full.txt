@@ -100,7 +100,7 @@ All module documentation is under /docs/reference/modules/ (native) and /docs/re
 - /blogs/engineering/stability-gate-and-release — The stability gate passed. We're shipping.: 1.54 million requests across four images, two base OSes, two product tiers. Zero memory growth, zero unexpected errors, no throughput degradation. nginz-token is ready.
 - /blogs/engineering/your-libc-is-your-performance-profile — Your libc is your performance profile: When we benchmarked our nginx Docker images, the performance gap had nothing to do with our code. Every percentage point traced back to glibc vs musl, OpenSSL, and the allocator.
 - /blogs/engineering/zig-bitfields-c-layout — I chose Zig, love it, and still eat my own dogfood: Dogfooding means you make your own mistakes. When our pgrest module handled subrequests, workers started crashing — even though subrequests had worked across multiple nginx versions. Five debugging iterations, three AI models, and countless isolation hours later, the culprit was a Zig bitfield binding that had been accidentally correct for years. Somewhere between a configure change and a version bump, the luck expired.
-- /blogs/releases/nginz-token-1.30-ships — nginz-token 1.30 — the AI gateway for nginx is shipping: Eight modules. Two tiers. Four Docker images. Zero memory growth, zero errors, ready for production.
+- /blogs/releases/nginz-token-1.30-ships — nginz-token 1.30 is live: Eight native nginx modules, two self-serve tiers, four stability-tested gateway images, and live private-registry delivery.
 
 ## Other Pages
 - /products — Product overview
