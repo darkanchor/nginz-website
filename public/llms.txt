@@ -75,6 +75,7 @@
 
 ## Blog
 - [/blogs](/blogs) — Engineering blog index
+- [/blogs/builds/build-ai-gateway-nginx](/blogs/builds/build-ai-gateway-nginx) — Build yourself an AI gateway in nginx
 - [/blogs/builds/js-access-authz-gleam](/blogs/builds/js-access-authz-gleam) — js_access shipped today. We compiled Gleam to it.
 - [/blogs/engineering/perf-regression-and-memory-layout](/blogs/engineering/perf-regression-and-memory-layout) — Another milestone reached, perf regressed
 - [/blogs/engineering/stability-gate-and-release](/blogs/engineering/stability-gate-and-release) — The stability gate passed. We're shipping.
