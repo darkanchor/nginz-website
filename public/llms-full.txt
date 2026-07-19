@@ -95,7 +95,7 @@ All module documentation is under /docs/reference/modules/ (native) and /docs/re
 
 ## Blog
 - /blogs — Engineering blog index
-- /blogs/builds/build-ai-gateway-nginx — Build yourself an AI gateway in nginx: nginz-token is source-available under BSL 1.1. Here is how to compile its eight Zig modules into stock nginx and stand up a working gateway with a seven-line config — one repo, three commands, no external dependencies.
+- /blogs/builds/build-ai-gateway-nginx — Build yourself an AI gateway in nginx: nginz-token is source-available under BSL 1.1. Here is how to compile its eight Zig modules into stock nginx and stand up a working gateway with a short config — one repo, three commands, no external dependencies.
 - /blogs/builds/js-access-authz-gleam — js_access shipped today. We compiled Gleam to it.: njs PR #1044 landed access-phase scripting. We built a type-safe authorization DSL in Gleam that runs there — denying requests before proxy_pass ever opens a connection, with compile-time guarantees on every decision branch.
 - /blogs/engineering/perf-regression-and-memory-layout — Another milestone reached, perf regressed: Adding auth, ratelimiting, metrics, and cost accounting to our AI gateway introduced a measurable performance tax. Two rounds of profiling, a cache-line audit, and a shared-memory restructuring later, the tax mostly disappeared — and we learned something about what a microbenchmark can hide.
 - /blogs/engineering/stability-gate-and-release — The stability gate passed. We're shipping.: 1.54 million requests across four images, two base OSes, two product tiers. Zero memory growth, zero unexpected errors, no throughput degradation. nginz-token is ready.

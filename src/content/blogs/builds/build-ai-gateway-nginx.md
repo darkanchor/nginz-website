@@ -1,6 +1,6 @@
 ---
 title: Build yourself an AI gateway in nginx
-description: nginz-token is source-available under BSL 1.1. Here is how to compile its eight Zig modules into stock nginx and stand up a working gateway with a seven-line config — one repo, three commands, no external dependencies.
+description: nginz-token is source-available under BSL 1.1. Here is how to compile its eight Zig modules into stock nginx and stand up a working gateway with a short config — one repo, three commands, no external dependencies.
 date: 2026-07-18
 author: darkanchor team
 ---
@@ -181,13 +181,15 @@ http {
             llm_auth_credential openai env:OPENAI_API_KEY;
 
             proxy_ssl_server_name on;
+            proxy_ssl_name api.openai.com;
+            proxy_set_header Host api.openai.com;
             proxy_pass https://openai_api;
         }
     }
 }
 ```
 
-Seven directives. `llm_proxy` parses the request body, identifies it as OpenAI dialect, selects the `openai` route. `llm_auth` reads `$OPENAI_API_KEY` from the environment and injects `Authorization: Bearer <key>` into the proxied request. `proxy_pass` sends it upstream. On the response path, `llm_proxy` extracts usage tokens and populates `$llm_prompt_tokens`, `$llm_completion_tokens`, and `$llm_total_tokens` — available for access logging.
+Nine directives. `llm_proxy` parses the request body, identifies it as OpenAI dialect, selects the `openai` route. `llm_auth` reads `$OPENAI_API_KEY` from the environment and injects `Authorization: Bearer <key>` into the proxied request. `proxy_ssl_name` and `proxy_set_header Host` matter because `proxy_pass` targets a named upstream (`openai_api`): without them, nginx sends SNI/`Host` as the upstream name, and the TLS handshake to OpenAI fails. `proxy_pass` sends it upstream. On the response path, `llm_proxy` extracts usage tokens and populates `$llm_prompt_tokens`, `$llm_completion_tokens`, and `$llm_total_tokens` — available for access logging.
 
 Start it (save the config as `nginx.conf` in your current directory, then point nginx at it with the full path):
 
@@ -213,16 +215,16 @@ If the key is valid, you get a normal OpenAI chat completion response — same J
 Point any OpenAI-compatible SDK at <code>http://localhost:8080/v1</code> as its API base URL, or configure your agent to hit <code>http://localhost:8080/v1/chat/completions</code> directly — the gateway handles credential injection, so your tools never need the real key.
 
 <div class="gap-callout">
-  <div class="gap-big">Seven lines</div>
+  <div class="gap-big">Nine directives</div>
   <div class="gap-body">
     <div class="gap-title">That is the whole gateway config.</div>
-    <div class="gap-sub"><code>llm_proxy</code>, <code>llm_proxy_route</code>, <code>llm_proxy_default_provider</code>, <code>llm_auth</code>, <code>llm_auth_credential</code>, <code>proxy_ssl_server_name</code>, and <code>proxy_pass</code>. Seven directives. Your services never touch the real API key. When you rotate it, you update one config file and reload nginx.</div>
+    <div class="gap-sub"><code>llm_proxy</code>, <code>llm_proxy_route</code>, <code>llm_proxy_default_provider</code>, <code>llm_auth</code>, <code>llm_auth_credential</code>, <code>proxy_ssl_server_name</code>, <code>proxy_ssl_name</code>, <code>proxy_set_header Host</code>, and <code>proxy_pass</code>. Your services never touch the real API key. When you rotate it, you update one config file and reload nginx.</div>
   </div>
 </div>
 
 ## What the other six modules give you
 
-The seven-line config works. The other six modules are additive — each a few more directives in a `location` block:
+That short config works. The other six modules are additive — each a few more directives in a `location` block:
 
 - **llm-auth** — client → project → org credential cascade with fail-closed guards. Not stuck with one API key.
 - **llm-ratelimit** — token-per-minute and request-per-minute budgets in shared memory, enforced before the upstream call leaves the building.
